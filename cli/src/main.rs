@@ -32,8 +32,8 @@ struct Args {
     #[arg(short, long, default_value = "1.75")]
     diameter: f32,
 
-    /// Filament density in g/cm³ (default: 1.25 for PLA)
-    #[arg(short = 'D', long, default_value = "1.25")]
+    /// Filament density in g/cm³ (default: 1.24 for PLA)
+    #[arg(short = 'D', long, default_value = "1.24")]
     density: f32,
 
     /// Output format (json or urdf)

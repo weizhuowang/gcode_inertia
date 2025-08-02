@@ -110,7 +110,7 @@ gcode-inertia-py -f part.gcode --output urdf
 
 Common options for both:
 - `--diameter`: Filament diameter in mm (default: 1.75)
-- `--density`: Filament density in g/cm³ (default: 1.25)
+- `--density`: Filament density in g/cm³ (default: 1.24)
 
 ### Example Output (JSON)
 
@@ -206,7 +206,7 @@ use gcode_inertia::interpreter::parse_segments;
 use gcode_inertia::segments::Segment;
 
 let gcode = std::fs::read_to_string("part.gcode")?;
-let segments = parse_segments(&gcode, 1.75, 1.25);
+let segments = parse_segments(&gcode, 1.75, 1.24);
 
 let total_mass: f32 = segments.iter().map(|s| s.mass()).sum();
 // ... calculate COM and inertia ...

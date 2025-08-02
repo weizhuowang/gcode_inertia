@@ -238,7 +238,7 @@ mod tests {
     #[test]
     fn test_parse_single_line() {
         let src = "G90\nG1 X10.0 Y20.0 E5.0";
-        let segs = parse_segments(src, 1.75, 1.25);
+        let segs = parse_segments(src, 1.75, 1.24);
         assert_eq!(segs.len(), 1);
         let seg = &segs[0];
         // center should be midpoint of (0,0) and (10,20)
@@ -247,25 +247,25 @@ mod tests {
         assert!((c.y - 10.0).abs() < EPS);
         assert!((c.z).abs() < EPS);
         // mass matches extrusion->mass conversion
-        let expected_mass = 5.0 * std::f32::consts::PI * 1.75_f32.powi(2) / 4.0 * (1.25 / 1000.0);
+        let expected_mass = 5.0 * std::f32::consts::PI * 1.75_f32.powi(2) / 4.0 * (1.24 / 1000.0);
         assert!((seg.mass() - expected_mass).abs() < EPS);
     }
 
     #[test]
     fn test_relative_extrusion_mode() {
         let src = "M83\nG1 X1 Y0 E2.0\nG1 X2 Y0 E3.0";
-        let segs = parse_segments(src, 1.75, 1.25);
+        let segs = parse_segments(src, 1.75, 1.24);
         // Two extrusion segments: first E=2.0, then relative E=3.0
         assert_eq!(segs.len(), 2);
         let first = &segs[0];
         let second = &segs[1];
         assert!(
-            (first.mass() - 2.0 * std::f32::consts::PI * 1.75_f32.powi(2) / 4.0 * (1.25 / 1000.0))
+            (first.mass() - 2.0 * std::f32::consts::PI * 1.75_f32.powi(2) / 4.0 * (1.24 / 1000.0))
                 .abs()
                 < EPS
         );
         assert!(
-            (second.mass() - 3.0 * std::f32::consts::PI * 1.75_f32.powi(2) / 4.0 * (1.25 / 1000.0))
+            (second.mass() - 3.0 * std::f32::consts::PI * 1.75_f32.powi(2) / 4.0 * (1.24 / 1000.0))
                 .abs()
                 < EPS
         );
@@ -275,7 +275,7 @@ mod tests {
     fn test_arc_segment_center() {
         // Move to (10,0), then CCW quarter circle to (0,10) with center at origin
         let src = "G90\nG1 X10 Y0 E1.0\nG3 X0 Y10 I-10 J0 E2.0";
-        let segs = parse_segments(src, 1.75, 1.25);
+        let segs = parse_segments(src, 1.75, 1.24);
         assert_eq!(segs.len(), 2);
         let arc = &segs[1];
         let c = arc.center();
@@ -292,7 +292,7 @@ mod tests {
     fn test_no_extrusion_no_segment() {
         // Move without extrusion should produce no segments
         let src = "G1 X5 Y5";
-        let segs = parse_segments(src, 1.75, 1.25);
+        let segs = parse_segments(src, 1.75, 1.24);
         assert!(segs.is_empty());
     }
 }
