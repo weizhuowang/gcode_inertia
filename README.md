@@ -8,28 +8,39 @@ Based on the original [PrintDynamic](https://github.com/gmmyung/printdynamic) pr
 
 - **Accurate Physics Calculations** - Computes mass, center of mass, and full inertia tensors
 - **G-code Parsing** - Handles standard FDM printer G-code with extrusion
-- **Multiple Interfaces**:
-  - Rust library for integration
-  - CLI tool with JSON/URDF output
-  - Web interface (WASM-based)
+- **Multiple Implementations**:
+  - **Rust**: Fast native library, CLI (`gcode-inertia`), and web interface
+  - **Python**: Easy-to-use package (`gcode-inertia-py`) with identical functionality
 
 ## Project Structure
 
 ```
 gcode_inertia/
-├── lib/          # Core physics library
-├── cli/          # Command-line tool
-└── web/          # Web interface (Leptos/WASM)
+├── lib/          # Core Rust physics library
+├── cli/          # Rust CLI tool (gcode-inertia)
+├── web/          # Web interface (Leptos/WASM)
+└── python/       # Python implementation (gcode-inertia-py)
 ```
 
 ## Setup & Installation
 
-### Prerequisites
+### Choose Your Implementation
 
-- [Rust](https://rustup.rs/) (latest stable version)
-- For web interface: [Trunk](https://trunkrs.dev/) (`cargo install trunk`)
+#### Rust Version (gcode-inertia)
+- **Pros**: Fast, native performance, includes web interface
+- **Cons**: Requires Rust toolchain
+- **Best for**: Performance-critical applications, web deployment
 
-### CLI Tool Installation
+#### Python Version (gcode-inertia-py)
+- **Pros**: Easy pip install, integrates with Python robotics tools
+- **Cons**: Slower than Rust version
+- **Best for**: Python workflows, quick scripts, robotics integration
+
+### Rust Installation
+
+Prerequisites: [Rust](https://rustup.rs/) (latest stable version)
+
+#### CLI Tool Installation
 
 ```bash
 # Clone the repository
@@ -44,7 +55,7 @@ cargo build --release -p gcode_inertia_cli
 ./target/release/gcode-inertia --help
 ```
 
-### Web Interface Setup
+#### Web Interface Setup
 
 ```bash
 # Install trunk if you haven't already
@@ -59,23 +70,47 @@ trunk serve
 # Open http://localhost:8080 in your browser
 ```
 
+### Python Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/gcode_inertia.git
+cd gcode_inertia/python
+
+# Install the package
+pip install -e .
+
+# Or install directly from the python directory
+pip install gcode-inertia-py
+```
+
 ## Usage
 
-### CLI Tool
+### CLI Tools
 
+Both versions provide identical CLI interfaces:
+
+#### Rust CLI (gcode-inertia)
 ```bash
 # Basic usage (outputs JSON)
 gcode-inertia -f part.gcode
 
-# Specify material properties
-gcode-inertia -f part.gcode --diameter 1.75 --density 1.25
-
-# Output URDF format for robotics
+# Output URDF format
 gcode-inertia -f part.gcode --output urdf
-
-# Get help
-gcode-inertia --help
 ```
+
+#### Python CLI (gcode-inertia-py)
+```bash
+# Basic usage (outputs JSON)
+gcode-inertia-py -f part.gcode
+
+# Output URDF format
+gcode-inertia-py -f part.gcode --output urdf
+```
+
+Common options for both:
+- `--diameter`: Filament diameter in mm (default: 1.75)
+- `--density`: Filament density in g/cm³ (default: 1.25)
 
 ### Example Output (JSON)
 
