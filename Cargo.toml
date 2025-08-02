@@ -1,0 +1,13 @@
+[workspace]
+members = ["lib", "web", "cli"]
+resolver = "2"
+
+[workspace.package]
+edition = "2021"
+authors = ["weizhuowang"]
+license = "MIT"
+
+[workspace.dependencies]
+nalgebra = "0.33.2"
+anyhow = "1.0.98"
+gcode = "0.6.1"

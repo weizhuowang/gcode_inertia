@@ -1,0 +1,12 @@
+[package]
+name = "gcode_inertia"
+description = "G-code to mass and inertia calculator for 3D printed parts"
+version = "0.1.0"
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[dependencies]
+anyhow.workspace = true
+gcode.workspace = true
+nalgebra.workspace = true
