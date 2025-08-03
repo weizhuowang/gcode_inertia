@@ -5,7 +5,7 @@ with open("../README.md", "r") as fh:
 
 setup(
     name="gcode-inertia-py",
-    version="0.2.0",
+    version="0.3.0",
     author="weizhuowang",
     description="G-code to mass and inertia calculator for 3D printed parts",
     long_description=long_description,

@@ -4,8 +4,13 @@ A Rust library and tools for calculating mass, center of mass, and inertia tenso
 
 Based on the original [PrintDynamic](https://github.com/gmmyung/printdynamic) project by [@gmmyung](https://github.com/gmmyung). This fork reorganizes the codebase, adds a CLI tool with URDF output, and provides better documentation for robotics applications.
 
-## 🆕 What's New in v0.2.0 (Python)
+## 🆕 What's New in v0.3.0 (Python)
 
+- **Fixed Z-axis COM Bug**: Center of mass Z-coordinate now correctly calculated at center of deposited material layer (not nozzle position)
+- **Bambu Lab Y-axis Correction**: Added automatic 2mm Y-axis offset correction for Bambu Lab slicer coordinate system
+- **Layer Height Detection**: Dynamically detects actual layer height from G-code for accurate Z calculations
+
+### Previous: v0.2.0
 - **Bambu Lab G-code Support**: Automatically detects and handles Bambu Lab slicer files
 - **Calibration Filtering**: Excludes purge/calibration lines for more accurate mass calculations
 - **Multi-Object Detection**: Warns when multiple objects are detected (single object only)
@@ -15,10 +20,11 @@ Based on the original [PrintDynamic](https://github.com/gmmyung/printdynamic) pr
 
 - **Accurate Physics Calculations** - Computes mass, center of mass, and full inertia tensors
 - **G-code Parsing** - Handles standard FDM printer G-code with extrusion
-- **Bambu Lab Support** (Python v0.2.0+) - Special handling for Bambu Lab slicer G-codes:
+- **Bambu Lab Support** (Python v0.3.0+) - Special handling for Bambu Lab slicer G-codes:
   - Automatic detection and color-coded status
   - Multi-object detection with single-object enforcement
   - Calibration line filtering to exclude purge material
+  - Automatic 2mm Y-axis coordinate correction
 - **Multiple Implementations**:
   - **Rust**: Fast native library, CLI (`gcode-inertia`), and web interface
   - **Python**: Easy-to-use package (`gcode-inertia-py`) with enhanced features

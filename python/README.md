@@ -68,7 +68,15 @@ Same as the Rust version - all calculations are in the 3D printer's coordinate f
 
 ## Version History
 
-### v0.2.0 (2025-08-03)
+### v0.3.0 (2025-08-03)
+- **Bug Fixes**:
+  - Fixed Z-axis center of mass calculation - now correctly positions mass at center of deposited layer (not nozzle position)
+  - Added 2mm Y-axis offset correction for Bambu Lab slicer coordinate system
+- **Improved Accuracy**:
+  - Dynamic layer height detection from G-code for accurate Z calculations
+  - Proper handling of material deposition physics
+
+### v0.2.0
 - **Bambu Lab G-code Support**: 
   - Automatic detection of Bambu Lab slicer generated files
   - Multi-object detection with error handling (only single objects supported)

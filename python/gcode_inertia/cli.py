@@ -199,6 +199,15 @@ For URDF/robotics applications you MUST:
 
     # Parse segments
     segments = parse_segments(gcode_content, args.diameter, args.density, is_bambu)
+    
+    # Debug: Check Y distribution
+    if segments and False:  # Set to True to enable debug
+        y_coords = []
+        for seg in segments[:100]:  # First 100 segments
+            center = seg.center()
+            y_coords.append(center[1])
+        print(f"Debug: Y range: {min(y_coords):.2f} to {max(y_coords):.2f}")
+        print(f"Debug: Y mean: {np.mean(y_coords):.2f}")
 
     if not segments:
         print("Warning: No extrusion segments found in G-code", file=sys.stderr)
@@ -206,6 +215,11 @@ For URDF/robotics applications you MUST:
 
     # Calculate properties
     properties = calculate_properties(segments)
+    
+    # Apply Bambu Lab Y-axis offset correction
+    if is_bambu:
+        properties["center_of_mass"][1] += 2.0  # Add 2mm to Y coordinate
+        print_colored("  ✓ Applied 2mm Y-axis offset correction for Bambu Lab slicer", "green")
 
     # Output results
     if args.output == "json":

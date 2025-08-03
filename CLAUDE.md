@@ -55,6 +55,9 @@ gcode-inertia-py -f ../test.gcode --output urdf
 - Supports absolute (G90/M82) and relative (G91/M83) positioning modes
 - Only processes moves with positive extrusion (ignores retractions)
 - Arc segments (G2/G3) use I/J offsets for center calculation
+- **v0.3.0 fixes**:
+  - Z-coordinate of mass is at center of deposited layer (0.5 * layer_height below nozzle)
+  - Bambu Lab slicers have a 2mm Y-axis offset that is automatically corrected
 
 ## Supported G-code Commands
 
@@ -80,3 +83,11 @@ Both implementations have unit tests covering:
 - G-code parsing edge cases (relative mode, retractions)
 
 Test files available: `test.gcode`, `arc.gcode`, `bambu_test_*.gcode`
+
+## Bambu Lab Specific Features (Python v0.3.0+)
+
+- Automatic detection via "BambuStudio" string in header
+- Filters calibration/purge lines before first `OBJECT_ID` marker
+- Single object enforcement (errors if multiple `OBJECT_ID` values found)
+- 2mm Y-axis coordinate correction applied to final center of mass
+- Dynamic layer height detection for accurate Z calculations
