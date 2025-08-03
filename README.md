@@ -4,13 +4,24 @@ A Rust library and tools for calculating mass, center of mass, and inertia tenso
 
 Based on the original [PrintDynamic](https://github.com/gmmyung/printdynamic) project by [@gmmyung](https://github.com/gmmyung). This fork reorganizes the codebase, adds a CLI tool with URDF output, and provides better documentation for robotics applications.
 
+## 🆕 What's New in v0.2.0 (Python)
+
+- **Bambu Lab G-code Support**: Automatically detects and handles Bambu Lab slicer files
+- **Calibration Filtering**: Excludes purge/calibration lines for more accurate mass calculations
+- **Multi-Object Detection**: Warns when multiple objects are detected (single object only)
+- **Updated PLA Density**: Now uses standard 1.24 g/cm³ as default
+
 ## Features
 
 - **Accurate Physics Calculations** - Computes mass, center of mass, and full inertia tensors
 - **G-code Parsing** - Handles standard FDM printer G-code with extrusion
+- **Bambu Lab Support** (Python v0.2.0+) - Special handling for Bambu Lab slicer G-codes:
+  - Automatic detection and color-coded status
+  - Multi-object detection with single-object enforcement
+  - Calibration line filtering to exclude purge material
 - **Multiple Implementations**:
   - **Rust**: Fast native library, CLI (`gcode-inertia`), and web interface
-  - **Python**: Easy-to-use package (`gcode-inertia-py`) with identical functionality
+  - **Python**: Easy-to-use package (`gcode-inertia-py`) with enhanced features
 
 ## Project Structure
 
@@ -32,9 +43,9 @@ gcode_inertia/
 - **Best for**: Performance-critical applications, web deployment
 
 #### Python Version (gcode-inertia-py)
-- **Pros**: Easy pip install, integrates with Python robotics tools
+- **Pros**: Easy pip install, integrates with Python robotics tools, enhanced Bambu Lab support
 - **Cons**: Slower than Rust version
-- **Best for**: Python workflows, quick scripts, robotics integration
+- **Best for**: Python workflows, quick scripts, robotics integration, Bambu Lab users
 
 ### Rust Installation
 

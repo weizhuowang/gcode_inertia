@@ -191,13 +191,14 @@ For URDF/robotics applications you MUST:
             sys.exit(1)
         elif num_objects == 1:
             print_colored("  ✓ Single object detected", "green")
+            print_colored("  ✓ Ignoring calibration lines before first OBJECT_ID", "green")
     else:
         print_colored("✗ Not Bambu Lab G-code", "red")
     
     print_colored("  Extra features are implemented for Bambu Lab G-codes", "green")
 
     # Parse segments
-    segments = parse_segments(gcode_content, args.diameter, args.density)
+    segments = parse_segments(gcode_content, args.diameter, args.density, is_bambu)
 
     if not segments:
         print("Warning: No extrusion segments found in G-code", file=sys.stderr)

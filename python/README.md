@@ -65,3 +65,19 @@ pytest tests/
 ## Coordinate System
 
 Same as the Rust version - all calculations are in the 3D printer's coordinate frame. See main README for details on coordinate transformations.
+
+## Version History
+
+### v0.2.0 (2025-08-03)
+- **Bambu Lab G-code Support**: 
+  - Automatic detection of Bambu Lab slicer generated files
+  - Multi-object detection with error handling (only single objects supported)
+  - Calibration line filtering - ignores purge/calibration material before first OBJECT_ID
+- **Updated Default Density**: Changed from 1.25 to 1.24 g/cm³ (standard PLA density)
+- **Improved CLI Output**: Color-coded status messages for better user feedback
+
+### v0.1.0 (Initial Release)
+- Basic G-code parsing for G0/G1/G2/G3 moves with extrusion
+- Mass and inertia tensor calculations
+- JSON and URDF output formats
+- Support for absolute/relative positioning and extrusion modes
