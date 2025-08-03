@@ -67,6 +67,8 @@ class GCodeInterpreter:
         self.extruder = Extruder()
         self.is_bambu = is_bambu
         self.object_started = not is_bambu  # For non-Bambu, always process; for Bambu, wait for OBJECT_ID
+        self.layer_z = None  # Track current layer Z
+        self.layer_height = 0.2  # Default layer height, will be detected
 
     def _parse_gcode_line(self, line: str) -> Optional[Dict[str, Union[str, float]]]:
         """Parse a single G-code line into command and parameters."""
@@ -153,6 +155,15 @@ class GCodeInterpreter:
                 self._next_coord(self.pos[2], params.get("Z"), self.xyz_rel),
             ]
         )
+        
+        # Detect layer change and calculate layer height
+        if target[2] != self.pos[2] and target[2] > self.pos[2]:  # Z is increasing
+            if self.layer_z is not None:
+                # Calculate layer height from the Z difference
+                detected_height = target[2] - self.layer_z
+                if 0.05 <= detected_height <= 0.5:  # Reasonable layer height range
+                    self.layer_height = detected_height
+            self.layer_z = target[2]
 
         # Calculate extrusion
         de = self.extruder.consume(params.get("E"))
@@ -167,7 +178,12 @@ class GCodeInterpreter:
         if self.object_started:
             if cmd in ["G0", "G1"] and de > 0:
                 # Linear move with extrusion
-                segment = LineSeg(self.pos.copy(), target, mass)
+                # Adjust Z to center of extruded material
+                adjusted_start = self.pos.copy()
+                adjusted_end = target.copy()
+                adjusted_start[2] -= self.layer_height * 0.5
+                adjusted_end[2] -= self.layer_height * 0.5
+                segment = LineSeg(adjusted_start, adjusted_end, mass)
 
             elif cmd in ["G2", "G3"] and de > 0:
                 # Arc move with extrusion
@@ -175,12 +191,12 @@ class GCodeInterpreter:
                 i = params.get("I", 0.0)
                 j = params.get("J", 0.0)
 
-                # Arc center
-                center = np.array([self.pos[0] + i, self.pos[1] + j, self.pos[2]])
+                # Arc center (keep at nozzle height for angle calculations)
+                center_nozzle = np.array([self.pos[0] + i, self.pos[1] + j, self.pos[2]])
 
-                # Calculate angles
-                s_rel = self.pos - center
-                e_rel = target - center
+                # Calculate angles using nozzle positions
+                s_rel = self.pos - center_nozzle
+                e_rel = target - center_nozzle
 
                 θ0 = np.arctan2(s_rel[1], s_rel[0])
                 θ1 = np.arctan2(e_rel[1], e_rel[0])
@@ -196,7 +212,10 @@ class GCodeInterpreter:
                     dθ = -dθ
 
                 radius = np.linalg.norm(s_rel[:2])
-                segment = ArcSeg(center, radius, θ0, dθ, mass)
+                # Create arc segment with adjusted Z center
+                center_adjusted = center_nozzle.copy()
+                center_adjusted[2] -= self.layer_height * 0.5
+                segment = ArcSeg(center_adjusted, radius, θ0, dθ, mass)
 
         # Always update position regardless of whether we create a segment
         self.pos = target

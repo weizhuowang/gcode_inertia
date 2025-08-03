@@ -1,13 +1,13 @@
 ; HEADER_BLOCK_START
 ; BambuStudio 02.01.01.52
-; model printing time: 5m 37s; total estimated time: 13m 59s
+; model printing time: 4m 38s; total estimated time: 11m 59s
 ; total layer number: 15
-; total filament length [mm] : 910.26
-; total filament volume [cm^3] : 2189.42
-; total filament weight [g] : 2.76
-; model label id: 72,104
-; filament_density: 1.26,1.32,1.04,1.32,1.26
-; filament_diameter: 1.75,1.75,1.75,1.75,1.75
+; total filament length [mm] : 778.43
+; total filament volume [cm^3] : 1872.34
+; total filament weight [g] : 2.36
+; model label id: 123,194
+; filament_density: 1.26,1.2,1.32,1.24
+; filament_diameter: 1.75,1.75,1.75,1.75
 ; max_z_height: 3.00
 ; filament: 1
 ; HEADER_BLOCK_END
@@ -15,8 +15,8 @@
 ; CONFIG_BLOCK_START
 ; accel_to_decel_enable = 0
 ; accel_to_decel_factor = 50%
-; activate_air_filtration = 0,0,1,0,0
-; additional_cooling_fan_speed = 70,70,0,70,70
+; activate_air_filtration = 0,0,0,0
+; additional_cooling_fan_speed = 70,70,70,70
 ; apply_scarf_seam_on_circles = 1
 ; auxiliary_fan = 1
 ; bed_custom_model = 
@@ -36,22 +36,22 @@
 ; brim_object_gap = 0.1
 ; brim_type = auto_brim
 ; brim_width = 5
-; chamber_temperatures = 0,0,0,0,0
+; chamber_temperatures = 0,0,0,0
 ; change_filament_gcode = M620 S[next_extruder]A\nM204 S9000\nG1 Z{max_layer_z + 3.0} F1200\n\nG1 X70 F21000\nG1 Y245\nG1 Y265 F3000\nM400\nM106 P1 S0\nM106 P2 S0\n{if old_filament_temp > 142 && next_extruder < 255}\nM104 S[old_filament_temp]\n{endif}\n{if long_retractions_when_cut[previous_extruder]}\nM620.11 S1 I[previous_extruder] E-{retraction_distances_when_cut[previous_extruder]} F{old_filament_e_feedrate}\n{else}\nM620.11 S0\n{endif}\nM400\nG1 X90 F3000\nG1 Y255 F4000\nG1 X100 F5000\nG1 X120 F15000\nG1 X20 Y50 F21000\nG1 Y-3\n{if toolchange_count == 2}\n; get travel path for change filament\nM620.1 X[travel_point_1_x] Y[travel_point_1_y] F21000 P0\nM620.1 X[travel_point_2_x] Y[travel_point_2_y] F21000 P1\nM620.1 X[travel_point_3_x] Y[travel_point_3_y] F21000 P2\n{endif}\nM620.1 E F[old_filament_e_feedrate] T{nozzle_temperature_range_high[previous_extruder]}\nT[next_extruder]\nM620.1 E F[new_filament_e_feedrate] T{nozzle_temperature_range_high[next_extruder]}\n\n{if next_extruder < 255}\n{if long_retractions_when_cut[previous_extruder]}\nM620.11 S1 I[previous_extruder] E{retraction_distances_when_cut[previous_extruder]} F{old_filament_e_feedrate}\nM628 S1\nG92 E0\nG1 E{retraction_distances_when_cut[previous_extruder]} F[old_filament_e_feedrate]\nM400\nM629 S1\n{else}\nM620.11 S0\n{endif}\nG92 E0\n{if flush_length_1 > 1}\nM83\n; FLUSH_START\n; always use highest temperature to flush\nM400\n{if filament_type[next_extruder] == "PETG"}\nM109 S260\n{elsif filament_type[next_extruder] == "PVA"}\nM109 S210\n{else}\nM109 S[nozzle_temperature_range_high]\n{endif}\n{if flush_length_1 > 23.7}\nG1 E23.7 F{old_filament_e_feedrate} ; do not need pulsatile flushing for start part\nG1 E{(flush_length_1 - 23.7) * 0.02} F50\nG1 E{(flush_length_1 - 23.7) * 0.23} F{old_filament_e_feedrate}\nG1 E{(flush_length_1 - 23.7) * 0.02} F50\nG1 E{(flush_length_1 - 23.7) * 0.23} F{new_filament_e_feedrate}\nG1 E{(flush_length_1 - 23.7) * 0.02} F50\nG1 E{(flush_length_1 - 23.7) * 0.23} F{new_filament_e_feedrate}\nG1 E{(flush_length_1 - 23.7) * 0.02} F50\nG1 E{(flush_length_1 - 23.7) * 0.23} F{new_filament_e_feedrate}\n{else}\nG1 E{flush_length_1} F{old_filament_e_feedrate}\n{endif}\n; FLUSH_END\nG1 E-[old_retract_length_toolchange] F1800\nG1 E[old_retract_length_toolchange] F300\n{endif}\n\n{if flush_length_2 > 1}\n\nG91\nG1 X3 F12000; move aside to extrude\nG90\nM83\n\n; FLUSH_START\nG1 E{flush_length_2 * 0.18} F{new_filament_e_feedrate}\nG1 E{flush_length_2 * 0.02} F50\nG1 E{flush_length_2 * 0.18} F{new_filament_e_feedrate}\nG1 E{flush_length_2 * 0.02} F50\nG1 E{flush_length_2 * 0.18} F{new_filament_e_feedrate}\nG1 E{flush_length_2 * 0.02} F50\nG1 E{flush_length_2 * 0.18} F{new_filament_e_feedrate}\nG1 E{flush_length_2 * 0.02} F50\nG1 E{flush_length_2 * 0.18} F{new_filament_e_feedrate}\nG1 E{flush_length_2 * 0.02} F50\n; FLUSH_END\nG1 E-[new_retract_length_toolchange] F1800\nG1 E[new_retract_length_toolchange] F300\n{endif}\n\n{if flush_length_3 > 1}\n\nG91\nG1 X3 F12000; move aside to extrude\nG90\nM83\n\n; FLUSH_START\nG1 E{flush_length_3 * 0.18} F{new_filament_e_feedrate}\nG1 E{flush_length_3 * 0.02} F50\nG1 E{flush_length_3 * 0.18} F{new_filament_e_feedrate}\nG1 E{flush_length_3 * 0.02} F50\nG1 E{flush_length_3 * 0.18} F{new_filament_e_feedrate}\nG1 E{flush_length_3 * 0.02} F50\nG1 E{flush_length_3 * 0.18} F{new_filament_e_feedrate}\nG1 E{flush_length_3 * 0.02} F50\nG1 E{flush_length_3 * 0.18} F{new_filament_e_feedrate}\nG1 E{flush_length_3 * 0.02} F50\n; FLUSH_END\nG1 E-[new_retract_length_toolchange] F1800\nG1 E[new_retract_length_toolchange] F300\n{endif}\n\n{if flush_length_4 > 1}\n\nG91\nG1 X3 F12000; move aside to extrude\nG90\nM83\n\n; FLUSH_START\nG1 E{flush_length_4 * 0.18} F{new_filament_e_feedrate}\nG1 E{flush_length_4 * 0.02} F50\nG1 E{flush_length_4 * 0.18} F{new_filament_e_feedrate}\nG1 E{flush_length_4 * 0.02} F50\nG1 E{flush_length_4 * 0.18} F{new_filament_e_feedrate}\nG1 E{flush_length_4 * 0.02} F50\nG1 E{flush_length_4 * 0.18} F{new_filament_e_feedrate}\nG1 E{flush_length_4 * 0.02} F50\nG1 E{flush_length_4 * 0.18} F{new_filament_e_feedrate}\nG1 E{flush_length_4 * 0.02} F50\n; FLUSH_END\n{endif}\n; FLUSH_START\nM400\nM109 S[new_filament_temp]\nG1 E2 F{new_filament_e_feedrate} ;Compensate for filament spillage during waiting temperature\n; FLUSH_END\nM400\nG92 E0\nG1 E-[new_retract_length_toolchange] F1800\nM106 P1 S255\nM400 S3\n\nG1 X70 F5000\nG1 X90 F3000\nG1 Y255 F4000\nG1 X105 F5000\nG1 Y265 F5000\nG1 X70 F10000\nG1 X100 F5000\nG1 X70 F10000\nG1 X100 F5000\n\nG1 X70 F10000\nG1 X80 F15000\nG1 X60\nG1 X80\nG1 X60\nG1 X80 ; shake to put down garbage\nG1 X100 F5000\nG1 X165 F15000; wipe and shake\nG1 Y256 ; move Y to aside, prevent collision\nM400\nG1 Z{max_layer_z + 3.0} F3000\n{if layer_z <= (initial_layer_print_height + 0.001)}\nM204 S[initial_layer_acceleration]\n{else}\nM204 S[default_acceleration]\n{endif}\n{else}\nG1 X[x_after_toolchange] Y[y_after_toolchange] Z[z_after_toolchange] F12000\n{endif}\nM621 S[next_extruder]A\n
 ; circle_compensation_manual_offset = 0
-; circle_compensation_speed = 200,200,200,200,200
-; close_fan_the_first_x_layers = 1,1,3,1,1
-; complete_print_exhaust_fan_speed = 70,70,70,70,70
-; cool_plate_temp = 35,35,0,35,35
-; cool_plate_temp_initial_layer = 35,35,0,35,35
-; counter_coef_1 = 0,0,0,0,0
-; counter_coef_2 = 0.008,0.008,0.008,0.008,0.008
-; counter_coef_3 = -0.041,-0.041,-0.041,-0.041,-0.041
-; counter_limit_max = 0.033,0.033,0.033,0.033,0.033
-; counter_limit_min = -0.035,-0.035,-0.035,-0.035,-0.035
+; circle_compensation_speed = 200,200,200,200
+; close_fan_the_first_x_layers = 1,1,1,1
+; complete_print_exhaust_fan_speed = 70,70,70,70
+; cool_plate_temp = 35,35,35,30
+; cool_plate_temp_initial_layer = 35,35,35,30
+; counter_coef_1 = 0,0,0,0
+; counter_coef_2 = 0.008,0.008,0.008,0.008
+; counter_coef_3 = -0.041,-0.041,-0.041,-0.041
+; counter_limit_max = 0.033,0.033,0.033,0.033
+; counter_limit_min = -0.035,-0.035,-0.035,-0.035
 ; curr_bed_type = High Temp Plate
 ; default_acceleration = 10000
-; default_filament_colour = ;;;;
+; default_filament_colour = ;;;
 ; default_filament_profile = "Bambu PLA Basic @BBL X1C"
 ; default_jerk = 0
 ; default_nozzle_volume_type = Standard
@@ -61,22 +61,23 @@
 ; detect_narrow_internal_solid_infill = 1
 ; detect_overhang_wall = 1
 ; detect_thin_wall = 0
-; diameter_limit = 50,50,50,50,50
+; diameter_limit = 50,50,50,50
+; different_settings_to_system = ;;nozzle_temperature_range_high;nozzle_temperature_range_low;;;
 ; draft_shield = disabled
-; during_print_exhaust_fan_speed = 70,70,70,70,70
+; during_print_exhaust_fan_speed = 70,70,70,70
 ; elefant_foot_compensation = 0.15
 ; enable_arc_fitting = 1
 ; enable_circle_compensation = 0
 ; enable_long_retraction_when_cut = 2
-; enable_overhang_bridge_fan = 1,1,1,1,1
+; enable_overhang_bridge_fan = 1,1,1,1
 ; enable_overhang_speed = 1
 ; enable_pre_heating = 0
-; enable_pressure_advance = 0,0,0,0,0
+; enable_pressure_advance = 0,0,0,0
 ; enable_prime_tower = 0
 ; enable_support = 0
 ; enforce_support_layers = 0
-; eng_plate_temp = 0,0,90,0,0
-; eng_plate_temp_initial_layer = 0,0,90,0,0
+; eng_plate_temp = 0,0,0,30
+; eng_plate_temp_initial_layer = 0,0,0,30
 ; ensure_vertical_shell_thickness = enabled
 ; exclude_object = 1
 ; extruder_ams_count = 1#0|4#0;1#0|4#0
@@ -89,45 +90,46 @@
 ; extruder_printable_area = 
 ; extruder_type = Direct Drive
 ; extruder_variant_list = "Direct Drive Standard"
-; fan_cooling_layer_time = 100,100,30,100,100
-; fan_max_speed = 100,100,60,100,100
-; fan_min_speed = 100,100,10,100,100
-; filament_adhesiveness_category = 100,100,200,100,100
-; filament_change_length = 5,10,10,10,5
-; filament_colour = #939393;#F99963;#000000;#BB3D43;#161616
-; filament_cost = 24.99,24.99,24.99,24.99,24.99
-; filament_density = 1.26,1.32,1.04,1.32,1.26
-; filament_diameter = 1.75,1.75,1.75,1.75,1.75
-; filament_end_gcode = "; filament end gcode \n\n";"; filament end gcode \n\n";"; filament end gcode \n\n";"; filament end gcode \n\n";"; filament end gcode \n\n"
-; filament_extruder_variant = "Direct Drive Standard";"Direct Drive Standard";"Direct Drive Standard";"Direct Drive Standard";"Direct Drive Standard"
-; filament_flow_ratio = 0.98,0.98,0.95,0.98,0.98
-; filament_flush_temp = 0,0,0,0,0
-; filament_flush_volumetric_speed = 0,0,0,0,0
-; filament_ids = GFA00;GFA01;GFB00;GFA01;GFA00
-; filament_is_support = 0,0,0,0,0
-; filament_long_retractions_when_cut = 1,1,1,1,1
-; filament_map = 1,1,1,1,1
+; fan_cooling_layer_time = 100,100,100,100
+; fan_max_speed = 100,100,100,100
+; fan_min_speed = 100,100,100,100
+; filament_adhesiveness_category = 100,100,100,600
+; filament_change_length = 5,10,10,10
+; filament_colour = #FF6A13;#FFFFFF;#BB3D43;#000000
+; filament_cost = 24.99,24.15,24.99,20
+; filament_density = 1.26,1.2,1.32,1.24
+; filament_diameter = 1.75,1.75,1.75,1.75
+; filament_end_gcode = "; filament end gcode \n\n";"; filament end gcode \n\n";"; filament end gcode \n\n";"; filament end gcode \n\n"
+; filament_extruder_variant = "Direct Drive Standard";"Direct Drive Standard";"Direct Drive Standard";"Direct Drive Standard"
+; filament_flow_ratio = 0.98,0.98,0.98,1
+; filament_flush_temp = 0,0,0,0
+; filament_flush_volumetric_speed = 0,0,0,0
+; filament_ids = GFA00;GFL04;GFA01;GFU99
+; filament_is_support = 0,0,0,0
+; filament_long_retractions_when_cut = 1,nil,1,nil
+; filament_map = 1,1,1,1
 ; filament_map_mode = Auto For Flush
-; filament_max_volumetric_speed = 21,22,16,22,21
-; filament_minimal_purge_on_wipe_tower = 15,15,15,15,15
+; filament_max_volumetric_speed = 21,15,22,3.2
+; filament_minimal_purge_on_wipe_tower = 15,15,15,15
 ; filament_notes = 
-; filament_pre_cooling_temperature = 0,0,0,0,0
-; filament_prime_volume = 30,45,45,45,30
-; filament_printable = 3,3,3,3,3
-; filament_ramming_travel_time = 0,0,0,0,0
-; filament_ramming_volumetric_speed = -1,-1,-1,-1,-1
-; filament_retraction_distances_when_cut = 18,18,18,18,18
-; filament_scarf_gap = 0%,0%,0%,0%,0%
-; filament_scarf_height = 10%,5%,10%,5%,10%
-; filament_scarf_length = 10,10,10,10,10
-; filament_scarf_seam_type = none,none,none,none,none
-; filament_self_index = 1,2,3,4,5
-; filament_settings_id = "Bambu PLA Basic @BBL X1C";"Bambu PLA Matte @BBL X1C";"Bambu ABS @BBL X1C";"Bambu PLA Matte @BBL X1C";"Bambu PLA Basic @BBL X1C"
-; filament_shrink = 100%,100%,100%,100%,100%
-; filament_soluble = 0,0,0,0,0
-; filament_start_gcode = "; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\nM142 P1 R35 S40\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}";"; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\nM142 P1 R35 S40\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}";"; Filament gcode\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}";"; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\nM142 P1 R35 S40\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}";"; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\nM142 P1 R35 S40\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
-; filament_type = PLA;PLA;ABS;PLA;PLA
-; filament_vendor = "Bambu Lab";"Bambu Lab";"Bambu Lab";"Bambu Lab";"Bambu Lab"
+; filament_pre_cooling_temperature = 0,0,0,0
+; filament_prime_volume = 30,45,45,45
+; filament_printable = 3,3,3,3
+; filament_ramming_travel_time = 0,0,0,0
+; filament_ramming_volumetric_speed = -1,-1,-1,-1
+; filament_retraction_distances_when_cut = 18,nil,18,nil
+; filament_retraction_length = nil,nil,nil,0.4
+; filament_scarf_gap = 0%,15%,0%,0%
+; filament_scarf_height = 10%,10%,5%,10%
+; filament_scarf_length = 10,10,10,10
+; filament_scarf_seam_type = none,none,none,none
+; filament_self_index = 1,2,3,4
+; filament_settings_id = "Bambu PLA Basic @BBL X1C";"Overture PLA @BBL X1C(main_frame_ass - lower_int_90.3mf)";"Bambu PLA Matte @BBL X1C";"Generic TPU"
+; filament_shrink = 100%,100%,100%,100%
+; filament_soluble = 0,0,0,0
+; filament_start_gcode = "; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\nM142 P1 R35 S40\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}";"; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}";"; filament start gcode\n{if  (bed_temperature[current_extruder] >55)||(bed_temperature_initial_layer[current_extruder] >55)}M106 P3 S200\n{elsif(bed_temperature[current_extruder] >50)||(bed_temperature_initial_layer[current_extruder] >50)}M106 P3 S150\n{elsif(bed_temperature[current_extruder] >45)||(bed_temperature_initial_layer[current_extruder] >45)}M106 P3 S50\n{endif}\nM142 P1 R35 S40\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}";"; filament start gcode\n{if (bed_temperature[current_extruder] >35)||(bed_temperature_initial_layer[current_extruder] >35)}M106 P3 S255\n{elsif (bed_temperature[current_extruder] >30)||(bed_temperature_initial_layer[current_extruder] >30)}M106 P3 S180\n{endif} \n\n{if activate_air_filtration[current_extruder] && support_air_filtration}\nM106 P3 S{during_print_exhaust_fan_speed_num[current_extruder]} \n{endif}"
+; filament_type = PLA;PLA;PLA;TPU
+; filament_vendor = "Bambu Lab";Overture;"Bambu Lab";Generic
 ; filename_format = {input_filename_base}_{filament_type[0]}_{print_time}.gcode
 ; filter_out_gap_fill = 0
 ; first_layer_print_sequence = 0
@@ -135,9 +137,9 @@
 ; flush_into_objects = 0
 ; flush_into_support = 1
 ; flush_multiplier = 1
-; flush_volumes_matrix = 0,285,123,184,123,203,0,175,134,182,443,575,0,423,163,312,336,139,0,146,446,582,167,422,0
-; flush_volumes_vector = 140,140,140,140,140,140,140,140,140,140
-; full_fan_speed_layer = 0,0,0,0,0
+; flush_volumes_matrix = 0,526,189,168,339,0,251,187,304,526,0,139,617,667,467,0
+; flush_volumes_vector = 140,140,140,140,140,140,140,140
+; full_fan_speed_layer = 0,0,0,0
 ; fuzzy_skin = none
 ; fuzzy_skin_point_distance = 0.8
 ; fuzzy_skin_thickness = 0.3
@@ -147,17 +149,17 @@
 ; grab_length = 0
 ; has_scarf_joint_seam = 1
 ; head_wrap_detect_zone = 
-; hole_coef_1 = 0,0,0,0,0
-; hole_coef_2 = -0.008,-0.008,-0.008,-0.008,-0.008
-; hole_coef_3 = 0.23415,0.23415,0.23415,0.23415,0.23415
-; hole_limit_max = 0.22,0.22,0.22,0.22,0.22
-; hole_limit_min = 0.088,0.088,0.088,0.088,0.088
+; hole_coef_1 = 0,0,0,0
+; hole_coef_2 = -0.008,-0.008,-0.008,-0.008
+; hole_coef_3 = 0.23415,0.23415,0.23415,0.23415
+; hole_limit_max = 0.22,0.22,0.22,0.22
+; hole_limit_min = 0.088,0.088,0.088,0.088
 ; host_type = octoprint
-; hot_plate_temp = 55,55,90,55,55
-; hot_plate_temp_initial_layer = 55,55,90,55,55
+; hot_plate_temp = 55,55,55,35
+; hot_plate_temp_initial_layer = 55,55,55,35
 ; hotend_cooling_rate = 2
 ; hotend_heating_rate = 2
-; impact_strength_z = 13.8,6.6,7.4,6.6,13.8
+; impact_strength_z = 13.8,10,6.6,10
 ; independent_support_layer_height = 1
 ; infill_combination = 0
 ; infill_direction = 45
@@ -166,6 +168,7 @@
 ; infill_rotate_step = 0
 ; infill_shift_step = 0.4
 ; infill_wall_overlap = 15%
+; inherits_group = ;;"Overture PLA @BBL X1C";;;
 ; initial_layer_acceleration = 500
 ; initial_layer_flow_ratio = 1
 ; initial_layer_infill_speed = 105
@@ -201,7 +204,7 @@
 ; layer_height = 0.2
 ; line_width = 0.42
 ; long_retractions_when_cut = 0
-; long_retractions_when_ec = 0,0,0,0,0
+; long_retractions_when_ec = 0,0,0,0
 ; machine_end_gcode = ;===== date: 20240528 =====================\nM400 ; wait for buffer to clear\nG92 E0 ; zero the extruder\nG1 E-0.8 F1800 ; retract\nG1 Z{max_layer_z + 0.5} F900 ; lower z a little\nG1 X65 Y245 F12000 ; move to safe pos\nG1 Y265 F3000\n\nG1 X65 Y245 F12000\nG1 Y265 F3000\nM140 S0 ; turn off bed\nM106 S0 ; turn off fan\nM106 P2 S0 ; turn off remote part cooling fan\nM106 P3 S0 ; turn off chamber cooling fan\n\nG1 X100 F12000 ; wipe\n; pull back filament to AMS\nM620 S255\nG1 X20 Y50 F12000\nG1 Y-3\nT255\nG1 X65 F12000\nG1 Y265\nG1 X100 F12000 ; wipe\nM621 S255\nM104 S0 ; turn off hotend\n\nM622.1 S1 ; for prev firware, default turned on\nM1002 judge_flag timelapse_record_flag\nM622 J1\n    M400 ; wait all motion done\n    M991 S0 P-1 ;end smooth timelapse at safe pos\n    M400 S3 ;wait for last picture to be taken\nM623; end of "timelapse_record_flag"\n\nM400 ; wait all motion done\nM17 S\nM17 Z0.4 ; lower z motor current to reduce impact if there is something in the bottom\n{if (max_layer_z + 100.0) < 250}\n    G1 Z{max_layer_z + 100.0} F600\n    G1 Z{max_layer_z +98.0}\n{else}\n    G1 Z250 F600\n    G1 Z248\n{endif}\nM400 P100\nM17 R ; restore z current\n\nM220 S100  ; Reset feedrate magnitude\nM201.2 K1.0 ; Reset acc magnitude\nM73.2   R1.0 ;Reset left time magnitude\nM1002 set_gcode_claim_speed_level : 0\n;=====printer finish  sound=========\nM17\nM400 S1\nM1006 S1\nM1006 A0 B20 L100 C37 D20 M40 E42 F20 N60\nM1006 A0 B10 L100 C44 D10 M60 E44 F10 N60\nM1006 A0 B10 L100 C46 D10 M80 E46 F10 N80\nM1006 A44 B20 L100 C39 D20 M60 E48 F20 N60\nM1006 A0 B10 L100 C44 D10 M60 E44 F10 N60\nM1006 A0 B10 L100 C0 D10 M60 E0 F10 N60\nM1006 A0 B10 L100 C39 D10 M60 E39 F10 N60\nM1006 A0 B10 L100 C0 D10 M60 E0 F10 N60\nM1006 A0 B10 L100 C44 D10 M60 E44 F10 N60\nM1006 A0 B10 L100 C0 D10 M60 E0 F10 N60\nM1006 A0 B10 L100 C39 D10 M60 E39 F10 N60\nM1006 A0 B10 L100 C0 D10 M60 E0 F10 N60\nM1006 A0 B10 L100 C48 D10 M60 E44 F10 N100\nM1006 A0 B10 L100 C0 D10 M60 E0 F10  N100\nM1006 A49 B20 L100 C44 D20 M100 E41 F20 N100\nM1006 A0 B20 L100 C0 D20 M60 E0 F20 N100\nM1006 A0 B20 L100 C37 D20 M30 E37 F20 N60\nM1006 W\n\nM17 X0.8 Y0.8 Z0.5 ; lower motor current to 45% power\nM960 S5 P0 ; turn off logo lamp\n
 ; machine_load_filament_time = 29
 ; machine_max_acceleration_e = 5000,5000
@@ -237,10 +240,10 @@
 ; mmu_segmented_region_max_width = 0
 ; nozzle_diameter = 0.4
 ; nozzle_height = 4.2
-; nozzle_temperature = 220,220,270,220,220
-; nozzle_temperature_initial_layer = 220,220,260,220,220
-; nozzle_temperature_range_high = 240,240,280,240,240
-; nozzle_temperature_range_low = 190,190,240,190,190
+; nozzle_temperature = 220,220,220,240
+; nozzle_temperature_initial_layer = 220,220,220,240
+; nozzle_temperature_range_high = 240,250,240,250
+; nozzle_temperature_range_low = 190,220,190,200
 ; nozzle_type = hardened_steel
 ; nozzle_volume = 107
 ; nozzle_volume_type = Standard
@@ -251,21 +254,21 @@
 ; outer_wall_acceleration = 5000
 ; outer_wall_jerk = 9
 ; outer_wall_line_width = 0.42
-; outer_wall_speed = 60
+; outer_wall_speed = 200
 ; overhang_1_4_speed = 0
 ; overhang_2_4_speed = 50
 ; overhang_3_4_speed = 30
 ; overhang_4_4_speed = 10
-; overhang_fan_speed = 100,100,80,100,100
-; overhang_fan_threshold = 50%,50%,25%,50%,50%
-; overhang_threshold_participating_cooling = 95%,95%,95%,95%,95%
+; overhang_fan_speed = 100,100,100,100
+; overhang_fan_threshold = 50%,50%,50%,95%
+; overhang_threshold_participating_cooling = 95%,95%,95%,95%
 ; overhang_totally_speed = 10
 ; physical_extruder_map = 0
 ; post_process = 
-; pre_start_fan_time = 0,0,0,0,0
+; pre_start_fan_time = 0,0,0,0
 ; precise_outer_wall = 0
 ; precise_z_height = 0
-; pressure_advance = 0.02,0.02,0.02,0.02,0.02
+; pressure_advance = 0.02,0.02,0.02,0.02
 ; prime_tower_brim_width = 3
 ; prime_tower_enable_framework = 0
 ; prime_tower_extra_rib_length = 0
@@ -284,7 +287,7 @@
 ; print_extruder_variant = "Direct Drive Standard"
 ; print_flow_ratio = 1
 ; print_sequence = by layer
-; print_settings_id = 0.20mm Strength @BBL X1C
+; print_settings_id = 0.20mm Standard @BBL X1C
 ; printable_area = 0x0,256x0,256x256,0x256
 ; printable_height = 250
 ; printer_extruder_id = 1
@@ -305,9 +308,9 @@
 ; raft_first_layer_expansion = 2
 ; raft_layers = 0
 ; reduce_crossing_wall = 0
-; reduce_fan_stop_start_freq = 1,1,1,1,1
+; reduce_fan_stop_start_freq = 1,1,1,1
 ; reduce_infill_retraction = 1
-; required_nozzle_HRC = 3,3,3,3,3
+; required_nozzle_HRC = 3,3,3,3
 ; resolution = 0.012
 ; retract_before_wipe = 0%
 ; retract_length_toolchange = 2
@@ -317,7 +320,7 @@
 ; retract_restart_extra_toolchange = 0
 ; retract_when_changing_layer = 1
 ; retraction_distances_when_cut = 18
-; retraction_distances_when_ec = 0,0,0,0,0
+; retraction_distances_when_ec = 0,0,0,0
 ; retraction_length = 0.8
 ; retraction_minimum_travel = 1
 ; retraction_speed = 30
@@ -332,9 +335,9 @@
 ; seam_slope_steps = 10
 ; silent_mode = 0
 ; single_extruder_multi_material = 1
-; skeleton_infill_density = 25%
+; skeleton_infill_density = 15%
 ; skeleton_infill_line_width = 0.45
-; skin_infill_density = 25%
+; skin_infill_density = 15%
 ; skin_infill_depth = 2
 ; skin_infill_line_width = 0.45
 ; skirt_distance = 2
@@ -342,9 +345,9 @@
 ; skirt_loops = 0
 ; slice_closing_radius = 0.049
 ; slicing_mode = regular
-; slow_down_for_layer_cooling = 1,1,1,1,1
-; slow_down_layer_time = 4,4,12,4,4
-; slow_down_min_speed = 20,20,20,20,20
+; slow_down_for_layer_cooling = 1,1,1,1
+; slow_down_layer_time = 4,6,4,8
+; slow_down_min_speed = 20,20,20,10
 ; small_perimeter_speed = 50%
 ; small_perimeter_threshold = 0
 ; smooth_coefficient = 150
@@ -353,7 +356,7 @@
 ; sparse_infill_acceleration = 100%
 ; sparse_infill_anchor = 400%
 ; sparse_infill_anchor_max = 20
-; sparse_infill_density = 25%
+; sparse_infill_density = 15%
 ; sparse_infill_filament = 1
 ; sparse_infill_line_width = 0.45
 ; sparse_infill_pattern = grid
@@ -363,8 +366,8 @@
 ; spiral_mode_smooth = 0
 ; standby_temperature_delta = -5
 ; start_end_points = 30x-3,54x245
-; supertack_plate_temp = 45,45,0,45,45
-; supertack_plate_temp_initial_layer = 45,45,0,45,45
+; supertack_plate_temp = 45,45,45,0
+; supertack_plate_temp_initial_layer = 45,45,45,0
 ; support_air_filtration = 0
 ; support_angle = 0
 ; support_base_pattern = default
@@ -394,10 +397,10 @@
 ; support_top_z_distance = 0.2
 ; support_type = tree(auto)
 ; symmetric_infill_y_axis = 0
-; temperature_vitrification = 45,45,100,45,45
+; temperature_vitrification = 45,45,45,30
 ; template_custom_gcode = 
-; textured_plate_temp = 55,55,90,55,55
-; textured_plate_temp_initial_layer = 55,55,90,55,55
+; textured_plate_temp = 55,55,55,35
+; textured_plate_temp_initial_layer = 55,55,55,35
 ; thick_bridges = 0
 ; thumbnail_size = 50x50
 ; time_lapse_gcode = ;========Date 20250206========\n; SKIPPABLE_START\n; SKIPTYPE: timelapse\nM622.1 S1 ; for prev firware, default turned on\nM1002 judge_flag timelapse_record_flag\nM622 J1\n{if timelapse_type == 0} ; timelapse without wipe tower\nM971 S11 C10 O0\nM1004 S5 P1  ; external shutter\n{elsif timelapse_type == 1} ; timelapse with wipe tower\nG92 E0\nG1 X65 Y245 F20000 ; move to safe pos\nG17\nG2 Z{layer_z} I0.86 J0.86 P1 F20000\nG1 Y265 F3000\nM400\nM1004 S5 P1  ; external shutter\nM400 P300\nM971 S11 C10 O0\nG92 E0\nG1 X100 F5000\nG1 Y255 F20000\n{endif}\nM623\n; SKIPPABLE_END\n
@@ -429,7 +432,7 @@
 ; wall_distribution_count = 1
 ; wall_filament = 1
 ; wall_generator = classic
-; wall_loops = 6
+; wall_loops = 2
 ; wall_sequence = inner wall/outer wall
 ; wall_transition_angle = 10
 ; wall_transition_filter_deviation = 25%
@@ -439,8 +442,8 @@
 ; wipe_speed = 80%
 ; wipe_tower_no_sparse_layers = 0
 ; wipe_tower_rotation_angle = 0
-; wipe_tower_x = 165
-; wipe_tower_y = 216.972
+; wipe_tower_x = 165,165
+; wipe_tower_y = 216.972,216.972
 ; xy_contour_compensation = 0
 ; xy_hole_compensation = 0
 ; z_direction_outwall_speed_continuous = 0
@@ -449,7 +452,7 @@
 ; CONFIG_BLOCK_END
 
 ; EXECUTABLE_BLOCK_START
-M73 P0 R13
+M73 P0 R11
 M201 X20000 Y20000 Z500 E5000
 M203 X500 Y500 Z20 E30
 M204 P20000 R5000 T20000
@@ -550,12 +553,12 @@ M412 S1 ; ===turn on filament runout detection===
 M109 S250 ;set nozzle to common flush temp
 M106 P1 S0
 G92 E0
-M73 P4 R13
+M73 P4 R11
 G1 E50 F200
 M400
 M104 S220
 G92 E0
-M73 P35 R9
+M73 P41 R7
 G1 E50 F200
 M400
 M106 P1 S255
@@ -563,12 +566,11 @@ G92 E0
 G1 E5 F300
 M109 S200 ; drop nozzle temp, make filament shink a bit
 G92 E0
-M73 P37 R8
+M73 P43 R6
 G1 E-0.5 F300
 
-M73 P38 R8
+M73 P45 R6
 G1 X70 F9000
-M73 P39 R8
 G1 X76 F15000
 G1 X65 F15000
 G1 X76 F15000
@@ -601,6 +603,7 @@ G92 E0
 G1 E-0.5 F300 ; retrack more
 G1 X100 F5000; second wipe mouth
 G1 X70 F15000
+M73 P46 R6
 G1 X100 F5000
 G1 X70 F15000
 G1 X100 F5000
@@ -663,8 +666,8 @@ G2 I0.5 J0 F3000
 M221 R; pop softend status
 G1 Z10 F1200
 M400
-M73 P40 R8
 G1 Z10
+M73 P47 R6
 G1 F30000
 G1 X128 Y128
 G29.2 S1 ; turn on ABL
@@ -684,7 +687,7 @@ M1002 judge_flag g29_before_print_flag
 M622 J1
 
     M1002 gcode_claim_action : 1
-    G29 A X101.168 Y122.001 I53.5557 J27.4973
+    G29 A X101.276 Y122.001 I53.4472 J24.9956
     M400
     M500 ; save cali data
 
@@ -746,15 +749,15 @@ M83
 T1000
 G1 X18.0 Y1.0 Z0.8 F18000;Move to start position
 M109 S220
-M73 P41 R8
+M73 P48 R6
 G1 Z0.2
 G0 E2 F300
-G0 X240 E15 F1809.98
-G0 Y11 E0.700 F452.496
+G0 X240 E15 F6033.27
+G0 Y11 E0.700 F1508.32
 G0 X239.5
 G0 E0.2
 G0 Y1.5 E0.700
-G0 X231 E0.700 F1809.98
+G0 X231 E0.700 F6033.27
 M400
 
 ;===== for Textured PEI Plate , lower the nozzle as the nozzle was touching topmost of the texture when homing ==
@@ -775,7 +778,7 @@ M622 J1
     G0 F1200.0 X216 Y8    Z0.2 E0.549
     G0 F1200.0 X216 Y1.5  Z0.2 E0.357
 
-    G0 X48.0 E12.0 F1809.98
+    G0 X48.0 E12.0 F6033.27
     G0 X48.0 Y14 E0.92 F1200.0
     G0 X35.0 Y6.0 E1.03 F1200.0
 
@@ -790,7 +793,7 @@ M622 J1
     G0 X35.000 Y6.000 Z0.300 F30000 E0
     G1 F1500.000 E0.800
     M106 S0 ; turn off fan
-    G0 X185.000 E9.35441 F1809.98
+    G0 X185.000 E9.35441 F6033.27
     G0 X187 Z0
     G1 F1500.000 E-0.800
     G0 Z1
@@ -801,32 +804,32 @@ M622 J1
     G0 X45.000 F30000
     G0 Y8.000 F30000
     G1 F1500.000 E0.800
-    G1 X65.000 E1.24726 F452.496
-    G1 X70.000 E0.31181 F452.496
-    G1 X75.000 E0.31181 F1809.98
-    G1 X80.000 E0.31181 F452.496
-    G1 X85.000 E0.31181 F1809.98
-    G1 X90.000 E0.31181 F452.496
-M73 P42 R8
-    G1 X95.000 E0.31181 F1809.98
-    G1 X100.000 E0.31181 F452.496
-    G1 X105.000 E0.31181 F1809.98
-    G1 X110.000 E0.31181 F452.496
-    G1 X115.000 E0.31181 F1809.98
-    G1 X120.000 E0.31181 F452.496
-    G1 X125.000 E0.31181 F1809.98
-    G1 X130.000 E0.31181 F452.496
-    G1 X135.000 E0.31181 F1809.98
-    G1 X140.000 E0.31181 F452.496
-M73 P43 R7
-    G1 X145.000 E0.31181 F1809.98
-    G1 X150.000 E0.31181 F452.496
-    G1 X155.000 E0.31181 F1809.98
-    G1 X160.000 E0.31181 F452.496
-    G1 X165.000 E0.31181 F1809.98
-    G1 X170.000 E0.31181 F452.496
-    G1 X175.000 E0.31181 F1809.98
-    G1 X180.000 E0.31181 F1809.98
+    G1 X65.000 E1.24726 F1508.32
+    G1 X70.000 E0.31181 F1508.32
+    G1 X75.000 E0.31181 F6033.27
+    G1 X80.000 E0.31181 F1508.32
+    G1 X85.000 E0.31181 F6033.27
+    G1 X90.000 E0.31181 F1508.32
+M73 P49 R6
+    G1 X95.000 E0.31181 F6033.27
+    G1 X100.000 E0.31181 F1508.32
+    G1 X105.000 E0.31181 F6033.27
+    G1 X110.000 E0.31181 F1508.32
+    G1 X115.000 E0.31181 F6033.27
+    G1 X120.000 E0.31181 F1508.32
+    G1 X125.000 E0.31181 F6033.27
+    G1 X130.000 E0.31181 F1508.32
+    G1 X135.000 E0.31181 F6033.27
+M73 P50 R5
+    G1 X140.000 E0.31181 F1508.32
+    G1 X145.000 E0.31181 F6033.27
+    G1 X150.000 E0.31181 F1508.32
+    G1 X155.000 E0.31181 F6033.27
+    G1 X160.000 E0.31181 F1508.32
+    G1 X165.000 E0.31181 F6033.27
+    G1 X170.000 E0.31181 F1508.32
+    G1 X175.000 E0.31181 F6033.27
+    G1 X180.000 E0.31181 F6033.27
     G1 F1500.000 E-0.800
     G1 X183 Z0.15 F30000
     G1 X185
@@ -840,33 +843,32 @@ M73 P43 R7
     G0 X45.000 F30000
     G0 Y10.000 F30000
     G1 F1500.000 E0.800
-    G1 X65.000 E1.24726 F452.496
-    G1 X70.000 E0.31181 F452.496
-    G1 X75.000 E0.31181 F1809.98
-    G1 X80.000 E0.31181 F452.496
-    G1 X85.000 E0.31181 F1809.98
-    G1 X90.000 E0.31181 F452.496
-    G1 X95.000 E0.31181 F1809.98
-M73 P44 R7
-    G1 X100.000 E0.31181 F452.496
-    G1 X105.000 E0.31181 F1809.98
-    G1 X110.000 E0.31181 F452.496
-    G1 X115.000 E0.31181 F1809.98
-    G1 X120.000 E0.31181 F452.496
-    G1 X125.000 E0.31181 F1809.98
-M73 P45 R7
-    G1 X130.000 E0.31181 F452.496
-    G1 X135.000 E0.31181 F1809.98
-    G1 X140.000 E0.31181 F452.496
-    G1 X145.000 E0.31181 F1809.98
-    G1 X150.000 E0.31181 F452.496
-    G1 X155.000 E0.31181 F1809.98
-    G1 X160.000 E0.31181 F452.496
-    G1 X165.000 E0.31181 F1809.98
-    G1 X170.000 E0.31181 F452.496
-    G1 X175.000 E0.31181 F1809.98
-    G1 X180.000 E0.31181 F1809.98
-M73 P46 R7
+    G1 X65.000 E1.24726 F1508.32
+M73 P51 R5
+    G1 X70.000 E0.31181 F1508.32
+    G1 X75.000 E0.31181 F6033.27
+    G1 X80.000 E0.31181 F1508.32
+    G1 X85.000 E0.31181 F6033.27
+    G1 X90.000 E0.31181 F1508.32
+    G1 X95.000 E0.31181 F6033.27
+    G1 X100.000 E0.31181 F1508.32
+    G1 X105.000 E0.31181 F6033.27
+    G1 X110.000 E0.31181 F1508.32
+    G1 X115.000 E0.31181 F6033.27
+    G1 X120.000 E0.31181 F1508.32
+    G1 X125.000 E0.31181 F6033.27
+    G1 X130.000 E0.31181 F1508.32
+M73 P52 R5
+    G1 X135.000 E0.31181 F6033.27
+    G1 X140.000 E0.31181 F1508.32
+    G1 X145.000 E0.31181 F6033.27
+    G1 X150.000 E0.31181 F1508.32
+    G1 X155.000 E0.31181 F6033.27
+    G1 X160.000 E0.31181 F1508.32
+    G1 X165.000 E0.31181 F6033.27
+    G1 X170.000 E0.31181 F1508.32
+    G1 X175.000 E0.31181 F6033.27
+    G1 X180.000 E0.31181 F6033.27
     G1 F1500.000 E-0.800
     G1 X183 Z0.15 F30000
     G1 X185
@@ -879,33 +881,32 @@ M73 P46 R7
     M900 K0.000
     G0 X45.000 F30000
     G0 Y12.000 F30000
-M73 P47 R7
+M73 P53 R5
     G1 F1500.000 E0.800
-    G1 X65.000 E1.24726 F452.496
-    G1 X70.000 E0.31181 F452.496
-    G1 X75.000 E0.31181 F1809.98
-    G1 X80.000 E0.31181 F452.496
-    G1 X85.000 E0.31181 F1809.98
-    G1 X90.000 E0.31181 F452.496
-    G1 X95.000 E0.31181 F1809.98
-    G1 X100.000 E0.31181 F452.496
-    G1 X105.000 E0.31181 F1809.98
-    G1 X110.000 E0.31181 F452.496
-    G1 X115.000 E0.31181 F1809.98
-    G1 X120.000 E0.31181 F452.496
-    G1 X125.000 E0.31181 F1809.98
-    G1 X130.000 E0.31181 F452.496
-    G1 X135.000 E0.31181 F1809.98
-    G1 X140.000 E0.31181 F452.496
-M73 P48 R7
-    G1 X145.000 E0.31181 F1809.98
-    G1 X150.000 E0.31181 F452.496
-    G1 X155.000 E0.31181 F1809.98
-    G1 X160.000 E0.31181 F452.496
-    G1 X165.000 E0.31181 F1809.98
-    G1 X170.000 E0.31181 F452.496
-    G1 X175.000 E0.31181 F1809.98
-    G1 X180.000 E0.31181 F1809.98
+    G1 X65.000 E1.24726 F1508.32
+    G1 X70.000 E0.31181 F1508.32
+    G1 X75.000 E0.31181 F6033.27
+    G1 X80.000 E0.31181 F1508.32
+    G1 X85.000 E0.31181 F6033.27
+    G1 X90.000 E0.31181 F1508.32
+    G1 X95.000 E0.31181 F6033.27
+    G1 X100.000 E0.31181 F1508.32
+    G1 X105.000 E0.31181 F6033.27
+    G1 X110.000 E0.31181 F1508.32
+    G1 X115.000 E0.31181 F6033.27
+    G1 X120.000 E0.31181 F1508.32
+    G1 X125.000 E0.31181 F6033.27
+    G1 X130.000 E0.31181 F1508.32
+    G1 X135.000 E0.31181 F6033.27
+    G1 X140.000 E0.31181 F1508.32
+    G1 X145.000 E0.31181 F6033.27
+    G1 X150.000 E0.31181 F1508.32
+    G1 X155.000 E0.31181 F6033.27
+    G1 X160.000 E0.31181 F1508.32
+    G1 X165.000 E0.31181 F6033.27
+    G1 X170.000 E0.31181 F1508.32
+    G1 X175.000 E0.31181 F6033.27
+    G1 X180.000 E0.31181 F6033.27
     G1 F1500.000 E-0.800
     G1 X183 Z0.15 F30000
     G1 X185
@@ -921,7 +922,7 @@ M623 ; end of "draw extrinsic para cali paint"
 M1002 judge_flag extrude_cali_flag
 M622 J0
     G0 X231 Y1.5 F30000
-    G0 X18 E14.3 F1809.98
+    G0 X18 E14.3 F6033.27
 M623
 
 M104 S140
@@ -1047,7 +1048,7 @@ M622 J1
 
     M969 S1 N3 A2000
     G0 F360.000 X181.000 Z0.000
-    M980.3 A70.000 B28.2332 C5.000 D112.933 E5.000 F175.000 H1.000 I0.000 J0.020 K0.040
+    M980.3 A70.000 B94.1106 C5.000 D376.442 E5.000 F175.000 H1.000 I0.000 J0.020 K0.040
     M400 P100
     G0 F20000
     G0 Z1 ; rise nozzle up
@@ -1063,49 +1064,48 @@ M622 J1
     M109 S220
     G0 Z0.3
     G1 F1500.000 E3.600
-    G1 X65.000 E1.24726 F452.496
-    G1 X70.000 E0.31181 F452.496
-    G1 X75.000 E0.31181 F1809.98
-    G1 X80.000 E0.31181 F452.496
-    G1 X85.000 E0.31181 F1809.98
-    G1 X90.000 E0.31181 F452.496
-M73 P49 R7
-    G1 X95.000 E0.31181 F1809.98
-    G1 X100.000 E0.31181 F452.496
-    G1 X105.000 E0.31181 F1809.98
-    G1 X110.000 E0.31181 F452.496
-    G1 X115.000 E0.31181 F1809.98
-    G1 X120.000 E0.31181 F452.496
-    G1 X125.000 E0.31181 F1809.98
-    G1 X130.000 E0.31181 F452.496
-    G1 X135.000 E0.31181 F1809.98
+    G1 X65.000 E1.24726 F1508.32
+    G1 X70.000 E0.31181 F1508.32
+    G1 X75.000 E0.31181 F6033.27
+    G1 X80.000 E0.31181 F1508.32
+    G1 X85.000 E0.31181 F6033.27
+    G1 X90.000 E0.31181 F1508.32
+    G1 X95.000 E0.31181 F6033.27
+    G1 X100.000 E0.31181 F1508.32
+    G1 X105.000 E0.31181 F6033.27
+    G1 X110.000 E0.31181 F1508.32
+    G1 X115.000 E0.31181 F6033.27
+    G1 X120.000 E0.31181 F1508.32
+    G1 X125.000 E0.31181 F6033.27
+M73 P54 R5
+    G1 X130.000 E0.31181 F1508.32
+    G1 X135.000 E0.31181 F6033.27
 
     ; see if extrude cali success, if not ,use default value
     M1002 judge_last_extrude_cali_success
     M622 J0
         M400
-        M900 K0.02 M0.0376442
+        M900 K0.02 M0.125481
     M623
 
-    G1 X140.000 E0.31181 F452.496
-    G1 X145.000 E0.31181 F1809.98
-    G1 X150.000 E0.31181 F452.496
-    G1 X155.000 E0.31181 F1809.98
-    G1 X160.000 E0.31181 F452.496
-    G1 X165.000 E0.31181 F1809.98
-    G1 X170.000 E0.31181 F452.496
-    G1 X175.000 E0.31181 F1809.98
-    G1 X180.000 E0.31181 F452.496
-    G1 X185.000 E0.31181 F1809.98
-M73 P50 R6
-    G1 X190.000 E0.31181 F452.496
-    G1 X195.000 E0.31181 F1809.98
-    G1 X200.000 E0.31181 F452.496
-    G1 X205.000 E0.31181 F1809.98
-    G1 X210.000 E0.31181 F452.496
-    G1 X215.000 E0.31181 F1809.98
-    G1 X220.000 E0.31181 F452.496
-    G1 X225.000 E0.31181 F1809.98
+    G1 X140.000 E0.31181 F1508.32
+    G1 X145.000 E0.31181 F6033.27
+    G1 X150.000 E0.31181 F1508.32
+    G1 X155.000 E0.31181 F6033.27
+    G1 X160.000 E0.31181 F1508.32
+    G1 X165.000 E0.31181 F6033.27
+    G1 X170.000 E0.31181 F1508.32
+    G1 X175.000 E0.31181 F6033.27
+    G1 X180.000 E0.31181 F1508.32
+    G1 X185.000 E0.31181 F6033.27
+    G1 X190.000 E0.31181 F1508.32
+    G1 X195.000 E0.31181 F6033.27
+    G1 X200.000 E0.31181 F1508.32
+    G1 X205.000 E0.31181 F6033.27
+    G1 X210.000 E0.31181 F1508.32
+    G1 X215.000 E0.31181 F6033.27
+    G1 X220.000 E0.31181 F1508.32
+    G1 X225.000 E0.31181 F6033.27
     M973 S4
 
 M623
@@ -1132,8 +1132,8 @@ G1 X18.0 Y2.5 Z0.8 F18000.0;Move to start position
 G1 E0.8 F1800
 M109 S220
 G1 Z0.2
-G0 X239 E15 F1809.98
-G0 Y12 E0.7 F452.496
+G0 X239 E15 F6033.27
+G0 Y12 E0.7 F1508.32
 ; MACHINE_START_GCODE_END
 ; filament start gcode
 M106 P3 S150
@@ -1156,7 +1156,7 @@ M106 S0
 M106 P2 S0
 M204 S6000
 G1 Z.4 F30000
-; object ids of layer 1 start: 72,104
+; object ids of layer 1 start: 123,194
 M624 AwAAAAAAAAA=
 ;========Date 20250206========
 ; SKIPPABLE_START
@@ -1171,119 +1171,16 @@ M1004 S5 P1  ; external shutter
 M623
 ; SKIPPABLE_END
 
-; object ids of this layer1 end: 72,104
+; object ids of this layer1 end: 123,194
 M625
-; OBJECT_ID: 72
-; start printing object, unique label id: 72
+; OBJECT_ID: 123
+; start printing object, unique label id: 123
 M624 AQAAAAAAAAA=
-G1 X140.29 Y125.581
+G1 X148.08 Y121.237
 G1 Z.2
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.5
-G1 F3000
-M204 S500
-G1 X142.184 Y124.883 E.0752
-G2 X142.186 Y127.118 I6.908 J1.114 E.08364
-G1 X140.009 Y126.315 E.08644
-G1 X115.991 Y126.315 E.89456
-G1 X113.815 Y127.118 E.08638
-M73 P51 R6
-G2 X113.814 Y124.882 I-6.913 J-1.114 E.08366
-G1 X115.991 Y125.685 E.08644
-G1 X140.008 Y125.685 E.89455
-G1 X140.234 Y125.602 E.00896
-M204 S6000
-G1 X140.151 Y125.146 F30000
-G1 F3000
-M204 S500
-G1 X142.815 Y124.163 E.10576
-G2 X142.815 Y127.838 I6.287 J1.837 E.13875
-G1 X139.927 Y126.772 E.11467
-G1 X116.073 Y126.772 E.88848
-G1 X113.185 Y127.838 E.11467
-G2 X113.185 Y124.162 I-6.289 J-1.838 E.13878
-G1 X116.073 Y125.228 E.11467
-G1 X139.927 Y125.228 E.88846
-G1 X140.095 Y125.166 E.00667
-M204 S6000
-G1 X139.667 Y124.771 F30000
-G1 F3000
-M204 S500
-G1 X139.845 Y124.771 E.00662
-G1 X143.631 Y123.375 E.15028
-G2 X143.631 Y128.627 I5.231 J2.625 E.20285
-G1 X139.845 Y127.229 E.15031
-G1 X116.155 Y127.229 E.88239
-G1 X112.369 Y128.627 E.15031
-G2 X112.369 Y123.373 I-5.231 J-2.626 E.2029
-M73 P52 R6
-G1 X116.155 Y124.771 E.15031
-G1 X139.607 Y124.771 E.87353
-M204 S6000
-G1 X139.873 Y124.274 F30000
-G1 F3000
-M204 S500
-G1 X144.464 Y122.58 E.18228
-G1 X144.587 Y122.743 E.00759
-M73 P53 R6
-G2 X144.588 Y129.259 I4.17 J3.257 E.26145
-G1 X144.465 Y129.422 E.00759
-G1 X139.764 Y127.686 E.18668
-G1 X116.236 Y127.686 E.87631
-G1 X111.535 Y129.422 E.18668
-G1 X111.412 Y129.259 E.00759
-G2 X111.412 Y122.741 I-4.169 J-3.259 E.26154
-G1 X111.535 Y122.578 E.00759
-G1 X116.236 Y124.314 E.18667
-G1 X139.763 Y124.314 E.8763
-G1 X139.816 Y124.295 E.0021
-; WIPE_START
-M73 P54 R6
-G1 X141.693 Y123.602 E-.76
-; WIPE_END
-G1 E-.04 F1800
-M204 S6000
-G1 X134.226 Y125.184 Z.6 F30000
-M73 P56 R6
-G1 X107.904 Y130.76 Z.6
-G1 Z.2
-G1 E.8 F1800
-G1 F3000
-M204 S500
-G1 X107.694 Y130.784 E.00789
-G3 X107.065 Y121.197 I-.418 J-4.787 E.57001
-G3 X107.482 Y121.197 I.21 J5.623 E.01551
-G3 X108.142 Y130.724 I-.206 J4.801 E.52211
-M73 P57 R6
-G1 X107.963 Y130.751 E.00673
-M204 S6000
-G1 X107.502 Y130.335 F30000
-; FEATURE: Outer wall
-G1 F3000
-M204 S500
-M73 P57 R5
-G1 X107.275 Y130.346 E.00846
-G3 X107.085 Y121.654 I0 J-4.348 E.50169
-G3 X107.463 Y121.654 I.19 J5.11 E.01408
-G3 X107.844 Y130.309 I-.188 J4.344 E.48054
-G1 X107.562 Y130.331 E.01053
-; WIPE_START
-G1 X107.275 Y130.346 E-.10911
-G1 X106.709 Y130.313 E-.21562
-G1 X106.334 Y130.247 E-.1447
-G1 X105.967 Y130.149 E-.1442
-G1 X105.61 Y130.019 E-.14428
-G1 X105.605 Y130.017 E-.0021
-; WIPE_END
-G1 E-.04 F1800
-M204 S6000
-G1 X113.08 Y128.472 Z.6 F30000
-G1 X148.08 Y121.237 Z.6
-G1 Z.2
-G1 E.8 F1800
-; FEATURE: Inner wall
-M73 P58 R5
 G1 F3000
 M204 S500
 G1 X148.098 Y121.234 E.00066
@@ -1307,22 +1204,58 @@ G1 X148.535 Y121.654 E-.14422
 G1 X148.913 Y121.654 E-.14365
 G1 X149.293 Y121.687 E-.14473
 G1 X149.666 Y121.753 E-.14419
-M73 P59 R5
 G1 X150.011 Y121.845 E-.13536
 ; WIPE_END
 G1 E-.04 F1800
 M204 S6000
-G1 X142.517 Y123.297 Z.6 F30000
-G1 X139.627 Y123.857 Z.6
+G1 X142.544 Y123.426 Z.6 F30000
+G1 X107.904 Y130.76 Z.6
 G1 Z.2
 G1 E.8 F1800
 ; FEATURE: Inner wall
 G1 F3000
 M204 S500
+G1 X107.694 Y130.784 E.00789
+G3 X107.065 Y121.197 I-.418 J-4.787 E.57001
+G3 X107.482 Y121.197 I.21 J5.623 E.01551
+G3 X108.142 Y130.724 I-.206 J4.801 E.52211
+M73 P55 R5
+G1 X107.963 Y130.751 E.00673
+M204 S6000
+G1 X107.502 Y130.335 F30000
+; FEATURE: Outer wall
+G1 F3000
+M204 S500
+G1 X107.275 Y130.346 E.00846
+G3 X107.085 Y121.654 I0 J-4.348 E.50169
+G3 X107.463 Y121.654 I.19 J5.11 E.01408
+G3 X107.844 Y130.309 I-.188 J4.344 E.48054
+G1 X107.562 Y130.331 E.01053
+; WIPE_START
+G1 X107.275 Y130.346 E-.10911
+M73 P56 R5
+G1 X106.709 Y130.313 E-.21562
+G1 X106.334 Y130.247 E-.1447
+G1 X105.967 Y130.149 E-.1442
+G1 X105.61 Y130.019 E-.14428
+G1 X105.605 Y130.017 E-.0021
+; WIPE_END
+G1 E-.04 F1800
+M204 S6000
+G1 X113.116 Y128.657 Z.6 F30000
+G1 X139.627 Y123.857 Z.6
+G1 Z.2
+M73 P57 R5
+G1 E.8 F1800
+; FEATURE: Inner wall
+G1 F3000
+M204 S500
 G1 X139.682 Y123.857 E.00205
+M73 P59 R4
 G1 X147.091 Y121.124 E.29415
 G3 X148.843 Y120.859 I1.684 J5.211 E.06628
 G3 X146.864 Y130.794 I-.122 J5.141 E.6679
+M73 P60 R4
 G1 X139.682 Y128.143 E.28514
 G1 X116.318 Y128.143 E.87022
 G1 X109.138 Y130.794 E.28509
@@ -1334,7 +1267,6 @@ G1 X139.624 Y123.391 F30000
 ; FEATURE: Outer wall
 G1 F3000
 M204 S500
-M73 P60 R5
 G1 X146.944 Y120.691 E.29061
 G3 X148.854 Y120.402 I1.836 J5.675 E.07226
 G3 X146.707 Y131.224 I-.133 J5.598 E.72691
@@ -1349,65 +1281,181 @@ G1 X141.443 Y122.711 E-.76
 ; WIPE_END
 G1 E-.04 F1800
 M204 S6000
-G1 X139.91 Y125.939 Z.6 F30000
-G1 Z.2
-G1 E.8 F1800
-; FEATURE: Gap infill
-; LINE_WIDTH: 0.117299
-G1 F3000
-M204 S500
-G1 X139.8 Y125.958 E.00068
-; LINE_WIDTH: 0.152545
-G1 X139.765 Y125.979 E.00037
-; LINE_WIDTH: 0.180473
-G1 X139.73 Y126 E.00046
-G1 X139.8 Y126.042 E.00092
-; LINE_WIDTH: 0.117427
-G1 X139.911 Y126.061 E.00068
-M204 S6000
-G1 X139.73 Y126 F30000
-; LINE_WIDTH: 0.21518
-G1 F3000
-M204 S500
-G1 X116.27 Y126 E.3293
-; LINE_WIDTH: 0.194335
-G1 X116.235 Y125.979 E.00051
-; LINE_WIDTH: 0.152645
-G1 X116.199 Y125.958 E.00037
-; LINE_WIDTH: 0.11736
-G1 X116.089 Y125.939 E.00068
-; WIPE_START
-G1 X116.199 Y125.958 E-.76
-; WIPE_END
-G1 E-.04 F1800
-M204 S6000
-G1 X114.215 Y125.224 Z.6 F30000
+G1 X143.681 Y122.577 Z.6 F30000
 G1 Z.2
 G1 E.8 F1800
 ; FEATURE: Bottom surface
-; LINE_WIDTH: 0.56868
+; LINE_WIDTH: 0.50088
 G1 F6300
 M204 S500
-G1 X115.188 Y126.197 E.05895
-G1 X114.645 Y126.398 E.0248
-G1 X114.087 Y125.84 E.0338
+G1 X144.335 Y123.23 E.03448
+G2 X144.1 Y123.643 I2.243 J1.549 E.01775
+G1 X143.368 Y122.911 E.0386
+G1 X142.895 Y123.086 E.01882
+G1 X143.898 Y124.089 E.05292
+G2 X143.732 Y124.571 I2.676 J1.187 E.01905
+G1 X142.422 Y123.26 E.06916
+G1 X141.949 Y123.435 E.01882
+G1 X143.608 Y125.095 E.08759
+G1 X143.544 Y125.678 E.02189
+G1 X141.476 Y123.609 E.10915
+G1 X141.003 Y123.784 E.01882
+G1 X143.542 Y126.324 E.13404
+G2 X143.653 Y127.082 I3.509 J-.125 E.02866
+G1 X140.529 Y123.958 E.16485
+G1 X140.056 Y124.133 E.01882
+G1 X143.942 Y128.019 E.20509
+G1 X144.019 Y128.203 E.00741
+G1 X144.34 Y128.789 E.02494
+M73 P61 R4
+G1 X144.523 Y129.049 E.01189
+G1 X144.446 Y129.17 E.00534
+G1 X139.521 Y124.246 E.25989
+G1 X138.874 Y124.246 E.02417
+G1 X143.922 Y129.294 E.26645
+G1 X142.896 Y128.915 E.04084
+G1 X138.226 Y124.246 E.24645
+G1 X137.578 Y124.246 E.02417
+G1 X141.869 Y128.536 E.22644
+G1 X140.842 Y128.157 E.04084
+G1 X136.931 Y124.246 E.20644
+G1 X136.283 Y124.246 E.02417
+G1 X139.815 Y127.778 E.18643
+G1 X139.751 Y127.754 E.00255
+G1 X139.144 Y127.754 E.02266
+G1 X135.635 Y124.246 E.18518
+G1 X134.988 Y124.246 E.02417
+G1 X138.497 Y127.754 E.18518
+G1 X137.849 Y127.754 E.02417
+G1 X134.34 Y124.246 E.18518
+G1 X133.692 Y124.246 E.02417
+G1 X137.201 Y127.754 E.18518
+G1 X136.554 Y127.754 E.02417
+G1 X133.045 Y124.246 E.18518
+G1 X132.397 Y124.246 E.02417
+G1 X135.906 Y127.754 E.18518
+G1 X135.258 Y127.754 E.02417
+G1 X131.749 Y124.246 E.18518
+G1 X131.102 Y124.246 E.02417
+G1 X134.611 Y127.754 E.18518
+G1 X133.963 Y127.754 E.02417
+G1 X130.454 Y124.246 E.18518
+G1 X129.806 Y124.246 E.02417
+G1 X133.315 Y127.754 E.18518
+G1 X132.668 Y127.754 E.02417
+G1 X129.159 Y124.246 E.18518
+G1 X128.511 Y124.246 E.02417
+G1 X132.02 Y127.754 E.18518
+G1 X131.372 Y127.754 E.02417
+G1 X127.863 Y124.246 E.18518
+G1 X127.216 Y124.246 E.02417
+G1 X130.725 Y127.754 E.18518
+G1 X130.077 Y127.754 E.02417
+G1 X126.568 Y124.246 E.18518
+G1 X125.921 Y124.246 E.02417
+G1 X129.429 Y127.754 E.18518
+G1 X128.782 Y127.754 E.02417
+G1 X125.273 Y124.246 E.18518
+G1 X124.625 Y124.246 E.02417
+G1 X128.134 Y127.754 E.18518
+G1 X127.486 Y127.754 E.02417
+G1 X123.978 Y124.246 E.18518
+G1 X123.33 Y124.246 E.02417
+G1 X126.839 Y127.754 E.18518
+G1 X126.191 Y127.754 E.02417
+G1 X122.682 Y124.246 E.18518
+G1 X122.035 Y124.246 E.02417
+G1 X125.543 Y127.754 E.18518
+G1 X124.896 Y127.754 E.02417
+G1 X121.387 Y124.246 E.18518
+G1 X120.739 Y124.246 E.02417
+G1 X124.248 Y127.754 E.18518
+G1 X123.6 Y127.754 E.02417
+G1 X120.092 Y124.246 E.18518
+M73 P62 R4
+G1 X119.444 Y124.246 E.02417
+G1 X122.953 Y127.754 E.18518
+G1 X122.305 Y127.754 E.02417
+G1 X118.796 Y124.246 E.18518
+G1 X118.149 Y124.246 E.02417
+G1 X121.658 Y127.754 E.18518
+G1 X121.01 Y127.754 E.02417
+G1 X117.501 Y124.246 E.18518
+G1 X116.853 Y124.246 E.02417
+G1 X120.362 Y127.754 E.18518
+G1 X119.715 Y127.754 E.02417
+G1 X116.181 Y124.22 E.18651
+G1 X115.154 Y123.841 E.04084
+G1 X119.067 Y127.754 E.20651
+G1 X118.419 Y127.754 E.02417
+G1 X114.127 Y123.462 E.22652
+G1 X113.1 Y123.083 E.04084
+G1 X117.772 Y127.754 E.24652
+G1 X117.124 Y127.754 E.02417
+G1 X112.074 Y122.704 E.26653
+G1 X111.719 Y122.573 E.0141
+G1 X111.553 Y122.832 E.01145
+G1 X116.476 Y127.754 E.25981
+G1 X116.249 Y127.754 E.0085
+G1 X115.942 Y127.868 E.0122
+G1 X112.059 Y123.985 E.20491
+G3 X112.348 Y124.921 I-4.303 J1.838 E.03661
+G1 X115.469 Y128.042 E.16473
+G1 X114.996 Y128.217 E.01882
+G1 X112.458 Y125.679 E.13394
+G1 X112.455 Y126.323 E.02405
+G1 X114.523 Y128.392 E.10915
+G1 X114.05 Y128.566 E.01882
+G1 X112.391 Y126.907 E.08754
+G3 X112.267 Y127.431 I-3.06 J-.449 E.0201
+G1 X113.577 Y128.741 E.06913
+G1 X113.104 Y128.915 E.01882
+G1 X112.101 Y127.913 E.0529
+G3 X111.9 Y128.359 I-2.653 J-.933 E.01828
+G1 X112.631 Y129.09 E.03859
+G1 X112.158 Y129.265 E.01882
+G1 X111.513 Y128.62 E.03401
 ; WIPE_START
-G1 X114.645 Y126.398 E-.29982
-G1 X115.188 Y126.197 E-.21997
-G1 X114.741 Y125.75 E-.2402
+G1 X112.158 Y129.265 E-.34632
+G1 X112.631 Y129.09 E-.19161
+G1 X112.218 Y128.677 E-.22208
 ; WIPE_END
 G1 E-.04 F1800
 M204 S6000
-G1 X111.29 Y122.523 Z.6 F30000
+G1 X110.263 Y130.135 Z.6 F30000
 G1 Z.2
 G1 E.8 F1800
 ; FEATURE: Gap infill
-; LINE_WIDTH: 0.399495
+; LINE_WIDTH: 0.399494
 G1 F3000
 M204 S500
-G1 X110.265 Y121.866 E.03537
+G1 X111.29 Y129.477 E.03545
 M204 S6000
-G1 X110.199 Y121.869 F30000
+G1 X111.296 Y129.486 F30000
+; LINE_WIDTH: 0.305098
+G1 F3000
+M204 S500
+G1 X110.763 Y129.811 E.01335
+; LINE_WIDTH: 0.283634
+G1 X110.667 Y129.868 E.00219
+; LINE_WIDTH: 0.242253
+G1 X110.568 Y129.927 E.00188
+; LINE_WIDTH: 0.203403
+G1 X110.471 Y129.982 E.00145
+; LINE_WIDTH: 0.167284
+G1 X110.372 Y130.038 E.00115
+; LINE_WIDTH: 0.126006
+G1 X110.199 Y130.131 E.00133
+; WIPE_START
+G1 X110.372 Y130.038 E-.76
+; WIPE_END
+G1 E-.04 F1800
+M204 S6000
+G1 X110.211 Y122.407 Z.6 F30000
+G1 X110.199 Y121.869 Z.6
+M73 P63 R4
+G1 Z.2
+G1 E.8 F1800
 ; LINE_WIDTH: 0.12598
 G1 F3000
 M204 S500
@@ -1422,68 +1470,48 @@ G1 X110.667 Y122.132 E.00188
 G1 X110.763 Y122.189 E.00219
 ; LINE_WIDTH: 0.305114
 G1 X111.297 Y122.514 E.01335
+M204 S6000
+G1 X111.29 Y122.523 F30000
+; LINE_WIDTH: 0.399495
+G1 F3000
+M204 S500
+G1 X110.265 Y121.866 E.03537
 ; WIPE_START
-G1 X110.763 Y122.189 E-.76
+G1 X111.29 Y122.523 E-.76
 ; WIPE_END
 G1 E-.04 F1800
 M204 S6000
-G1 X111.29 Y129.477 Z.6 F30000
+G1 X118.921 Y122.378 Z.6 F30000
+G1 X145.737 Y121.867 Z.6
 G1 Z.2
 G1 E.8 F1800
-; LINE_WIDTH: 0.399494
+; LINE_WIDTH: 0.397824
 G1 F3000
 M204 S500
-G1 X110.263 Y130.135 E.03545
+G1 X144.709 Y122.525 E.0353
 M204 S6000
-G1 X110.199 Y130.131 F30000
-; LINE_WIDTH: 0.126006
+G1 X144.702 Y122.516 F30000
+; LINE_WIDTH: 0.300393
 G1 F3000
 M204 S500
-G1 X110.372 Y130.038 E.00133
-; LINE_WIDTH: 0.167284
-G1 X110.471 Y129.982 E.00115
-; LINE_WIDTH: 0.203403
-G1 X110.568 Y129.927 E.00145
-; LINE_WIDTH: 0.242253
-G1 X110.667 Y129.868 E.00188
-; LINE_WIDTH: 0.283634
-G1 X110.763 Y129.811 E.00219
-; LINE_WIDTH: 0.305098
-G1 X111.296 Y129.486 E.01335
+G3 X145.333 Y122.132 I17.428 J27.964 E.01549
+; LINE_WIDTH: 0.24139
+G1 X145.429 Y122.075 E.00181
+; LINE_WIDTH: 0.202407
+G1 X145.53 Y122.019 E.0015
+; LINE_WIDTH: 0.16599
+G1 X145.626 Y121.964 E.00112
+; LINE_WIDTH: 0.125435
+G1 X145.796 Y121.873 E.00129
 ; WIPE_START
-G1 X110.763 Y129.811 E-.76
+G1 X145.626 Y121.964 E-.76
 ; WIPE_END
 G1 E-.04 F1800
 M204 S6000
-G1 X118.343 Y128.919 Z.6 F30000
-G1 X141.912 Y126.146 Z.6
+G1 X145.789 Y129.594 Z.6 F30000
+G1 X145.801 Y130.131 Z.6
 G1 Z.2
 G1 E.8 F1800
-; FEATURE: Bottom surface
-; LINE_WIDTH: 0.56177
-G1 F6300
-M204 S500
-M73 P61 R5
-G1 X141.366 Y125.599 E.0327
-G1 X140.83 Y125.796 E.02416
-G1 X141.823 Y126.79 E.05939
-; WIPE_START
-G1 X140.83 Y125.796 E-.53379
-G1 X141.366 Y125.599 E-.21711
-G1 X141.383 Y125.616 E-.0091
-; WIPE_END
-G1 E-.04 F1800
-M204 S6000
-G1 X144.71 Y129.477 Z.6 F30000
-G1 Z.2
-G1 E.8 F1800
-; FEATURE: Gap infill
-; LINE_WIDTH: 0.399182
-G1 F3000
-M204 S500
-G1 X145.735 Y130.134 E.03534
-M204 S6000
-G1 X145.801 Y130.131 F30000
 ; LINE_WIDTH: 0.126272
 G1 F3000
 M204 S500
@@ -1496,389 +1524,380 @@ G1 X145.429 Y129.925 E.00152
 G1 X145.333 Y129.868 E.00182
 ; LINE_WIDTH: 0.301994
 G3 X144.703 Y129.486 I17.603 J-29.687 E.01554
-; WIPE_START
-G1 X145.333 Y129.868 E-.76
-; WIPE_END
-G1 E-.04 F1800
 M204 S6000
-G1 X144.709 Y122.525 Z.6 F30000
-G1 Z.2
-G1 E.8 F1800
-; LINE_WIDTH: 0.397824
+G1 X144.71 Y129.477 F30000
+; LINE_WIDTH: 0.399182
 G1 F3000
 M204 S500
-G1 X145.737 Y121.867 E.0353
-M204 S6000
-G1 X145.796 Y121.873 F30000
-; LINE_WIDTH: 0.125435
-G1 F3000
-M204 S500
-G1 X145.626 Y121.964 E.00129
-; LINE_WIDTH: 0.16599
-G1 X145.53 Y122.019 E.00112
-; LINE_WIDTH: 0.202407
-G1 X145.429 Y122.075 E.0015
-; LINE_WIDTH: 0.24139
-G1 X145.333 Y122.133 E.00181
-; LINE_WIDTH: 0.300393
-G2 X144.702 Y122.516 I16.797 J28.347 E.01549
-; OBJECT_ID: 104
+G1 X145.735 Y130.134 E.03534
+; OBJECT_ID: 194
 ; WIPE_START
-G1 X145.333 Y122.133 E-.76
+G1 X144.71 Y129.477 E-.76
 ; WIPE_END
 G1 E-.04 F1800
-; stop printing object, unique label id: 72
+; stop printing object, unique label id: 123
 M625
-; start printing object, unique label id: 104
+; start printing object, unique label id: 194
 M624 AgAAAAAAAAA=
 M204 S6000
-G1 X143.331 Y129.498 Z.6 F30000
-G1 X140.182 Y141.081 Z.6
+G1 X148.08 Y134.235 Z.6 F30000
 G1 Z.2
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.5
 G1 F3000
 M204 S500
-G1 X142.076 Y140.382 E.0752
-G2 X142.077 Y142.618 I6.908 J1.114 E.08364
-G1 X139.9 Y141.814 E.08644
-G1 X115.883 Y141.814 E.89456
-G1 X113.707 Y142.617 E.08638
-G2 X113.706 Y140.381 I-6.913 J-1.114 E.08366
-G1 X115.883 Y141.185 E.08644
-G1 X139.9 Y141.185 E.89455
-G1 X140.125 Y141.102 E.00896
+G1 X148.098 Y134.232 E.00066
+G3 X148.515 Y134.195 I.628 J4.764 E.01563
+G3 X148.932 Y134.195 I.21 J5.622 E.01551
+G3 X147.685 Y134.305 I-.206 J4.801 E1.07773
+G1 X148.021 Y134.245 E.01273
 M204 S6000
-G1 X140.043 Y140.645 F30000
-G1 F3000
-M204 S500
-G1 X142.706 Y139.662 E.10576
-G2 X142.707 Y143.338 I6.287 J1.837 E.13875
-G1 X139.819 Y142.271 E.11467
-G1 X115.964 Y142.271 E.88848
-G1 X113.076 Y143.338 E.11467
-G2 X113.076 Y139.662 I-6.289 J-1.838 E.13878
-G1 X115.964 Y140.728 E.11467
-G1 X139.818 Y140.728 E.88846
-G1 X139.986 Y140.666 E.00667
-M204 S6000
-G1 X139.559 Y140.271 F30000
-G1 F3000
-M204 S500
-G1 X139.737 Y140.271 E.00662
-G1 X143.522 Y138.874 E.15028
-G2 X143.523 Y144.126 I5.231 J2.625 E.20285
-G1 X139.737 Y142.728 E.15031
-G1 X116.046 Y142.728 E.88239
-G1 X112.26 Y144.126 E.15031
-G2 X112.26 Y138.873 I-5.231 J-2.626 E.2029
-G1 X116.046 Y140.271 E.15031
-G1 X139.499 Y140.271 E.87353
-M204 S6000
-G1 X139.764 Y139.773 F30000
-G1 F3000
-M204 S500
-G1 X144.356 Y138.08 E.18228
-G1 X144.478 Y138.242 E.00759
-G2 X144.48 Y144.758 I4.17 J3.257 E.26145
-G1 X144.357 Y144.921 E.00759
-G1 X139.655 Y143.185 E.18668
-G1 X116.128 Y143.185 E.87631
-G1 X111.426 Y144.921 E.18668
-G1 X111.303 Y144.758 E.00759
-G2 X111.303 Y138.241 I-4.169 J-3.259 E.26154
-G1 X111.426 Y138.078 E.00759
-G1 X116.128 Y139.814 E.18667
-G1 X139.655 Y139.814 E.8763
-G1 X139.708 Y139.794 E.0021
-; WIPE_START
-G1 X141.584 Y139.102 E-.76
-; WIPE_END
-G1 E-.04 F1800
-M204 S6000
-G1 X134.118 Y140.684 Z.6 F30000
-G1 X107.796 Y146.26 Z.6
-G1 Z.2
-G1 E.8 F1800
-G1 F3000
-M204 S500
-G1 X107.585 Y146.284 E.00789
-G3 X106.957 Y136.697 I-.418 J-4.787 E.57001
-G3 X107.373 Y136.697 I.21 J5.623 E.01551
-G3 X108.033 Y146.223 I-.206 J4.801 E.52211
-G1 X107.855 Y146.251 E.00673
-M204 S6000
-G1 X107.393 Y145.835 F30000
+G1 X148.092 Y134.696 F30000
 ; FEATURE: Outer wall
 G1 F3000
 M204 S500
-G1 X107.166 Y145.845 E.00846
-G3 X106.977 Y137.154 I0 J-4.348 E.50169
-G3 X107.355 Y137.153 I.19 J5.11 E.01408
-G3 X107.735 Y145.808 I-.188 J4.344 E.48054
-G1 X107.453 Y145.83 E.01053
+G1 X148.157 Y134.685 E.00246
+G3 X148.535 Y134.652 I.568 J4.311 E.01414
+G3 X148.913 Y134.652 I.19 J5.11 E.01408
+G3 X147.784 Y134.751 I-.188 J4.344 E.97518
+G1 X148.033 Y134.707 E.00944
 ; WIPE_START
-G1 X107.166 Y145.845 E-.10911
-G1 X106.6 Y145.813 E-.21562
-G1 X106.225 Y145.747 E-.1447
-G1 X105.858 Y145.648 E-.1442
-G1 X105.502 Y145.518 E-.14428
-G1 X105.497 Y145.516 E-.0021
+G1 X148.157 Y134.685 E-.04785
+G1 X148.535 Y134.652 E-.14422
+G1 X148.913 Y134.652 E-.14365
+G1 X149.293 Y134.685 E-.14473
+G1 X149.666 Y134.751 E-.14419
+G1 X150.011 Y134.843 E-.13536
 ; WIPE_END
 G1 E-.04 F1800
 M204 S6000
-G1 X112.971 Y143.971 Z.6 F30000
-G1 X147.972 Y136.736 Z.6
+G1 X142.544 Y136.424 Z.6 F30000
+G1 X107.904 Y143.758 Z.6
 G1 Z.2
 G1 E.8 F1800
 ; FEATURE: Inner wall
 G1 F3000
 M204 S500
-G1 X147.989 Y136.733 E.00066
-G3 X148.407 Y136.697 I.628 J4.764 E.01563
-G3 X148.823 Y136.697 I.21 J5.622 E.01551
-M73 P62 R5
-G3 X147.576 Y136.806 I-.206 J4.801 E1.07773
-G1 X147.913 Y136.747 E.01273
+G1 X107.694 Y143.782 E.00789
+G3 X107.065 Y134.195 I-.418 J-4.787 E.57001
+M73 P64 R4
+G3 X107.482 Y134.195 I.21 J5.623 E.01551
+G3 X108.142 Y143.722 I-.206 J4.801 E.52211
+G1 X107.963 Y143.749 E.00673
 M204 S6000
-G1 X147.984 Y137.198 F30000
+G1 X107.502 Y143.333 F30000
 ; FEATURE: Outer wall
 G1 F3000
 M204 S500
-G1 X148.049 Y137.187 E.00246
-G3 X148.427 Y137.154 I.568 J4.311 E.01414
-G3 X148.805 Y137.153 I.19 J5.11 E.01408
-G3 X147.675 Y137.253 I-.188 J4.344 E.97518
-G1 X147.925 Y137.209 E.00944
+G1 X107.275 Y143.344 E.00846
+G3 X107.085 Y134.652 I0 J-4.348 E.50169
+G3 X107.463 Y134.652 I.19 J5.11 E.01408
+G3 X107.844 Y143.306 I-.188 J4.344 E.48054
+G1 X107.562 Y143.328 E.01053
 ; WIPE_START
-G1 X148.049 Y137.187 E-.04785
-G1 X148.427 Y137.154 E-.14422
-G1 X148.805 Y137.153 E-.14365
-G1 X149.184 Y137.187 E-.14473
-G1 X149.558 Y137.253 E-.14419
-G1 X149.902 Y137.345 E-.13536
+G1 X107.275 Y143.344 E-.10911
+G1 X106.709 Y143.311 E-.21562
+G1 X106.334 Y143.245 E-.1447
+G1 X105.967 Y143.147 E-.1442
+G1 X105.61 Y143.017 E-.14428
+G1 X105.605 Y143.014 E-.0021
 ; WIPE_END
 G1 E-.04 F1800
 M204 S6000
-G1 X142.409 Y138.797 Z.6 F30000
-G1 X139.518 Y139.357 Z.6
+G1 X113.116 Y141.655 Z.6 F30000
+G1 X139.627 Y136.855 Z.6
 G1 Z.2
 G1 E.8 F1800
 ; FEATURE: Inner wall
 G1 F3000
 M204 S500
-G1 X139.573 Y139.357 E.00205
-G1 X146.983 Y136.623 E.29415
-G3 X148.734 Y136.358 I1.684 J5.211 E.06628
-G3 X146.755 Y146.294 I-.122 J5.141 E.6679
-G1 X139.574 Y143.642 E.28514
-G1 X116.209 Y143.642 E.87022
-G1 X109.029 Y146.293 E.28509
-G3 X109.028 Y136.705 I-1.861 J-4.794 E.74359
-G1 X116.209 Y139.357 E.28514
-G1 X139.458 Y139.357 E.86593
+G1 X139.682 Y136.855 E.00205
+G1 X147.091 Y134.122 E.29415
+G3 X148.843 Y133.857 I1.684 J5.211 E.06628
+G3 X146.864 Y143.792 I-.122 J5.141 E.6679
+G1 X139.682 Y141.141 E.28514
+G1 X116.318 Y141.141 E.87022
+G1 X109.138 Y143.792 E.28509
+G3 X109.136 Y134.203 I-1.861 J-4.794 E.74359
+G1 X116.318 Y136.855 E.28514
+G1 X139.567 Y136.855 E.86593
 M204 S6000
-G1 X139.515 Y138.891 F30000
+G1 X139.624 Y136.389 F30000
 ; FEATURE: Outer wall
 G1 F3000
 M204 S500
-G1 X146.835 Y136.19 E.29061
-G3 X148.745 Y135.901 I1.836 J5.675 E.07226
-G3 X146.599 Y146.723 I-.133 J5.598 E.72691
-G1 X139.492 Y144.1 E.28217
-G1 X116.291 Y144.1 E.86414
-G1 X109.185 Y146.723 E.28214
-G3 X109.184 Y136.276 I-2.017 J-5.224 E.80895
-G1 X116.291 Y138.9 E.28217
-G1 X139.457 Y138.9 E.86283
+G1 X146.944 Y133.689 E.29061
+G3 X148.854 Y133.4 I1.836 J5.675 E.07226
+G3 X146.707 Y144.222 I-.133 J5.598 E.72691
+G1 X139.6 Y141.598 E.28217
+G1 X116.4 Y141.598 E.86414
+G1 X109.294 Y144.221 E.28214
+G3 X109.293 Y133.774 I-2.017 J-5.224 E.80895
+G1 X116.4 Y136.398 E.28217
+G1 X139.565 Y136.398 E.86283
 ; WIPE_START
-G1 X141.334 Y138.21 E-.76
+G1 X141.443 Y135.709 E-.76
 ; WIPE_END
 G1 E-.04 F1800
 M204 S6000
-G1 X139.802 Y141.438 Z.6 F30000
-G1 Z.2
-G1 E.8 F1800
-; FEATURE: Gap infill
-; LINE_WIDTH: 0.117299
-G1 F3000
-M204 S500
-G1 X139.692 Y141.458 E.00068
-; LINE_WIDTH: 0.152545
-G1 X139.656 Y141.479 E.00037
-; LINE_WIDTH: 0.180473
-G1 X139.621 Y141.5 E.00046
-G1 X139.692 Y141.541 E.00092
-; LINE_WIDTH: 0.117427
-G1 X139.802 Y141.561 E.00068
-M204 S6000
-G1 X139.621 Y141.5 F30000
-; LINE_WIDTH: 0.21518
-G1 F3000
-M204 S500
-G1 X116.162 Y141.5 E.3293
-; LINE_WIDTH: 0.194335
-G1 X116.126 Y141.479 E.00051
-; LINE_WIDTH: 0.152645
-G1 X116.091 Y141.458 E.00037
-; LINE_WIDTH: 0.11736
-G1 X115.98 Y141.438 E.00068
-; WIPE_START
-G1 X116.091 Y141.458 E-.76
-; WIPE_END
-G1 E-.04 F1800
-M204 S6000
-G1 X114.106 Y140.724 Z.6 F30000
+G1 X143.681 Y135.574 Z.6 F30000
 G1 Z.2
 G1 E.8 F1800
 ; FEATURE: Bottom surface
-; LINE_WIDTH: 0.56868
+; LINE_WIDTH: 0.50088
 G1 F6300
 M204 S500
-G1 X115.079 Y141.697 E.05895
-G1 X114.536 Y141.897 E.0248
-G1 X113.978 Y141.339 E.0338
+G1 X144.335 Y136.228 E.03448
+G2 X144.1 Y136.641 I2.243 J1.549 E.01775
+G1 X143.368 Y135.909 E.0386
+G1 X142.895 Y136.084 E.01882
+G1 X143.898 Y137.086 E.05292
+G2 X143.732 Y137.569 I2.676 J1.187 E.01905
+G1 X142.422 Y136.258 E.06916
+G1 X141.949 Y136.433 E.01882
+G1 X143.608 Y138.092 E.08759
+G1 X143.544 Y138.675 E.02189
+G1 X141.476 Y136.607 E.10915
+G1 X141.003 Y136.782 E.01882
+G1 X143.542 Y139.321 E.13404
+G2 X143.653 Y140.08 I3.509 J-.125 E.02866
+G1 X140.529 Y136.956 E.16485
+G1 X140.056 Y137.131 E.01882
+G1 X143.943 Y141.017 E.20509
+G1 X144.019 Y141.2 E.00741
+G1 X144.34 Y141.786 E.02494
+G1 X144.523 Y142.047 E.01189
+G1 X144.446 Y142.168 E.00534
+G1 X139.521 Y137.243 E.25989
+G1 X138.874 Y137.243 E.02417
+G1 X143.922 Y142.292 E.26645
+G1 X142.896 Y141.913 E.04084
+G1 X138.226 Y137.243 E.24645
+G1 X137.578 Y137.243 E.02417
+G1 X141.869 Y141.534 E.22644
+G1 X140.842 Y141.155 E.04084
+G1 X136.931 Y137.243 E.20644
+G1 X136.283 Y137.243 E.02417
+G1 X139.815 Y140.776 E.18643
+G1 X139.751 Y140.752 E.00255
+G1 X139.144 Y140.752 E.02266
+G1 X135.635 Y137.243 E.18518
+G1 X134.988 Y137.243 E.02417
+G1 X138.497 Y140.752 E.18518
+G1 X137.849 Y140.752 E.02417
+G1 X134.34 Y137.243 E.18518
+G1 X133.692 Y137.243 E.02417
+G1 X137.201 Y140.752 E.18518
+G1 X136.554 Y140.752 E.02417
+G1 X133.045 Y137.243 E.18518
+G1 X132.397 Y137.243 E.02417
+G1 X135.906 Y140.752 E.18518
+G1 X135.258 Y140.752 E.02417
+G1 X131.749 Y137.243 E.18518
+G1 X131.102 Y137.243 E.02417
+G1 X134.611 Y140.752 E.18518
+G1 X133.963 Y140.752 E.02417
+G1 X130.454 Y137.243 E.18518
+G1 X129.806 Y137.243 E.02417
+G1 X133.315 Y140.752 E.18518
+G1 X132.668 Y140.752 E.02417
+G1 X129.159 Y137.243 E.18518
+G1 X128.511 Y137.243 E.02417
+G1 X132.02 Y140.752 E.18518
+G1 X131.372 Y140.752 E.02417
+G1 X127.863 Y137.243 E.18518
+G1 X127.216 Y137.243 E.02417
+G1 X130.725 Y140.752 E.18518
+G1 X130.077 Y140.752 E.02417
+G1 X126.568 Y137.243 E.18518
+G1 X125.921 Y137.243 E.02417
+G1 X129.429 Y140.752 E.18518
+G1 X128.782 Y140.752 E.02417
+G1 X125.273 Y137.243 E.18518
+G1 X124.625 Y137.243 E.02417
+G1 X128.134 Y140.752 E.18518
+G1 X127.486 Y140.752 E.02417
+G1 X123.978 Y137.243 E.18518
+G1 X123.33 Y137.243 E.02417
+G1 X126.839 Y140.752 E.18518
+G1 X126.191 Y140.752 E.02417
+G1 X122.682 Y137.243 E.18518
+G1 X122.035 Y137.243 E.02417
+G1 X125.543 Y140.752 E.18518
+G1 X124.896 Y140.752 E.02417
+G1 X121.387 Y137.243 E.18518
+G1 X120.739 Y137.243 E.02417
+G1 X124.248 Y140.752 E.18518
+G1 X123.601 Y140.752 E.02417
+G1 X120.092 Y137.243 E.18518
+M73 P65 R4
+G1 X119.444 Y137.243 E.02417
+G1 X122.953 Y140.752 E.18518
+G1 X122.305 Y140.752 E.02417
+G1 X118.796 Y137.243 E.18518
+G1 X118.149 Y137.243 E.02417
+G1 X121.658 Y140.752 E.18518
+G1 X121.01 Y140.752 E.02417
+G1 X117.501 Y137.243 E.18518
+G1 X116.853 Y137.243 E.02417
+G1 X120.362 Y140.752 E.18518
+G1 X119.715 Y140.752 E.02417
+G1 X116.181 Y137.218 E.18651
+G1 X115.154 Y136.839 E.04084
+G1 X119.067 Y140.752 E.20651
+G1 X118.419 Y140.752 E.02417
+G1 X114.127 Y136.46 E.22652
+G1 X113.1 Y136.081 E.04084
+G1 X117.772 Y140.752 E.24652
+G1 X117.124 Y140.752 E.02417
+G1 X112.074 Y135.702 E.26653
+G1 X111.719 Y135.571 E.0141
+G1 X111.553 Y135.829 E.01145
+G1 X116.476 Y140.752 E.25981
+G1 X116.249 Y140.752 E.0085
+G1 X115.942 Y140.865 E.0122
+G1 X112.059 Y136.983 E.20491
+G3 X112.348 Y137.919 I-4.303 J1.838 E.03661
+G1 X115.469 Y141.04 E.16473
+G1 X114.996 Y141.215 E.01882
+G1 X112.458 Y138.677 E.13394
+G1 X112.455 Y139.321 E.02405
+G1 X114.523 Y141.389 E.10915
+G1 X114.05 Y141.564 E.01882
+G1 X112.391 Y139.905 E.08754
+G3 X112.267 Y140.429 I-3.06 J-.449 E.0201
+G1 X113.577 Y141.739 E.06913
+G1 X113.104 Y141.913 E.01882
+G1 X112.101 Y140.911 E.0529
+G3 X111.9 Y141.357 I-2.653 J-.933 E.01828
+G1 X112.631 Y142.088 E.03859
+G1 X112.158 Y142.263 E.01882
+G1 X111.513 Y141.618 E.03401
 ; WIPE_START
-G1 X114.536 Y141.897 E-.29982
-G1 X115.079 Y141.697 E-.21997
-G1 X114.632 Y141.25 E-.2402
+G1 X112.158 Y142.263 E-.34632
+G1 X112.631 Y142.088 E-.19161
+G1 X112.218 Y141.675 E-.22208
 ; WIPE_END
 G1 E-.04 F1800
 M204 S6000
-G1 X111.181 Y138.023 Z.6 F30000
+G1 X110.263 Y143.133 Z.6 F30000
 G1 Z.2
 G1 E.8 F1800
 ; FEATURE: Gap infill
-; LINE_WIDTH: 0.399495
-G1 F3000
-M204 S500
-M73 P63 R5
-G1 X110.156 Y137.365 E.03537
-M204 S6000
-G1 X110.091 Y137.369 F30000
-; LINE_WIDTH: 0.12598
-G1 F3000
-M204 S500
-G1 X110.263 Y137.461 E.00133
-; LINE_WIDTH: 0.167261
-G1 X110.362 Y137.517 E.00115
-; LINE_WIDTH: 0.203419
-G1 X110.459 Y137.572 E.00146
-; LINE_WIDTH: 0.242271
-G1 X110.559 Y137.631 E.00188
-; LINE_WIDTH: 0.283649
-G1 X110.655 Y137.688 E.00219
-; LINE_WIDTH: 0.305114
-G1 X111.188 Y138.014 E.01335
-; WIPE_START
-G1 X110.655 Y137.688 E-.76
-; WIPE_END
-G1 E-.04 F1800
-M204 S6000
-G1 X111.181 Y144.976 Z.6 F30000
-G1 Z.2
-G1 E.8 F1800
 ; LINE_WIDTH: 0.399494
 G1 F3000
 M204 S500
-G1 X110.154 Y145.635 E.03545
+G1 X111.29 Y142.475 E.03545
 M204 S6000
-G1 X110.091 Y145.63 F30000
-; LINE_WIDTH: 0.126006
-G1 F3000
-M204 S500
-G1 X110.264 Y145.537 E.00133
-; LINE_WIDTH: 0.167284
-G1 X110.362 Y145.482 E.00115
-; LINE_WIDTH: 0.203403
-G1 X110.459 Y145.427 E.00145
-; LINE_WIDTH: 0.242253
-G1 X110.559 Y145.368 E.00188
-; LINE_WIDTH: 0.283634
-G1 X110.655 Y145.311 E.00219
+G1 X111.296 Y142.483 F30000
 ; LINE_WIDTH: 0.305098
-G1 X111.188 Y144.985 E.01335
-; WIPE_START
-G1 X110.655 Y145.311 E-.76
-; WIPE_END
-G1 E-.04 F1800
-M204 S6000
-G1 X118.235 Y144.419 Z.6 F30000
-G1 X141.804 Y141.645 Z.6
-G1 Z.2
-G1 E.8 F1800
-; FEATURE: Bottom surface
-; LINE_WIDTH: 0.56177
-G1 F6300
-M204 S500
-G1 X141.257 Y141.098 E.0327
-G1 X140.721 Y141.296 E.02416
-G1 X141.714 Y142.289 E.05939
-; WIPE_START
-G1 X140.721 Y141.296 E-.53379
-G1 X141.257 Y141.098 E-.21711
-G1 X141.274 Y141.115 E-.0091
-; WIPE_END
-G1 E-.04 F1800
-M204 S6000
-G1 X144.602 Y144.976 Z.6 F30000
-G1 Z.2
-G1 E.8 F1800
-; FEATURE: Gap infill
-; LINE_WIDTH: 0.399182
 G1 F3000
 M204 S500
-G1 X145.627 Y145.634 E.03534
-M204 S6000
-G1 X145.692 Y145.63 F30000
-; LINE_WIDTH: 0.126272
-G1 F3000
-M204 S500
-G1 X145.517 Y145.536 E.00135
-; LINE_WIDTH: 0.167665
-G1 X145.421 Y145.482 E.00113
-; LINE_WIDTH: 0.204086
-G1 X145.32 Y145.425 E.00152
-; LINE_WIDTH: 0.24306
-G1 X145.224 Y145.368 E.00182
-; LINE_WIDTH: 0.301994
-G3 X144.595 Y144.985 I17.603 J-29.687 E.01554
+G1 X110.763 Y142.809 E.01335
+; LINE_WIDTH: 0.283634
+G1 X110.667 Y142.866 E.00219
+; LINE_WIDTH: 0.242253
+G1 X110.568 Y142.925 E.00188
+; LINE_WIDTH: 0.203403
+G1 X110.471 Y142.98 E.00145
+; LINE_WIDTH: 0.167284
+G1 X110.372 Y143.036 E.00115
+; LINE_WIDTH: 0.126006
+G1 X110.199 Y143.129 E.00133
 ; WIPE_START
-G1 X145.224 Y145.368 E-.76
+G1 X110.372 Y143.036 E-.76
 ; WIPE_END
 G1 E-.04 F1800
 M204 S6000
-G1 X144.6 Y138.024 Z.6 F30000
+G1 X110.211 Y135.405 Z.6 F30000
+G1 X110.199 Y134.867 Z.6
+M73 P66 R4
+G1 Z.2
+G1 E.8 F1800
+; LINE_WIDTH: 0.12598
+G1 F3000
+M204 S500
+G1 X110.372 Y134.96 E.00133
+; LINE_WIDTH: 0.167261
+G1 X110.471 Y135.016 E.00115
+; LINE_WIDTH: 0.203419
+G1 X110.568 Y135.071 E.00146
+; LINE_WIDTH: 0.242271
+G1 X110.667 Y135.13 E.00188
+; LINE_WIDTH: 0.283649
+G1 X110.763 Y135.187 E.00219
+; LINE_WIDTH: 0.305114
+G1 X111.297 Y135.512 E.01335
+M204 S6000
+G1 X111.29 Y135.521 F30000
+; LINE_WIDTH: 0.399495
+G1 F3000
+M204 S500
+G1 X110.265 Y134.864 E.03537
+; WIPE_START
+G1 X111.29 Y135.521 E-.76
+; WIPE_END
+G1 E-.04 F1800
+M204 S6000
+G1 X118.921 Y135.376 Z.6 F30000
+G1 X145.737 Y134.865 Z.6
 G1 Z.2
 G1 E.8 F1800
 ; LINE_WIDTH: 0.397824
 G1 F3000
 M204 S500
-G1 X145.628 Y137.366 E.0353
+G1 X144.709 Y135.523 E.0353
 M204 S6000
-G1 X145.687 Y137.372 F30000
-; LINE_WIDTH: 0.125435
+G1 X144.702 Y135.514 F30000
+; LINE_WIDTH: 0.300393
 G1 F3000
 M204 S500
-G1 X145.518 Y137.463 E.00129
-; LINE_WIDTH: 0.16599
-G1 X145.421 Y137.518 E.00112
-; LINE_WIDTH: 0.202407
-G1 X145.321 Y137.575 E.0015
+G3 X145.333 Y135.13 I17.428 J27.964 E.01549
 ; LINE_WIDTH: 0.24139
-G1 X145.225 Y137.632 E.00181
-; LINE_WIDTH: 0.300393
-G2 X144.594 Y138.016 I16.797 J28.347 E.01549
+G1 X145.429 Y135.073 E.00181
+; LINE_WIDTH: 0.202407
+G1 X145.53 Y135.016 E.0015
+; LINE_WIDTH: 0.16599
+G1 X145.626 Y134.962 E.00112
+; LINE_WIDTH: 0.125435
+G1 X145.796 Y134.871 E.00129
+; WIPE_START
+G1 X145.626 Y134.962 E-.76
+; WIPE_END
+G1 E-.04 F1800
+M204 S6000
+G1 X145.789 Y142.592 Z.6 F30000
+G1 X145.801 Y143.129 Z.6
+G1 Z.2
+G1 E.8 F1800
+; LINE_WIDTH: 0.126272
+G1 F3000
+M204 S500
+G1 X145.626 Y143.035 E.00135
+; LINE_WIDTH: 0.167665
+G1 X145.529 Y142.98 E.00113
+; LINE_WIDTH: 0.204086
+G1 X145.429 Y142.923 E.00152
+; LINE_WIDTH: 0.24306
+G1 X145.333 Y142.866 E.00182
+; LINE_WIDTH: 0.301994
+G3 X144.703 Y142.484 I17.603 J-29.687 E.01554
+M204 S6000
+G1 X144.71 Y142.474 F30000
+; LINE_WIDTH: 0.399182
+G1 F3000
+M204 S500
+G1 X145.735 Y143.132 E.03534
 ; CHANGE_LAYER
 ; Z_HEIGHT: 0.4
 ; LAYER_HEIGHT: 0.2
 ; WIPE_START
 G1 F3000
-G1 X145.225 Y137.632 E-.76
+G1 X144.71 Y142.474 E-.76
 ; WIPE_END
 G1 E-.04 F1800
-; stop printing object, unique label id: 104
+; stop printing object, unique label id: 194
 M625
 ; layer num/total_layer_count: 2/15
 ; update layer progress
@@ -1895,7 +1914,7 @@ G1 E-.8
 M204 S10000
 G17
 G3 Z.6 I1.217 J0 P1  F30000
-; object ids of layer 2 start: 72,104
+; object ids of layer 2 start: 123,194
 M624 AwAAAAAAAAA=
 ;========Date 20250206========
 ; SKIPPABLE_START
@@ -1910,87 +1929,49 @@ M1004 S5 P1  ; external shutter
 M623
 ; SKIPPABLE_END
 
-; object ids of this layer2 end: 72,104
+; object ids of this layer2 end: 123,194
 M625
-; OBJECT_ID: 72
-; start printing object, unique label id: 72
+; OBJECT_ID: 123
+; start printing object, unique label id: 123
 M624 AQAAAAAAAAA=
-G1 X143.058 Y124.075
+G1 X148.177 Y121.683
+G1 Z.4
+M73 P66 R3
+G1 E.8 F1800
+; FEATURE: Inner wall
+; LINE_WIDTH: 0.45
+G1 F15476.087
+G1 X148.61 Y121.65 E.01441
+G3 X149.104 Y121.664 I.115 J4.679 E.01643
+G3 X148.117 Y121.692 I-.371 J4.336 E.87411
+G1 X148.143 Y122.085 F30000
+; FEATURE: Outer wall
+; LINE_WIDTH: 0.42
+G1 F2040
+M204 S5000
+G1 X148.208 Y122.076 E.00204
+G3 X148.624 Y122.042 I.525 J3.924 E.01283
+G3 X149.07 Y122.055 I.101 J4.244 E.01371
+G3 X147.868 Y122.136 I-.337 J3.945 E.72725
+G1 X148.084 Y122.096 E.00672
+; WIPE_START
+M204 S10000
+G1 X148.208 Y122.076 E-.04804
+G1 X148.624 Y122.042 E-.15858
+G1 X149.07 Y122.055 E-.16952
+G1 X149.413 Y122.1 E-.13122
+G1 X149.916 Y122.223 E-.19684
+G1 X150.054 Y122.273 E-.05579
+; WIPE_END
+G1 E-.04 F1800
+G1 X142.555 Y123.698 Z.8 F30000
+G1 X107.631 Y130.336 Z.8
 G1 Z.4
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X142.948 Y124.452 E.013
-G2 X143.055 Y127.924 I5.888 J1.557 E.11687
-G1 X139.927 Y126.77 E.11059
-G1 X116.072 Y126.77 E.79131
-G1 X112.942 Y127.925 E.1107
-G2 X112.945 Y124.076 I-5.887 J-1.93 E.12985
-G1 X116.072 Y125.23 E.11059
-M73 P64 R5
-G1 X139.927 Y125.23 E.7913
-G1 X143.001 Y124.096 E.10869
-; WIPE_START
-G1 X142.948 Y124.452 E-.13664
-G1 X142.835 Y124.961 E-.19806
-G1 X142.768 Y125.464 E-.19312
-G1 X142.754 Y126.075 E-.23218
-; WIPE_END
-G1 E-.04 F1800
-G1 X139.636 Y124.823 Z.8 F30000
-G1 Z.4
-G1 E.8 F1800
-G1 F15476.087
-G1 X139.855 Y124.823 E.00724
-G1 X143.812 Y123.363 E.13994
-G2 X143.813 Y128.638 I4.974 J2.637 E.18211
-G1 X139.855 Y127.177 E.13996
-G1 X116.145 Y127.177 E.78649
-G1 X112.187 Y128.638 E.13996
-G2 X112.187 Y123.362 I-4.974 J-2.638 E.18215
-G1 X116.145 Y124.823 E.13996
-G1 X139.576 Y124.823 E.77725
-G1 X139.618 Y124.416 F30000
-G1 F15476.087
-G1 X139.782 Y124.416 E.00543
-G1 X144.557 Y122.654 E.16885
-G1 X144.667 Y122.799 E.00602
-G2 X144.672 Y129.2 I4.062 J3.197 E.22896
-G1 X144.563 Y129.349 E.00612
-G1 X139.782 Y127.584 E.16907
-G1 X116.218 Y127.584 E.78166
-G1 X111.441 Y129.347 E.16891
-G1 X111.332 Y129.202 E.00602
-G2 X111.332 Y122.798 I-4.089 J-3.202 E.22893
-G1 X111.441 Y122.653 E.00602
-G1 X116.218 Y124.416 E.16891
-G1 X139.558 Y124.416 E.77424
-G1 X139.6 Y124.009 F30000
-G1 F15476.087
-G1 X139.709 Y124.009 E.00361
-G1 X146.752 Y121.411 E.24903
-G1 X146.841 Y121.63 E.00786
-G2 X146.87 Y130.382 I1.89 J4.37 E.36824
-G1 X146.781 Y130.602 E.00786
-G1 X139.709 Y127.991 E.25005
-G1 X116.291 Y127.991 E.77683
-G1 X109.219 Y130.602 E.25007
-G1 X109.13 Y130.382 E.00786
-G2 X109.131 Y121.618 I-1.861 J-4.382 E.36928
-G1 X109.219 Y121.398 E.00786
-G1 X116.291 Y124.009 E.25005
-G1 X139.54 Y124.009 E.77122
-; WIPE_START
-G1 X139.709 Y124.009 E-.0642
-G1 X141.427 Y123.375 E-.6958
-; WIPE_END
-G1 E-.04 F1800
-G1 X133.951 Y124.915 Z.8 F30000
-G1 X107.631 Y130.336 Z.8
-G1 Z.4
-G1 E.8 F1800
-G1 F15476.087
+M73 P67 R3
 G1 X107.085 Y130.347 E.01809
 G3 X107.16 Y121.65 I.198 J-4.347 E.44277
 G3 X107.655 Y121.664 I.115 J4.679 E.01643
@@ -2015,38 +1996,7 @@ G1 X105.76 Y129.659 E-.1313
 G1 X105.597 Y129.578 E-.069
 ; WIPE_END
 G1 E-.04 F1800
-G1 X113.101 Y128.187 Z.8 F30000
-M73 P64 R4
-G1 X148.177 Y121.684 Z.8
-G1 Z.4
-G1 E.8 F1800
-; FEATURE: Inner wall
-; LINE_WIDTH: 0.45
-G1 F15476.087
-G1 X148.61 Y121.65 E.01441
-G3 X149.105 Y121.664 I.115 J4.679 E.01643
-G3 X148.117 Y121.692 I-.371 J4.336 E.87411
-G1 X148.143 Y122.085 F30000
-; FEATURE: Outer wall
-; LINE_WIDTH: 0.42
-G1 F2040
-M204 S5000
-G1 X148.208 Y122.076 E.00204
-G3 X148.624 Y122.042 I.525 J3.924 E.01283
-G3 X149.07 Y122.055 I.101 J4.244 E.01371
-G3 X147.868 Y122.136 I-.337 J3.945 E.72725
-G1 X148.084 Y122.096 E.00672
-; WIPE_START
-M204 S10000
-G1 X148.208 Y122.076 E-.04804
-G1 X148.624 Y122.042 E-.15858
-G1 X149.07 Y122.055 E-.16952
-G1 X149.413 Y122.1 E-.13122
-G1 X149.916 Y122.223 E-.19684
-G1 X150.054 Y122.273 E-.05579
-; WIPE_END
-G1 E-.04 F1800
-G1 X142.482 Y123.234 Z.8 F30000
+G1 X113.114 Y128.256 Z.8 F30000
 G1 X139.582 Y123.602 Z.8
 G1 Z.4
 G1 E.8 F1800
@@ -2066,7 +2016,7 @@ G1 X139.522 Y123.602 E.76821
 G1 X139.566 Y123.21 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
 G1 X146.883 Y120.511 E.23962
 G3 X148.841 Y120.212 I1.898 J5.862 E.06114
@@ -2082,110 +2032,10 @@ M204 S10000
 G1 X141.385 Y122.523 E-.76
 ; WIPE_END
 G1 E-.04 F1800
-G1 X141.05 Y126 Z.8 F30000
+G1 X147.104 Y121.736 Z.8 F30000
 G1 Z.4
 G1 E.8 F1800
-; FEATURE: Internal solid infill
-; LINE_WIDTH: 0.34892
-G1 F15000
-G1 X141.64 Y126.218 E.01568
-G1 X141.65 Y125.779 E.01095
-G1 X141.106 Y125.979 E.01445
-G1 X139.964 Y126 F30000
-; LINE_WIDTH: 0.420143
-G1 F15000
-G1 X140.16 Y126.035 E.00612
-G1 X142.027 Y126.725 E.06118
-G3 X142.017 Y125.279 I8.181 J-.781 E.04449
-G1 X140.159 Y125.965 E.06085
-G1 X140.023 Y125.989 E.00426
-G1 X139.964 Y125.622 F30000
-; LINE_WIDTH: 0.41999
-G1 F15000
-G1 X116.036 Y125.622 E.7352
-G1 X113.51 Y124.702 E.08261
-G3 X113.509 Y127.298 I-6.304 J1.296 E.08032
-G1 X116.036 Y126.378 E.08264
-G1 X139.964 Y126.378 E.73521
-G1 X142.49 Y127.298 E.08261
-G1 X142.359 Y126.29 E.03123
-G1 X142.376 Y125.444 E.02599
-G3 X142.491 Y124.702 I4.403 J.301 E.02309
-G1 X140.023 Y125.612 E.08082
-G1 X115.987 Y126 F30000
-; LINE_WIDTH: 0.421045
-G1 F15000
-G1 X139.904 Y126 E.73695
-G1 X115.987 Y126 F30000
-; LINE_WIDTH: 0.420875
-G1 F15000
-G1 X115.84 Y125.966 E.00465
-G2 X113.983 Y125.279 I-264.06 J710.566 E.06099
-G3 X113.983 Y126.721 I-7.556 J.726 E.04449
-G3 X115.928 Y126.014 I23.568 J61.752 E.06374
-G1 X114.555 Y125.934 F30000
-; LINE_WIDTH: 0.6492
-G1 F10391.239
-G2 X114.563 Y126.052 I-.035 J.061 E.015
-G1 X110.315 Y129.98 F30000
 ; FEATURE: Gap infill
-; LINE_WIDTH: 0.335595
-G1 F15000
-G1 X111.224 Y129.397 E.02573
-G1 X111.231 Y129.407 F30000
-; LINE_WIDTH: 0.24328
-G1 F15000
-G1 X110.694 Y129.734 E.01027
-; LINE_WIDTH: 0.222393
-G1 X110.599 Y129.79 E.00161
-; LINE_WIDTH: 0.181846
-G1 X110.502 Y129.848 E.00128
-; LINE_WIDTH: 0.145266
-G1 X110.403 Y129.904 E.00095
-; LINE_WIDTH: 0.11304
-G1 X110.304 Y129.96 E.00065
-G1 X108.989 Y130.576 F30000
-; LINE_WIDTH: 0.681315
-G1 F9868.511
-G3 X108.988 Y121.426 I-1.7 J-4.575 E.97823
-G1 X110.304 Y122.04 F30000
-; LINE_WIDTH: 0.113023
-G1 F15000
-G1 X110.403 Y122.096 E.00065
-; LINE_WIDTH: 0.145237
-G1 X110.502 Y122.152 E.00095
-; LINE_WIDTH: 0.181839
-G1 X110.599 Y122.21 E.00128
-; LINE_WIDTH: 0.222428
-G1 X110.694 Y122.266 E.00161
-; LINE_WIDTH: 0.243333
-G1 X111.231 Y122.594 E.01027
-G1 X111.224 Y122.602 F30000
-; LINE_WIDTH: 0.335519
-G1 F15000
-G1 X110.315 Y122.021 E.02573
-; WIPE_START
-G1 X111.224 Y122.602 E-.76
-; WIPE_END
-G1 E-.04 F1800
-G1 X118.856 Y122.474 Z.8 F30000
-G1 X145.681 Y122.024 Z.8
-G1 Z.4
-G1 E.8 F1800
-; LINE_WIDTH: 0.333952
-G1 F15000
-G1 X144.775 Y122.604 E.02552
-G1 X144.768 Y122.595 F30000
-; LINE_WIDTH: 0.238659
-G1 F15000
-G3 X145.401 Y122.21 I17.618 J28.271 E.01182
-; LINE_WIDTH: 0.180664
-G1 X145.496 Y122.154 E.00124
-; LINE_WIDTH: 0.144368
-G1 X145.595 Y122.098 E.00094
-; LINE_WIDTH: 0.112622
-G1 X145.692 Y122.043 E.00063
-G1 X147.104 Y121.736 F30000
 ; LINE_WIDTH: 0.611073
 G1 F11088.567
 G1 X147.273 Y121.373 E.01855
@@ -2198,336 +2048,531 @@ G1 X147.288 Y121.342 E.00088
 ; LINE_WIDTH: 0.681303
 G1 F9868.682
 G3 X147.012 Y130.574 I1.433 J4.663 E.96374
-G1 X145.696 Y129.96 F30000
-; LINE_WIDTH: 0.112995
-G1 F15000
-G1 X145.597 Y129.904 E.00065
-; LINE_WIDTH: 0.145528
-G1 X145.496 Y129.847 E.00097
-; LINE_WIDTH: 0.182198
-G1 X145.401 Y129.79 E.00125
-; LINE_WIDTH: 0.240123
-G3 X144.772 Y129.409 I19.996 J-33.707 E.01182
-G1 X144.779 Y129.399 F30000
-; LINE_WIDTH: 0.335576
-M73 P65 R4
-G1 F15000
-G1 X145.685 Y129.979 E.02565
-; OBJECT_ID: 104
 ; WIPE_START
-G1 X144.779 Y129.399 E-.76
+G1 X147.663 Y130.757 E-.2573
+G1 X148.208 Y130.847 E-.20989
+G1 X148.718 Y130.874 E-.19391
+G1 X148.978 Y130.86 E-.0989
 ; WIPE_END
 G1 E-.04 F1800
-; stop printing object, unique label id: 72
-M625
-; start printing object, unique label id: 104
-M624 AgAAAAAAAAA=
-G1 X143.428 Y136.911 Z.8 F30000
-G1 X142.949 Y139.575 Z.8
-G1 Z.4
-G1 E.8 F1800
-; FEATURE: Inner wall
-; LINE_WIDTH: 0.45
-G1 F15476.087
-G1 X142.839 Y139.951 E.013
-G2 X142.946 Y143.424 I5.888 J1.557 E.11687
-G1 X139.819 Y142.269 E.11059
-G1 X115.964 Y142.269 E.79131
-G1 X112.833 Y143.425 E.1107
-G2 X112.837 Y139.575 I-5.887 J-1.93 E.12985
-G1 X115.964 Y140.73 E.11059
-G1 X139.819 Y140.73 E.7913
-G1 X142.893 Y139.596 E.10869
-; WIPE_START
-G1 X142.839 Y139.951 E-.13664
-G1 X142.727 Y140.46 E-.19806
-G1 X142.659 Y140.964 E-.19312
-G1 X142.645 Y141.575 E-.23218
-; WIPE_END
-G1 E-.04 F1800
-G1 X139.528 Y140.323 Z.8 F30000
-G1 Z.4
-G1 E.8 F1800
-G1 F15476.087
-G1 X139.746 Y140.323 E.00724
-G1 X143.704 Y138.863 E.13994
-G2 X143.704 Y144.138 I4.974 J2.637 E.18211
-G1 X139.746 Y142.676 E.13996
-G1 X116.037 Y142.676 E.78649
-G1 X112.079 Y144.138 E.13996
-G2 X112.079 Y138.861 I-4.974 J-2.638 E.18215
-G1 X116.037 Y140.323 E.13996
-G1 X139.468 Y140.323 E.77725
-G1 X139.51 Y139.916 F30000
-G1 F15476.087
-G1 X139.673 Y139.916 E.00543
-G1 X144.449 Y138.154 E.16885
-G1 X144.558 Y138.299 E.00602
-G2 X144.564 Y144.7 I4.062 J3.197 E.22896
-G1 X144.455 Y144.849 E.00612
-G1 X139.673 Y143.083 E.16907
-G1 X116.109 Y143.083 E.78166
-G1 X111.333 Y144.847 E.16891
-G1 X111.223 Y144.702 E.00602
-G2 X111.223 Y138.297 I-4.089 J-3.202 E.22893
-G1 X111.333 Y138.152 E.00602
-G1 X116.109 Y139.916 E.16891
-G1 X139.45 Y139.916 E.77424
-G1 X139.492 Y139.509 F30000
-G1 F15476.087
-G1 X139.601 Y139.509 E.00361
-G1 X146.644 Y136.91 E.24903
-G1 X146.733 Y137.13 E.00786
-G2 X146.761 Y145.882 I1.89 J4.37 E.36824
-G1 X146.672 Y146.101 E.00786
-G1 X139.601 Y143.49 E.25005
-G1 X116.182 Y143.49 E.77683
-G1 X109.11 Y146.101 E.25007
-G1 X109.021 Y145.882 E.00786
-G2 X109.022 Y137.117 I-1.861 J-4.382 E.36928
-G1 X109.111 Y136.898 E.00786
-G1 X116.182 Y139.509 E.25005
-G1 X139.432 Y139.509 E.77122
-; WIPE_START
-G1 X139.601 Y139.509 E-.0642
-G1 X141.318 Y138.875 E-.6958
-; WIPE_END
-G1 E-.04 F1800
-G1 X133.843 Y140.415 Z.8 F30000
-G1 X107.522 Y145.836 Z.8
-G1 Z.4
-G1 E.8 F1800
-G1 F15476.087
-G1 X106.977 Y145.846 E.01809
-G3 X107.051 Y137.15 I.198 J-4.347 E.44277
-G3 X107.546 Y137.164 I.115 J4.679 E.01643
-G3 X107.582 Y145.832 I-.371 J4.336 E.42765
-G1 X107.37 Y145.448 F30000
-; FEATURE: Outer wall
-; LINE_WIDTH: 0.42
-G1 F2040
-M204 S5000
-G1 X106.994 Y145.455 E.01157
-G3 X107.066 Y137.542 I.181 J-3.955 E.3733
-G3 X107.512 Y137.555 I.101 J4.245 E.01371
-G3 X107.512 Y145.444 I-.337 J3.945 E.36146
-G1 X107.43 Y145.446 E.0025
-; WIPE_START
-M204 S10000
-G1 X106.994 Y145.455 E-.16592
-G1 X106.578 Y145.415 E-.15862
-G1 X106.309 Y145.366 E-.10388
-G1 X105.976 Y145.276 E-.13127
-G1 X105.651 Y145.158 E-.1313
-G1 X105.488 Y145.078 E-.069
-; WIPE_END
-G1 E-.04 F1800
-G1 X112.993 Y143.686 Z.8 F30000
-G1 X148.068 Y137.183 Z.8
-G1 Z.4
-G1 E.8 F1800
-; FEATURE: Inner wall
-; LINE_WIDTH: 0.45
-G1 F15476.087
-G1 X148.501 Y137.15 E.01441
-G3 X148.996 Y137.164 I.115 J4.679 E.01643
-G3 X148.009 Y137.192 I-.371 J4.336 E.87411
-G1 X148.034 Y137.585 F30000
-; FEATURE: Outer wall
-; LINE_WIDTH: 0.42
-G1 F2040
-M204 S5000
-G1 X148.1 Y137.575 E.00204
-G3 X148.516 Y137.542 I.525 J3.924 E.01283
-G3 X148.962 Y137.555 I.101 J4.244 E.01371
-G3 X147.76 Y137.636 I-.337 J3.945 E.72725
-G1 X147.975 Y137.596 E.00672
-; WIPE_START
-M204 S10000
-G1 X148.1 Y137.575 E-.04804
-G1 X148.516 Y137.542 E-.15858
-G1 X148.962 Y137.555 E-.16952
-G1 X149.304 Y137.6 E-.13122
-G1 X149.807 Y137.723 E-.19684
-G1 X149.945 Y137.773 E-.05579
-; WIPE_END
-G1 E-.04 F1800
-G1 X142.373 Y138.734 Z.8 F30000
-G1 X139.474 Y139.102 Z.8
-G1 Z.4
-G1 E.8 F1800
-; FEATURE: Inner wall
-; LINE_WIDTH: 0.45
-G1 F15476.087
-G1 X139.528 Y139.102 E.0018
-G1 X146.9 Y136.382 E.26067
-G3 X148.724 Y136.103 I1.768 J5.465 E.06145
-G3 X146.666 Y146.533 I-.111 J5.396 E.62478
-G1 X139.528 Y143.897 E.2524
-G1 X116.255 Y143.897 E.77201
-G1 X109.116 Y146.533 E.25243
-G3 X109.117 Y136.466 I-1.949 J-5.034 E.69479
-G1 X116.255 Y139.102 E.25242
-G1 X139.414 Y139.102 E.76821
-G1 X139.458 Y138.71 F30000
-; FEATURE: Outer wall
-; LINE_WIDTH: 0.42
-G1 F3600
-M204 S5000
-G1 X146.774 Y136.011 E.23962
-G3 X148.732 Y135.711 I1.898 J5.862 E.06114
-G3 X146.533 Y146.902 I-.12 J5.788 E.62048
-G1 X139.458 Y144.29 E.23173
-G1 X116.325 Y144.29 E.71081
-G1 X109.25 Y146.902 E.23173
-G3 X109.251 Y136.098 I-2.083 J-5.402 E.68983
-G1 X116.325 Y138.71 E.23172
-G1 X139.398 Y138.71 E.70896
-; WIPE_START
-M204 S10000
-G1 X141.276 Y138.022 E-.76
-; WIPE_END
-G1 E-.04 F1800
-G1 X140.941 Y141.5 Z.8 F30000
+G1 X141.423 Y129.775 Z.8 F30000
+G1 X115.123 Y126 Z.8
 G1 Z.4
 G1 E.8 F1800
 ; FEATURE: Internal solid infill
-; LINE_WIDTH: 0.34892
+; LINE_WIDTH: 0.46903
+G1 F14784.914
+G1 X114.287 Y125.691 E.03095
+G1 X114.278 Y126.312 E.02155
+G1 X115.067 Y126.021 E.0292
+G1 X139.673 Y123.994 F30000
+; LINE_WIDTH: 0.418477
 G1 F15000
-G1 X141.531 Y141.717 E.01568
-G1 X141.541 Y141.278 E.01095
-G1 X140.998 Y141.479 E.01445
-G1 X139.855 Y141.5 F30000
-; LINE_WIDTH: 0.420143
-G1 F15000
-G1 X140.051 Y141.535 E.00612
-G1 X141.918 Y142.224 E.06118
-G3 X141.908 Y140.779 I8.181 J-.781 E.04449
-G1 X140.051 Y141.464 E.06085
-G1 X139.914 Y141.489 E.00426
-G1 X139.855 Y141.122 F30000
+G1 X116.327 Y123.994 E.71445
+G1 X110.366 Y121.806 E.19433
+G3 X109.38 Y121.422 I326.074 J-839.451 E.03238
+G1 X109.286 Y121.733 E.00994
+G3 X110.151 Y122.227 I-1.461 J3.561 E.03058
+G1 X110.761 Y122.783 E.02525
+G1 X111.309 Y123.506 E.02776
+G1 X111.569 Y123.984 E.01666
+G1 X111.872 Y124.834 E.02764
+G1 X112.013 Y125.774 E.02908
+G1 X111.968 Y126.682 E.02783
+G1 X111.739 Y127.604 E.02908
+G1 X111.35 Y128.427 E.02784
+G1 X110.785 Y129.191 E.02908
+G1 X110.174 Y129.755 E.02545
+G1 X109.654 Y130.093 E.01898
+G1 X109.287 Y130.267 E.01242
+G1 X109.379 Y130.578 E.00995
+G1 X110.366 Y130.194 E.03242
+G1 X116.327 Y128.006 E.19433
+G1 X139.673 Y128.006 E.71445
+G1 X145.833 Y130.268 E.20084
+G2 X146.621 Y130.581 I6.987 J-16.464 E.02595
+G1 X146.716 Y130.267 E.01003
+G1 X146.014 Y129.893 E.02433
+G3 X144.624 Y128.384 I3.058 J-4.211 E.06321
+G1 X144.348 Y127.829 E.01898
+G1 X144.126 Y127.159 E.02159
+G3 X144.14 Y124.782 I4.647 J-1.162 E.07352
+G3 X146.443 Y121.844 I4.577 J1.216 E.11743
+G1 X146.372 Y121.745 E.00372
+G1 X146.432 Y121.513 E.00734
+G1 X139.732 Y123.984 E.21853
+G1 X139.673 Y124.371 F30000
 ; LINE_WIDTH: 0.41999
 G1 F15000
-G1 X115.928 Y141.122 E.7352
-G1 X113.401 Y140.202 E.08261
-G3 X113.401 Y142.798 I-6.304 J1.296 E.08032
-G1 X115.928 Y141.877 E.08264
-G1 X139.855 Y141.877 E.73521
-G1 X142.382 Y142.797 E.08261
-G1 X142.25 Y141.79 E.03123
-G1 X142.268 Y140.944 E.02599
-G3 X142.382 Y140.202 I4.403 J.301 E.02309
-G1 X139.914 Y141.111 E.08082
-G1 X115.878 Y141.5 F30000
-; LINE_WIDTH: 0.421045
+G1 X116.327 Y124.371 E.71733
+G1 X116.131 Y124.336 E.00611
+G1 X110.911 Y122.409 E.17098
+G1 X111.086 Y122.582 E.00755
+G1 X111.61 Y123.279 E.02681
+G1 X111.901 Y123.805 E.01845
+G1 X112.228 Y124.709 E.02954
+G1 X112.386 Y125.72 E.03144
+G1 X112.345 Y126.702 E.03022
+G1 X112.105 Y127.697 E.03143
+G1 X111.69 Y128.589 E.03024
+G1 X111.087 Y129.416 E.03144
+G1 X110.911 Y129.591 E.00763
+G1 X116.131 Y127.664 E.17098
+G1 X116.327 Y127.629 E.00611
+G1 X139.673 Y127.629 E.71733
+G1 X139.869 Y127.664 E.00611
+G1 X145.084 Y129.589 E.17083
+G1 X144.77 Y129.251 E.01419
+G1 X144.315 Y128.6 E.02441
+G1 X144.009 Y127.996 E.02081
+G1 X143.768 Y127.277 E.02331
+G3 X143.656 Y125.283 I5.489 J-1.307 E.06169
+G3 X145.082 Y122.413 I4.991 J.691 E.1002
+G1 X139.868 Y124.336 E.17075
+G1 X139.732 Y124.361 E.00427
+G1 X139.673 Y124.748 F30000
 G1 F15000
-G1 X139.795 Y141.5 E.73695
-G1 X115.878 Y141.5 F30000
-; LINE_WIDTH: 0.420875
+G1 X116.327 Y124.748 E.71733
+G1 X116.001 Y124.69 E.01019
+G1 X112.013 Y123.218 E.13062
+G1 X112.292 Y123.759 E.01873
+G1 X112.583 Y124.583 E.02685
+G1 X112.759 Y125.665 E.03368
+G1 X112.721 Y126.723 E.03251
+G1 X112.47 Y127.789 E.03367
+G1 X112.012 Y128.783 E.03362
+G1 X116.001 Y127.31 E.13065
+G1 X116.327 Y127.252 E.01019
+G1 X139.673 Y127.252 E.71733
+G1 X139.999 Y127.31 E.01019
+G1 X143.985 Y128.782 E.13055
+G1 X143.671 Y128.162 E.02133
+G1 X143.409 Y127.394 E.02494
+G3 X143.28 Y125.254 I5.877 J-1.428 E.06623
+G3 X143.993 Y123.217 I5.239 J.689 E.0668
+G1 X139.999 Y124.69 E.13081
+G1 X139.732 Y124.738 E.00834
+G1 X139.673 Y125.125 F30000
 G1 F15000
-G1 X115.731 Y141.465 E.00465
-G2 X113.874 Y140.778 I-264.06 J710.566 E.06099
-G3 X113.875 Y142.221 I-7.556 J.726 E.04449
-G3 X115.82 Y141.513 I23.568 J61.752 E.06374
-G1 X114.446 Y141.434 F30000
-; LINE_WIDTH: 0.6492
-G1 F10391.239
-G2 X114.454 Y141.551 I-.035 J.061 E.015
-G1 X110.207 Y145.479 F30000
-; FEATURE: Gap infill
-; LINE_WIDTH: 0.335595
+G1 X116.327 Y125.125 E.71733
+G1 X115.87 Y125.044 E.01427
+G1 X112.737 Y123.887 E.10261
+G1 X112.939 Y124.458 E.0186
+G1 X113.132 Y125.611 E.03592
+G1 X113.098 Y126.743 E.0348
+G1 X112.836 Y127.882 E.03591
+G1 X112.754 Y128.107 E.00735
+G1 X115.87 Y126.956 E.10205
+G1 X116.327 Y126.875 E.01427
+G1 X139.673 Y126.875 E.71733
+G1 X140.13 Y126.956 E.01427
+G1 X143.246 Y128.107 E.10207
+G3 X142.852 Y126.089 I6.081 J-2.235 E.06346
+G1 X142.904 Y125.226 E.02657
+G3 X143.245 Y123.895 I5.459 J.687 E.04232
+G1 X140.129 Y125.044 E.10203
+G1 X139.732 Y125.115 E.01241
+G1 X139.673 Y125.502 F30000
 G1 F15000
-G1 X111.115 Y144.897 E.02573
-G1 X111.122 Y144.906 F30000
-; LINE_WIDTH: 0.24328
+G1 X116.327 Y125.502 E.71733
+G1 X116.019 Y125.474 E.0095
+G3 X113.339 Y124.511 I22.662 J-67.275 E.08752
+G1 X113.506 Y125.556 E.03252
+G1 X113.475 Y126.763 E.03708
+G1 X113.322 Y127.495 E.02298
+G1 X115.739 Y126.603 E.07917
+G1 X116.179 Y126.504 E.01385
+G1 X116.327 Y126.498 E.00455
+G1 X139.673 Y126.498 E.71733
+G1 X139.981 Y126.526 E.0095
+G3 X142.656 Y127.487 I-22.415 J66.587 E.08735
+G1 X142.541 Y126.914 E.01796
+G1 X142.476 Y126.113 E.02469
+G1 X142.528 Y125.197 E.0282
+G1 X142.655 Y124.514 E.02134
+G1 X140.26 Y125.398 E.07844
+G3 X139.732 Y125.497 I-.542 J-1.428 E.01658
+G1 X139.673 Y125.845 F30000
+; LINE_WIDTH: 0.352297
 G1 F15000
-G1 X110.585 Y145.234 E.01027
-; LINE_WIDTH: 0.222393
-G1 X110.491 Y145.29 E.00161
-; LINE_WIDTH: 0.181846
-G1 X110.394 Y145.347 E.00128
-; LINE_WIDTH: 0.145266
-G1 X110.295 Y145.403 E.00095
-; LINE_WIDTH: 0.11304
-G1 X110.196 Y145.46 E.00065
-G1 X108.88 Y146.076 F30000
-; LINE_WIDTH: 0.681315
-G1 F9868.511
-G3 X108.88 Y136.925 I-1.7 J-4.575 E.97823
-G1 X110.196 Y137.54 F30000
-; LINE_WIDTH: 0.113023
-G1 F15000
-G1 X110.295 Y137.596 E.00065
-; LINE_WIDTH: 0.145237
-G1 X110.394 Y137.652 E.00095
-; LINE_WIDTH: 0.181839
-G1 X110.491 Y137.709 E.00128
-; LINE_WIDTH: 0.222428
-G1 X110.585 Y137.766 E.00161
-; LINE_WIDTH: 0.243333
-G1 X111.122 Y138.093 E.01027
-G1 X111.116 Y138.102 F30000
-; LINE_WIDTH: 0.335519
-G1 F15000
-G1 X110.207 Y137.521 E.02573
+G1 X116.327 Y125.845 E.58855
+G1 X115.953 Y125.831 E.00943
+; LINE_WIDTH: 0.419166
+G1 X115.609 Y125.751 E.01084
+G1 X113.819 Y125.09 E.05851
+M73 P68 R3
+G1 X113.898 Y125.912 E.02531
+G1 X113.833 Y126.905 E.03051
+G1 X115.609 Y126.249 E.05805
+; LINE_WIDTH: 0.405083
+G1 X115.879 Y126.203 E.00808
+; LINE_WIDTH: 0.35228
+G3 X116.327 Y126.155 I.39 J1.496 E.01141
+G1 X139.673 Y126.155 E.58852
+; LINE_WIDTH: 0.368983
+G1 X139.861 Y126.155 E.005
+; LINE_WIDTH: 0.419497
+G1 X140.049 Y126.155 E.00577
+G3 X142.16 Y126.902 I-14.847 J45.313 E.06874
+G1 X142.099 Y126.138 E.02353
+G1 X142.162 Y125.098 E.03198
+G1 X140.39 Y125.751 E.05795
+G1 X140.049 Y125.845 E.01087
+; LINE_WIDTH: 0.402988
+G1 X139.891 Y125.845 E.00464
+; LINE_WIDTH: 0.368983
+G1 X139.733 Y125.845 E.0042
+G1 X140.872 Y126 F30000
+; LINE_WIDTH: 0.46607
+G1 F14888.338
+G1 X141.71 Y126.309 E.03078
+G1 X141.711 Y125.69 E.02134
+G1 X140.929 Y125.979 E.02877
 ; WIPE_START
-G1 X111.116 Y138.102 E-.76
+G1 X141.711 Y125.69 E-.31709
+G1 X141.71 Y126.309 E-.23513
+G1 X141.197 Y126.12 E-.20778
 ; WIPE_END
 G1 E-.04 F1800
-G1 X118.747 Y137.974 Z.8 F30000
-G1 X145.572 Y137.523 Z.8
-M73 P66 R4
+G1 X133.644 Y125.019 Z.8 F30000
+G1 X108.988 Y121.426 Z.8
 G1 Z.4
 G1 E.8 F1800
-; LINE_WIDTH: 0.333952
-G1 F15000
-G1 X144.666 Y138.104 E.02552
-G1 X144.659 Y138.095 F30000
-; LINE_WIDTH: 0.238659
-G1 F15000
-G3 X145.293 Y137.71 I17.618 J28.271 E.01182
-; LINE_WIDTH: 0.180664
-G1 X145.388 Y137.653 E.00124
-; LINE_WIDTH: 0.144368
-G1 X145.486 Y137.597 E.00094
-; LINE_WIDTH: 0.112622
-G1 X145.583 Y137.543 E.00063
-G1 X146.995 Y137.236 F30000
+; FEATURE: Gap infill
+; LINE_WIDTH: 0.681315
+G1 F9868.511
+G2 X108.989 Y130.576 I-1.699 J4.575 E.97823
+; OBJECT_ID: 194
+; WIPE_START
+G1 X108.337 Y130.757 E-.2572
+G1 X107.815 Y130.844 E-.20092
+G1 X107.156 Y130.873 E-.25072
+G1 X107.022 Y130.861 E-.05117
+; WIPE_END
+G1 E-.04 F1800
+; stop printing object, unique label id: 123
+M625
+; start printing object, unique label id: 194
+M624 AgAAAAAAAAA=
+G1 X114.622 Y131.567 Z.8 F30000
+G1 X148.177 Y134.681 Z.8
+G1 Z.4
+G1 E.8 F1800
+; FEATURE: Inner wall
+; LINE_WIDTH: 0.45
+G1 F15476.087
+G1 X148.61 Y134.648 E.01441
+G3 X149.105 Y134.662 I.115 J4.679 E.01643
+G3 X148.117 Y134.69 I-.371 J4.336 E.87411
+G1 X148.143 Y135.083 F30000
+; FEATURE: Outer wall
+; LINE_WIDTH: 0.42
+G1 F2040
+M204 S5000
+G1 X148.208 Y135.073 E.00204
+G3 X148.624 Y135.04 I.525 J3.924 E.01283
+G3 X149.07 Y135.053 I.101 J4.244 E.01371
+G3 X147.868 Y135.134 I-.337 J3.945 E.72725
+G1 X148.084 Y135.094 E.00672
+; WIPE_START
+M204 S10000
+G1 X148.208 Y135.073 E-.04804
+G1 X148.624 Y135.04 E-.15858
+G1 X149.07 Y135.053 E-.16952
+G1 X149.413 Y135.098 E-.13122
+G1 X149.916 Y135.221 E-.19684
+G1 X150.054 Y135.271 E-.05579
+; WIPE_END
+G1 E-.04 F1800
+G1 X142.555 Y136.696 Z.8 F30000
+G1 X107.631 Y143.334 Z.8
+G1 Z.4
+G1 E.8 F1800
+; FEATURE: Inner wall
+; LINE_WIDTH: 0.45
+G1 F15476.087
+G1 X107.085 Y143.345 E.01809
+G3 X107.16 Y134.648 I.198 J-4.347 E.44277
+G3 X107.655 Y134.662 I.115 J4.679 E.01643
+G3 X107.69 Y143.33 I-.371 J4.336 E.42765
+G1 X107.479 Y142.946 F30000
+; FEATURE: Outer wall
+; LINE_WIDTH: 0.42
+G1 F2040
+M204 S5000
+G1 X107.102 Y142.953 E.01157
+G3 X107.174 Y135.04 I.181 J-3.955 E.3733
+G3 X107.62 Y135.053 I.101 J4.245 E.01371
+G3 X107.62 Y142.943 I-.337 J3.945 E.36146
+G1 X107.539 Y142.945 E.0025
+; WIPE_START
+M204 S10000
+G1 X107.102 Y142.953 E-.16592
+G1 X106.687 Y142.913 E-.15862
+G1 X106.418 Y142.864 E-.10388
+G1 X106.084 Y142.775 E-.13127
+G1 X105.76 Y142.656 E-.1313
+G1 X105.597 Y142.576 E-.069
+; WIPE_END
+G1 E-.04 F1800
+G1 X113.114 Y141.254 Z.8 F30000
+G1 X139.582 Y136.6 Z.8
+G1 Z.4
+G1 E.8 F1800
+; FEATURE: Inner wall
+; LINE_WIDTH: 0.45
+G1 F15476.087
+G1 X139.636 Y136.6 E.0018
+G1 X147.009 Y133.88 E.26067
+G3 X148.832 Y133.602 I1.768 J5.465 E.06145
+G3 X146.774 Y144.031 I-.111 J5.396 E.62478
+G1 X139.636 Y141.396 E.2524
+G1 X116.364 Y141.396 E.77201
+G1 X109.225 Y144.031 E.25243
+G3 X109.225 Y133.964 I-1.949 J-5.034 E.69479
+G1 X116.364 Y136.6 E.25242
+G1 X139.522 Y136.6 E.76821
+G1 X139.566 Y136.208 F30000
+; FEATURE: Outer wall
+; LINE_WIDTH: 0.42
+G1 F12000
+M204 S5000
+G1 X146.883 Y133.509 E.23962
+G3 X148.841 Y133.21 I1.898 J5.862 E.06114
+G3 X146.641 Y144.4 I-.12 J5.788 E.62048
+G1 X139.566 Y141.788 E.23173
+G1 X116.434 Y141.788 E.71081
+G1 X109.359 Y144.4 E.23173
+G3 X109.359 Y133.596 I-2.083 J-5.402 E.68983
+G1 X116.434 Y136.208 E.23172
+G1 X139.506 Y136.208 E.70896
+; WIPE_START
+M204 S10000
+G1 X141.385 Y135.521 E-.76
+; WIPE_END
+G1 E-.04 F1800
+G1 X147.104 Y134.734 Z.8 F30000
+G1 Z.4
+G1 E.8 F1800
+; FEATURE: Gap infill
 ; LINE_WIDTH: 0.611073
 G1 F11088.567
-G1 X147.165 Y136.873 E.01855
+G1 X147.273 Y134.371 E.01855
 ; LINE_WIDTH: 0.642174
 G1 F10513.075
-G1 X147.172 Y136.857 E.00084
+G1 X147.281 Y134.356 E.00084
 ; LINE_WIDTH: 0.667792
 G1 F10082.07
-G1 X147.18 Y136.842 E.00088
+G1 X147.288 Y134.34 E.00088
 ; LINE_WIDTH: 0.681303
 G1 F9868.682
-G3 X146.903 Y146.074 I1.433 J4.663 E.96374
-G1 X145.587 Y145.459 F30000
-; LINE_WIDTH: 0.112995
+G3 X147.012 Y143.572 I1.433 J4.663 E.96374
+; WIPE_START
+G1 X147.663 Y143.755 E-.2573
+G1 X148.209 Y143.844 E-.20989
+G1 X148.718 Y143.872 E-.19391
+G1 X148.978 Y143.858 E-.0989
+; WIPE_END
+G1 E-.04 F1800
+G1 X141.423 Y142.773 Z.8 F30000
+G1 X115.123 Y138.998 Z.8
+G1 Z.4
+G1 E.8 F1800
+; FEATURE: Internal solid infill
+; LINE_WIDTH: 0.46903
+G1 F14784.914
+G1 X114.287 Y138.689 E.03095
+G1 X114.278 Y139.31 E.02155
+G1 X115.067 Y139.019 E.0292
+G1 X139.673 Y136.992 F30000
+; LINE_WIDTH: 0.418477
 G1 F15000
-G1 X145.488 Y145.404 E.00065
-; LINE_WIDTH: 0.145528
-G1 X145.387 Y145.346 E.00097
-; LINE_WIDTH: 0.182198
-G1 X145.292 Y145.29 E.00125
-; LINE_WIDTH: 0.240123
-G3 X144.663 Y144.909 I19.996 J-33.707 E.01182
-G1 X144.67 Y144.899 F30000
-; LINE_WIDTH: 0.335576
+G1 X116.327 Y136.992 E.71445
+G1 X110.366 Y134.804 E.19433
+G3 X109.38 Y134.42 I326.074 J-839.451 E.03238
+G1 X109.286 Y134.731 E.00994
+G3 X110.151 Y135.225 I-1.461 J3.561 E.03058
+G1 X110.761 Y135.781 E.02525
+G1 X111.309 Y136.504 E.02776
+G1 X111.569 Y136.982 E.01666
+G1 X111.872 Y137.832 E.02764
+G1 X112.013 Y138.772 E.02908
+G1 X111.968 Y139.68 E.02783
+G1 X111.739 Y140.602 E.02908
+G1 X111.35 Y141.424 E.02784
+G1 X110.785 Y142.189 E.02908
+G1 X110.174 Y142.753 E.02545
+G1 X109.654 Y143.09 E.01898
+G1 X109.287 Y143.264 E.01242
+G1 X109.379 Y143.576 E.00995
+G1 X110.366 Y143.192 E.03242
+G1 X116.327 Y141.004 E.19433
+G1 X139.673 Y141.004 E.71445
+G1 X145.833 Y143.266 E.20084
+G2 X146.621 Y143.578 I6.987 J-16.464 E.02595
+G1 X146.716 Y143.265 E.01003
+G1 X146.014 Y142.891 E.02433
+G3 X144.624 Y141.382 I3.058 J-4.211 E.06321
+G1 X144.348 Y140.827 E.01898
+G1 X144.126 Y140.157 E.02159
+G3 X144.14 Y137.78 I4.647 J-1.162 E.07352
+G3 X146.443 Y134.842 I4.577 J1.216 E.11743
+G1 X146.372 Y134.743 E.00372
+G1 X146.432 Y134.511 E.00734
+G1 X139.732 Y136.981 E.21853
+G1 X139.673 Y137.369 F30000
+; LINE_WIDTH: 0.41999
 G1 F15000
-G1 X145.576 Y145.479 E.02565
+G1 X116.327 Y137.369 E.71733
+G1 X116.131 Y137.334 E.00611
+G1 X110.911 Y135.407 E.17098
+G1 X111.086 Y135.58 E.00755
+G1 X111.61 Y136.277 E.02681
+G1 X111.901 Y136.802 E.01845
+G1 X112.228 Y137.707 E.02954
+G1 X112.386 Y138.717 E.03144
+G1 X112.345 Y139.7 E.03022
+G1 X112.105 Y140.695 E.03143
+G1 X111.69 Y141.587 E.03024
+G1 X111.087 Y142.414 E.03144
+G1 X110.911 Y142.589 E.00763
+G1 X116.131 Y140.662 E.17098
+G1 X116.327 Y140.627 E.00611
+G1 X139.673 Y140.627 E.71733
+G1 X139.869 Y140.662 E.00611
+G1 X145.084 Y142.587 E.17083
+G1 X144.77 Y142.249 E.01419
+G1 X144.315 Y141.598 E.02441
+G1 X144.009 Y140.993 E.02081
+G1 X143.768 Y140.275 E.02331
+G3 X143.656 Y138.28 I5.489 J-1.307 E.06169
+G3 X145.082 Y135.411 I4.991 J.691 E.1002
+G1 X139.868 Y137.334 E.17075
+G1 X139.732 Y137.358 E.00427
+G1 X139.673 Y137.746 F30000
+G1 F15000
+G1 X116.327 Y137.746 E.71733
+G1 X116.001 Y137.688 E.01019
+G1 X112.013 Y136.215 E.13062
+G1 X112.292 Y136.757 E.01873
+G1 X112.583 Y137.581 E.02685
+G1 X112.759 Y138.663 E.03368
+G1 X112.721 Y139.72 E.03251
+G1 X112.47 Y140.787 E.03367
+G1 X112.012 Y141.781 E.03362
+G1 X116.001 Y140.308 E.13065
+G1 X116.327 Y140.25 E.01019
+G1 X139.673 Y140.25 E.71733
+G1 X139.999 Y140.308 E.01019
+M73 P69 R3
+G1 X143.985 Y141.779 E.13055
+G1 X143.671 Y141.16 E.02133
+G1 X143.409 Y140.392 E.02494
+G3 X143.28 Y138.252 I5.877 J-1.428 E.06623
+G3 X143.993 Y136.214 I5.239 J.689 E.0668
+G1 X139.999 Y137.688 E.13081
+G1 X139.732 Y137.736 E.00834
+G1 X139.673 Y138.123 F30000
+G1 F15000
+G1 X116.327 Y138.123 E.71733
+G1 X115.87 Y138.041 E.01427
+G1 X112.737 Y136.885 E.10261
+G1 X112.939 Y137.456 E.0186
+G1 X113.132 Y138.608 E.03592
+G1 X113.098 Y139.74 E.0348
+G1 X112.836 Y140.879 E.03591
+G1 X112.754 Y141.104 E.00735
+G1 X115.87 Y139.954 E.10205
+G1 X116.327 Y139.872 E.01427
+G1 X139.673 Y139.872 E.71733
+G1 X140.13 Y139.954 E.01427
+G1 X143.246 Y141.105 E.10207
+G3 X142.852 Y139.086 I6.081 J-2.235 E.06346
+G1 X142.904 Y138.223 E.02657
+G3 X143.245 Y136.892 I5.459 J.687 E.04232
+G1 X140.129 Y138.042 E.10203
+G1 X139.732 Y138.113 E.01241
+G1 X139.673 Y138.5 F30000
+G1 F15000
+G1 X116.327 Y138.5 E.71733
+G1 X116.019 Y138.472 E.0095
+G3 X113.339 Y137.509 I22.662 J-67.275 E.08752
+G1 X113.506 Y138.554 E.03252
+G1 X113.475 Y139.76 E.03708
+G1 X113.322 Y140.493 E.02298
+G1 X115.739 Y139.6 E.07917
+G1 X116.179 Y139.502 E.01385
+G1 X116.327 Y139.495 E.00455
+G1 X139.673 Y139.495 E.71733
+G1 X139.981 Y139.524 E.0095
+G3 X142.656 Y140.485 I-22.415 J66.587 E.08735
+G1 X142.541 Y139.912 E.01796
+G1 X142.476 Y139.111 E.02469
+G1 X142.528 Y138.195 E.0282
+G1 X142.655 Y137.512 E.02134
+G1 X140.26 Y138.395 E.07844
+G3 X139.732 Y138.495 I-.542 J-1.428 E.01658
+G1 X139.673 Y138.843 F30000
+; LINE_WIDTH: 0.352297
+G1 F15000
+G1 X116.327 Y138.843 E.58855
+G1 X115.953 Y138.829 E.00943
+; LINE_WIDTH: 0.419166
+G1 X115.609 Y138.749 E.01084
+G1 X113.819 Y138.088 E.05851
+G1 X113.898 Y138.91 E.02531
+G1 X113.833 Y139.902 E.03051
+G1 X115.609 Y139.247 E.05805
+; LINE_WIDTH: 0.405083
+G1 X115.879 Y139.201 E.00808
+; LINE_WIDTH: 0.35228
+G3 X116.327 Y139.152 I.39 J1.496 E.01141
+G1 X139.673 Y139.152 E.58852
+; LINE_WIDTH: 0.368983
+G1 X139.861 Y139.153 E.005
+; LINE_WIDTH: 0.419497
+G1 X140.049 Y139.153 E.00577
+G3 X142.16 Y139.9 I-14.847 J45.313 E.06874
+G1 X142.1 Y139.136 E.02353
+G1 X142.162 Y138.095 E.03198
+G1 X140.39 Y138.749 E.05795
+G1 X140.049 Y138.843 E.01087
+; LINE_WIDTH: 0.402988
+G1 X139.891 Y138.843 E.00464
+; LINE_WIDTH: 0.368983
+G1 X139.733 Y138.843 E.0042
+G1 X140.872 Y138.998 F30000
+; LINE_WIDTH: 0.46607
+G1 F14888.338
+G1 X141.71 Y139.307 E.03078
+G1 X141.711 Y138.688 E.02134
+G1 X140.929 Y138.977 E.02877
+; WIPE_START
+G1 X141.711 Y138.688 E-.31709
+G1 X141.71 Y139.307 E-.23513
+G1 X141.197 Y139.118 E-.20778
+; WIPE_END
+G1 E-.04 F1800
+G1 X133.644 Y138.017 Z.8 F30000
+G1 X108.988 Y134.424 Z.8
+G1 Z.4
+G1 E.8 F1800
+; FEATURE: Gap infill
+; LINE_WIDTH: 0.681315
+G1 F9868.511
+G2 X108.989 Y143.574 I-1.699 J4.575 E.97823
 ; CHANGE_LAYER
 ; Z_HEIGHT: 0.6
 ; LAYER_HEIGHT: 0.2
 ; WIPE_START
-G1 F15000
-G1 X144.67 Y144.899 E-.76
+G1 F9868.511
+G1 X108.337 Y143.755 E-.2572
+G1 X107.815 Y143.842 E-.20092
+G1 X107.156 Y143.871 E-.25072
+G1 X107.022 Y143.859 E-.05117
 ; WIPE_END
 G1 E-.04 F1800
-; stop printing object, unique label id: 104
+; stop printing object, unique label id: 194
 M625
 ; layer num/total_layer_count: 3/15
 ; update layer progress
@@ -2535,7 +2580,7 @@ M73 L3
 M991 S0 P2 ;notify layer change
 G17
 G3 Z.8 I1.217 J0 P1  F30000
-; object ids of layer 3 start: 72,104
+; object ids of layer 3 start: 123,194
 M624 AwAAAAAAAAA=
 ;========Date 20250206========
 ; SKIPPABLE_START
@@ -2550,151 +2595,16 @@ M1004 S5 P1  ; external shutter
 M623
 ; SKIPPABLE_END
 
-; object ids of this layer3 end: 72,104
+; object ids of this layer3 end: 123,194
 M625
-; OBJECT_ID: 72
-; start printing object, unique label id: 72
+; OBJECT_ID: 123
+; start printing object, unique label id: 123
 M624 AQAAAAAAAAA=
-G1 X139.655 Y125.23
+G1 X148.005 Y121.915
 G1 Z.6
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
-G1 F15476.087
-G1 X139.927 Y125.23 E.00905
-G1 X143.306 Y123.984 E.11946
-G2 X143.306 Y128.017 I5.525 J2.016 E.13656
-G1 X139.927 Y126.77 E.11948
-G1 X116.072 Y126.77 E.79131
-G1 X112.694 Y128.017 E.11948
-G2 X112.694 Y123.983 I-5.525 J-2.017 E.1366
-G1 X116.072 Y125.23 E.11948
-G1 X139.595 Y125.23 E.78027
-G1 X139.636 Y124.823 F30000
-G1 F15476.087
-G1 X139.855 Y124.823 E.00723
-G1 X144.085 Y123.263 E.14957
-G2 X144.085 Y128.739 I4.781 J2.737 E.19011
-G1 X139.855 Y127.177 E.1496
-G1 X116.145 Y127.177 E.78649
-G1 X111.915 Y128.739 E.1496
-G2 X111.915 Y123.261 I-4.78 J-2.739 E.19016
-G1 X116.145 Y124.823 E.1496
-G1 X139.576 Y124.823 E.77726
-G1 X139.618 Y124.416 F30000
-G1 F15476.087
-G1 X139.782 Y124.416 E.00542
-G1 X144.931 Y122.517 E.18204
-G1 X145.038 Y122.673 E.0063
-G2 X145.04 Y129.329 I3.703 J3.327 E.24181
-G1 X144.932 Y129.485 E.0063
-G1 X139.782 Y127.584 E.18212
-G1 X116.218 Y127.584 E.78166
-G1 X111.068 Y129.485 E.18212
-G1 X110.96 Y129.329 E.0063
-G2 X110.96 Y122.671 I-3.701 J-3.329 E.24191
-G1 X111.068 Y122.515 E.0063
-G1 X116.218 Y124.416 E.18212
-G1 X139.558 Y124.416 E.77424
-; WIPE_START
-G1 X139.782 Y124.416 E-.0849
-G1 X141.449 Y123.801 E-.6751
-; WIPE_END
-G1 E-.04 F1800
-G1 X133.962 Y125.289 Z1 F30000
-G1 X107.474 Y130.551 Z1
-G1 Z.6
-G1 E.8 F1800
-G1 F15476.087
-G1 X107.275 Y130.558 E.00659
-G3 X107.076 Y121.445 I.001 J-4.559 E.46845
-G1 X107.275 Y121.441 E.0066
-G3 X107.672 Y130.541 I.001 J4.559 E.46192
-G1 X107.534 Y130.548 E.00461
-G1 X107.456 Y130.144 F30000
-G1 F15476.087
-G1 X107.275 Y130.151 E.006
-G3 X107.094 Y121.852 I0 J-4.152 E.42662
-G1 X107.275 Y121.848 E.00601
-G3 X107.637 Y130.135 I0 J4.152 E.42067
-G1 X107.516 Y130.141 E.00402
-G1 X107.47 Y129.754 F30000
-; FEATURE: Outer wall
-; LINE_WIDTH: 0.42
-G1 F2040
-M204 S5000
-G1 X107.439 Y129.753 E.00095
-G3 X106.784 Y129.728 I-.175 J-4.003 E.02015
-G1 F2160
-G1 X106.622 Y129.703 E.00504
-G1 F2040
-G3 X104.292 Y128.289 I.66 J-3.714 E.08568
-G1 F2160
-G1 X104.195 Y128.157 E.00505
-G1 F2040
-G3 X103.643 Y126.973 I3.308 J-2.263 E.0403
-G1 F2160
-G1 X103.604 Y126.814 E.00505
-G1 F2040
-G3 X103.547 Y125.509 I3.923 J-.825 E.0403
-G1 F2160
-G1 X103.572 Y125.347 E.00504
-G1 F2040
-G3 X104.019 Y124.12 I3.94 J.739 E.04031
-G1 F2160
-G1 X104.104 Y123.98 E.00504
-G1 F2040
-G3 X107.111 Y122.244 I3.187 J2.048 E.11084
-G1 F2160
-G1 X107.275 Y122.24 E.00504
-G1 F2040
-G3 X110.446 Y123.98 I-.004 J3.767 E.11593
-G1 F2160
-G1 X110.531 Y124.12 E.00504
-G1 F2040
-G3 X110.907 Y125.027 I-3.693 J2.061 E.03022
-G1 F2160
-G1 X110.946 Y125.186 E.00505
-G1 F2040
-G3 X111.003 Y126.491 I-3.922 J.825 E.0403
-G1 F2160
-G1 X110.978 Y126.653 E.00504
-G1 F2040
-G3 X110.531 Y127.88 I-3.939 J-.739 E.04031
-G1 F2160
-G1 X110.446 Y128.02 E.00504
-G1 F2040
-G3 X108.248 Y129.632 I-3.179 J-2.031 E.08568
-G1 F2160
-G1 X108.089 Y129.671 E.00505
-G1 F2040
-G3 X107.765 Y129.725 I-.825 J-3.921 E.01008
-G1 X107.529 Y129.748 E.00729
-; WIPE_START
-M204 S10000
-G1 X107.439 Y129.753 E-.03451
-G1 X107.111 Y129.756 E-.12454
-G1 X106.784 Y129.728 E-.12469
-G1 X106.622 Y129.703 E-.0623
-G1 X106.302 Y129.632 E-.12473
-G1 X105.989 Y129.533 E-.12457
-G1 X105.686 Y129.408 E-.12462
-G1 X105.593 Y129.359 E-.04003
-; WIPE_END
-G1 E-.04 F1800
-G1 X113.097 Y127.969 Z1 F30000
-G1 X147.934 Y121.514 Z1
-G1 Z.6
-G1 E.8 F1800
-; FEATURE: Inner wall
-; LINE_WIDTH: 0.45
-G1 F15476.087
-G1 X148.13 Y121.48 E.0066
-G3 X148.526 Y121.445 I.596 J4.52 E.0132
-G1 X148.725 Y121.441 E.0066
-G3 X147.738 Y121.549 I.001 J4.559 E.91719
-G1 X147.875 Y121.525 E.0046
-G1 X148.005 Y121.915 F30000
 G1 F15476.087
 G1 X148.183 Y121.883 E.00601
 G3 X148.544 Y121.852 I.542 J4.116 E.01202
@@ -2769,24 +2679,88 @@ G1 X149.698 Y122.368 E-.18695
 G1 X150.055 Y122.489 E-.14317
 ; WIPE_END
 G1 E-.04 F1800
-G1 X142.502 Y123.587 Z1 F30000
-G1 X139.6 Y124.009 Z1
+G1 X142.543 Y123.839 Z1 F30000
+G1 X107.456 Y130.144 Z1
 G1 Z.6
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X139.709 Y124.009 E.00361
-G1 X147.14 Y121.268 E.26274
-G3 X148.806 Y121.011 I1.632 J5.049 E.05617
-G3 X146.915 Y130.651 I-.085 J4.989 E.57848
-G1 X139.709 Y127.991 E.25479
-G1 X116.291 Y127.991 E.77683
-G1 X109.085 Y130.651 E.2548
-G3 X109.085 Y121.349 I-1.809 J-4.651 E.64289
-G1 X116.291 Y124.009 E.25479
-G1 X139.54 Y124.009 E.77123
-G1 X139.582 Y123.602 F30000
+G1 X107.275 Y130.151 E.006
+G3 X107.094 Y121.852 I0 J-4.152 E.42662
+G1 X107.275 Y121.848 E.00601
+G3 X107.637 Y130.135 I0 J4.152 E.42067
+G1 X107.516 Y130.141 E.00402
+G1 X107.47 Y129.754 F30000
+; FEATURE: Outer wall
+; LINE_WIDTH: 0.42
+G1 F2040
+M204 S5000
+G1 X107.439 Y129.753 E.00095
+G3 X106.784 Y129.728 I-.175 J-4.003 E.02015
+G1 F2160
+G1 X106.622 Y129.703 E.00504
+G1 F2040
+G3 X104.292 Y128.289 I.66 J-3.714 E.08568
+G1 F2160
+G1 X104.195 Y128.157 E.00505
+G1 F2040
+G3 X103.643 Y126.973 I3.308 J-2.263 E.0403
+G1 F2160
+G1 X103.604 Y126.814 E.00505
+G1 F2040
+G3 X103.547 Y125.509 I3.923 J-.825 E.0403
+G1 F2160
+G1 X103.572 Y125.347 E.00504
+G1 F2040
+G3 X104.019 Y124.12 I3.94 J.739 E.04031
+G1 F2160
+G1 X104.104 Y123.98 E.00504
+G1 F2040
+G3 X107.111 Y122.244 I3.187 J2.048 E.11084
+G1 F2160
+G1 X107.275 Y122.24 E.00504
+G1 F2040
+G3 X110.446 Y123.98 I-.004 J3.767 E.11593
+G1 F2160
+G1 X110.531 Y124.12 E.00504
+G1 F2040
+G3 X110.907 Y125.027 I-3.693 J2.061 E.03022
+G1 F2160
+G1 X110.946 Y125.186 E.00505
+G1 F2040
+G3 X111.003 Y126.491 I-3.922 J.825 E.0403
+G1 F2160
+G1 X110.978 Y126.653 E.00504
+G1 F2040
+G3 X110.531 Y127.88 I-3.939 J-.739 E.04031
+G1 F2160
+G1 X110.446 Y128.02 E.00504
+G1 F2040
+G3 X108.248 Y129.632 I-3.179 J-2.031 E.08568
+G1 F2160
+G1 X108.089 Y129.671 E.00505
+G1 F2040
+G3 X107.765 Y129.725 I-.825 J-3.921 E.01008
+G1 X107.529 Y129.748 E.00729
+; WIPE_START
+M204 S10000
+G1 X107.439 Y129.753 E-.03451
+G1 X107.111 Y129.756 E-.12454
+G1 X106.784 Y129.728 E-.12469
+G1 X106.622 Y129.703 E-.0623
+G1 X106.302 Y129.632 E-.12473
+G1 X105.989 Y129.533 E-.12457
+G1 X105.686 Y129.408 E-.12462
+G1 X105.593 Y129.359 E-.04003
+; WIPE_END
+G1 E-.04 F1800
+G1 X113.118 Y128.085 Z1 F30000
+G1 X139.582 Y123.602 Z1
+G1 Z.6
+G1 E.8 F1800
+; FEATURE: Inner wall
+; LINE_WIDTH: 0.45
 G1 F15476.087
 G1 X139.636 Y123.602 E.0018
 G1 X147.009 Y120.882 E.26067
@@ -2801,11 +2775,10 @@ G1 X139.522 Y123.602 E.76822
 G1 X139.566 Y123.21 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
 G1 X146.883 Y120.511 E.23962
 G3 X148.824 Y120.212 I1.897 J5.859 E.0606
-M73 P67 R4
 G3 X146.642 Y131.402 I-.103 J5.788 E.62098
 G1 X139.566 Y128.79 E.23174
 G1 X116.434 Y128.79 E.71081
@@ -2818,648 +2791,803 @@ M204 S10000
 G1 X141.385 Y122.523 E-.76
 ; WIPE_END
 G1 E-.04 F1800
-G1 X144.432 Y123.076 Z1 F30000
-G1 Z.6
-G1 E.8 F1800
-; FEATURE: Gap infill
-; LINE_WIDTH: 0.109549
-G1 F15000
-G3 X144.576 Y122.885 I.31 J.085 E.00133
-G1 X145.154 Y122.482 F30000
-; LINE_WIDTH: 0.445842
-G1 F15000
-G1 X145.371 Y122.347 E.0084
-; LINE_WIDTH: 0.414753
-G1 X145.469 Y122.288 E.00347
-; LINE_WIDTH: 0.374593
-G1 X145.56 Y122.234 E.00286
-; LINE_WIDTH: 0.337103
-G1 X145.658 Y122.179 E.00269
-; LINE_WIDTH: 0.302104
-G1 X145.75 Y122.127 E.00223
-; LINE_WIDTH: 0.269745
-G1 X145.847 Y122.075 E.00203
-; LINE_WIDTH: 0.239867
-G1 X145.939 Y122.025 E.00168
-; LINE_WIDTH: 0.224787
-G1 X145.942 Y122.023 E.00006
-; LINE_WIDTH: 0.19962
-G1 X146.129 Y121.928 E.00268
-; LINE_WIDTH: 0.154615
-G1 X146.32 Y121.836 E.00192
-; LINE_WIDTH: 0.113275
-G1 X146.59 Y121.715 E.0017
-; WIPE_START
-G1 X146.32 Y121.836 E-.76
-; WIPE_END
-G1 E-.04 F1800
-G1 X144.432 Y128.925 Z1 F30000
-G1 Z.6
-G1 E.8 F1800
-; LINE_WIDTH: 0.107541
-G1 F15000
-G2 X144.577 Y129.117 I.494 J-.222 E.00128
-G1 X145.156 Y129.52 F30000
-; LINE_WIDTH: 0.446779
-G1 F15000
-G1 X145.37 Y129.654 E.00833
-; LINE_WIDTH: 0.416335
-G1 X145.469 Y129.712 E.00349
-; LINE_WIDTH: 0.376191
-G1 X145.56 Y129.767 E.00287
-; LINE_WIDTH: 0.338724
-G1 X145.658 Y129.822 E.00271
-; LINE_WIDTH: 0.303749
-G1 X145.749 Y129.874 E.00224
-; LINE_WIDTH: 0.271417
-G1 X145.846 Y129.926 E.00205
-; LINE_WIDTH: 0.241568
-G1 X145.938 Y129.976 E.00169
-; LINE_WIDTH: 0.226498
-G1 X145.942 Y129.977 E.00006
-; LINE_WIDTH: 0.201345
-G1 X146.129 Y130.073 E.00271
-; LINE_WIDTH: 0.156396
-G1 X146.319 Y130.165 E.00196
-; LINE_WIDTH: 0.114053
-G1 X146.606 Y130.293 E.00182
-; WIPE_START
-G1 X146.319 Y130.165 E-.76
-; WIPE_END
-G1 E-.04 F1800
-G1 X138.753 Y129.162 Z1 F30000
-G1 X114.88 Y126 Z1
+G1 X133.808 Y123.442 Z1 F30000
+G1 X111.812 Y126.111 Z1
 G1 Z.6
 G1 E.8 F1800
 ; FEATURE: Internal solid infill
-; LINE_WIDTH: 0.3975
-G1 F15000
-G1 X114.181 Y125.742 E.02155
-G1 X114.181 Y126.258 E.01493
-G1 X114.824 Y126.021 E.01981
-G1 X115.987 Y126 F30000
-; LINE_WIDTH: 0.421045
-G1 F15000
-G1 X139.904 Y126 E.73695
-G1 X115.987 Y126 F30000
-; LINE_WIDTH: 0.42086
-G1 F15000
-G1 X115.84 Y125.966 E.00465
-G2 X113.771 Y125.2 I-323.491 J871.059 E.06794
-G1 X113.825 Y125.975 E.02392
-G3 X113.771 Y126.8 I-5.005 J.086 E.02547
-G3 X115.928 Y126.014 I28.684 J75.375 E.07072
-G1 X139.964 Y125.622 F30000
 ; LINE_WIDTH: 0.41999
 G1 F15000
-G1 X116.036 Y125.622 E.7352
-G1 X113.286 Y124.62 E.08994
-G1 X113.424 Y125.453 E.02596
-G3 X113.28 Y127.383 I-5.849 J.534 E.05973
-G1 X116.036 Y126.378 E.09015
-G1 X139.964 Y126.378 E.73521
-G1 X142.714 Y127.38 E.08994
-G1 X142.576 Y126.547 E.02596
-G3 X142.72 Y124.618 I5.852 J-.534 E.0597
-G1 X140.023 Y125.612 E.08833
-G1 X139.964 Y126 F30000
-; LINE_WIDTH: 0.420139
+G1 X111.714 Y126.969 E.02654
+G1 X111.401 Y127.902 E.03021
+G1 X111.005 Y128.595 E.02452
+G1 X110.635 Y129.059 E.01826
+G1 X110.052 Y129.596 E.02434
+; LINE_WIDTH: 0.433263
+G1 X109.639 Y129.864 E.01568
+; LINE_WIDTH: 0.460551
+G1 X109.225 Y130.133 E.01678
+G3 X104.974 Y129.937 I-1.934 J-4.251 E.1504
+G1 X104.211 Y129.377 E.0322
+G1 X103.667 Y128.789 E.02727
+G1 X103.149 Y127.946 E.03365
+G1 X102.928 Y127.387 E.02046
+G1 X102.754 Y126.613 E.02699
+G1 X102.716 Y125.819 E.02706
+G3 X103.28 Y123.8 I4.997 J.307 E.07187
+G1 X103.731 Y123.148 E.02699
+G3 X106.272 Y121.549 I3.581 J2.873 E.10408
+G1 X107.06 Y121.442 E.02706
+G1 X108.045 Y121.502 E.03359
+G1 X108.818 Y121.707 E.02721
+G1 X109.55 Y122.024 E.02715
+; LINE_WIDTH: 0.475588
+G1 F14560.836
+G1 X109.941 Y122.331 E.01751
+; LINE_WIDTH: 0.422117
 G1 F15000
-G1 X140.16 Y126.035 E.00612
-G1 X142.229 Y126.8 E.06781
-G1 X142.175 Y126.025 E.02388
-G3 X142.229 Y125.201 I5.005 J-.086 E.02541
-G1 X140.159 Y125.965 E.06782
-G1 X140.023 Y125.989 E.00426
-G1 X141.12 Y126 F30000
-; LINE_WIDTH: 0.39742
+G1 X110.331 Y122.638 E.01535
+G1 X110.985 Y123.377 E.0305
+G1 X111.387 Y124.067 E.02466
+G1 X111.604 Y124.62 E.01836
+G1 X111.778 Y125.391 E.02441
+G1 X111.809 Y126.051 E.02043
+G1 X115.05 Y126 F30000
+; LINE_WIDTH: 0.52015
+G1 F13201.182
+G1 X114.107 Y125.652 E.03909
+G1 X114.114 Y126.345 E.02698
+G1 X114.993 Y126.021 E.03646
+G1 X139.673 Y123.994 F30000
+; LINE_WIDTH: 0.41999
 G1 F15000
-G1 X141.819 Y126.258 E.02154
-G1 X141.819 Y125.742 E.01492
-G1 X141.176 Y125.979 E.01981
-G1 X111.568 Y123.076 F30000
-; FEATURE: Gap infill
-; LINE_WIDTH: 0.109725
+G1 X116.327 Y123.994 E.71733
+G1 X110.71 Y121.933 E.18384
+; LINE_WIDTH: 0.43436
+G1 X110.26 Y121.782 E.01514
+; LINE_WIDTH: 0.464238
+G1 F14953.104
+G3 X109.099 Y121.363 I4.992 J-15.641 E.04239
+G1 X108.208 Y121.107 E.03185
+G2 X105.613 Y121.311 I-.911 J5.014 E.09035
+G1 X104.877 Y121.633 E.02761
+G2 X103.4 Y122.876 I2.905 J4.951 E.06659
+G1 X102.998 Y123.461 E.02435
+G1 X102.633 Y124.191 E.02803
+G1 X102.423 Y124.895 E.02521
+G1 X102.305 Y125.656 E.02646
+G1 X102.322 Y126.523 E.02977
+G1 X102.488 Y127.376 E.02983
+G1 X102.707 Y127.988 E.02233
+G1 X103.124 Y128.746 E.02967
+G1 X103.661 Y129.425 E.02974
+G1 X104.311 Y129.997 E.02972
+G2 X106.702 Y130.946 I3.078 J-4.271 E.08922
+G1 X107.57 Y130.97 E.02982
+G1 X108.215 Y130.89 E.02232
+G2 X109.342 Y130.546 I-2.191 J-9.204 E.04047
+; LINE_WIDTH: 0.420675
 G1 F15000
-G1 X111.478 Y122.925 E.00096
-G1 X111.423 Y122.883 E.00038
-G1 X110.844 Y122.48 F30000
-; LINE_WIDTH: 0.44638
+G1 X110.31 Y130.215 E.0315
+G1 X116.327 Y128.006 E.1973
+G1 X139.673 Y128.006 E.71863
+G1 X145.289 Y130.067 E.18417
+; LINE_WIDTH: 0.434365
+G1 X145.739 Y130.218 E.01514
+; LINE_WIDTH: 0.463512
+G1 F14978.892
+G3 X146.901 Y130.637 I-4.991 J15.638 E.04233
+G1 X147.792 Y130.893 E.03179
+G2 X150.799 Y130.527 I.913 J-5.029 E.10539
+G1 X151.481 Y130.145 E.0268
+G1 X152.188 Y129.576 E.03109
+G1 X152.736 Y128.954 E.02842
+G1 X153.084 Y128.407 E.02223
+G1 X153.448 Y127.574 E.03113
+G2 X153.651 Y125.262 I-5.279 J-1.629 E.08017
+G1 X153.448 Y124.417 E.02978
+G2 X152.108 Y122.359 I-4.661 J1.57 E.08508
+G1 X151.832 Y122.111 E.01269
+G1 X151.266 Y121.723 E.02354
+M73 P70 R3
+G1 X150.555 Y121.367 E.02722
+G1 X149.844 Y121.152 E.02547
+G1 X148.991 Y121.034 E.02952
+G1 X148.125 Y121.06 E.0297
+G1 X147.275 Y121.24 E.02978
+G1 X146.658 Y121.455 E.02238
+; LINE_WIDTH: 0.423337
 G1 F15000
-G1 X110.622 Y122.341 E.00862
-; LINE_WIDTH: 0.414641
-G1 X110.531 Y122.287 E.0032
-; LINE_WIDTH: 0.374846
-G1 X110.434 Y122.23 E.00305
-; LINE_WIDTH: 0.337568
-G1 X110.342 Y122.178 E.00252
-; LINE_WIDTH: 0.302932
-G1 X110.246 Y122.124 E.00234
-; LINE_WIDTH: 0.270689
-G1 X110.154 Y122.074 E.00195
-; LINE_WIDTH: 0.240944
-G1 X110.058 Y122.022 E.00176
-; LINE_WIDTH: 0.201008
-G1 X109.869 Y121.926 E.00273
-; LINE_WIDTH: 0.155951
-G1 X109.678 Y121.834 E.00195
-; LINE_WIDTH: 0.113884
-G1 X109.394 Y121.707 E.0018
+G1 X145.691 Y121.787 E.03171
+G1 X139.732 Y123.984 E.19687
+G1 X139.673 Y124.371 F30000
+; LINE_WIDTH: 0.41999
+G1 F15000
+G1 X116.327 Y124.371 E.71733
+G1 X116.131 Y124.336 E.00611
+G1 X110.398 Y122.22 E.18777
+G1 X110.645 Y122.417 E.00971
+G1 X111.269 Y123.129 E.02908
+G1 X111.714 Y123.878 E.02678
+G1 X111.956 Y124.483 E.02002
+G1 X112.146 Y125.309 E.02604
+G1 X112.189 Y126.095 E.02418
+G1 X112.088 Y127.019 E.02856
+G1 X111.758 Y128.023 E.03248
+G1 X111.332 Y128.783 E.02678
+G1 X110.929 Y129.295 E.02002
+G1 X110.417 Y129.774 E.02153
+G1 X116.131 Y127.664 E.18716
+G1 X116.327 Y127.629 E.00611
+G1 X139.673 Y127.629 E.71733
+G1 X139.869 Y127.664 E.00611
+G1 X145.602 Y129.78 E.18778
+G1 X145.355 Y129.583 E.00972
+G1 X144.731 Y128.871 E.02907
+G1 X144.286 Y128.122 E.02678
+G1 X143.937 Y127.124 E.03247
+G1 X143.812 Y126.261 E.02679
+G1 X143.871 Y125.206 E.03247
+G1 X144.086 Y124.362 E.02678
+G1 X144.544 Y123.409 E.03247
+G1 X145.065 Y122.713 E.02672
+G1 X145.58 Y122.229 E.02171
+G1 X139.868 Y124.336 E.18705
+G1 X139.732 Y124.361 E.00427
+G1 X139.673 Y124.748 F30000
+G1 F15000
+G1 X116.327 Y124.748 E.71733
+G1 X116.001 Y124.69 E.01019
+G1 X111.701 Y123.103 E.14082
+G1 X112.04 Y123.69 E.02083
+G1 X112.307 Y124.346 E.02178
+G1 X112.514 Y125.227 E.0278
+G1 X112.565 Y126.078 E.02619
+G1 X112.462 Y127.068 E.03057
+G1 X112.115 Y128.144 E.03475
+G1 X111.701 Y128.897 E.02641
+G1 X116.001 Y127.31 E.14082
+G1 X116.327 Y127.252 E.01019
+G1 X139.673 Y127.252 E.71733
+G1 X139.999 Y127.31 E.01019
+G1 X144.299 Y128.897 E.14082
+G1 X143.96 Y128.31 E.02084
+G1 X143.58 Y127.245 E.03474
+G1 X143.438 Y126.311 E.02905
+G1 X143.495 Y125.181 E.03473
+G1 X143.722 Y124.264 E.02904
+G1 X144.206 Y123.242 E.03474
+G1 X144.29 Y123.107 E.00489
+G1 X139.999 Y124.69 E.14054
+G1 X139.732 Y124.738 E.00834
+G1 X139.673 Y125.125 F30000
+G1 F15000
+G1 X116.327 Y125.125 E.71733
+G1 X115.87 Y125.044 E.01427
+G1 X112.499 Y123.799 E.11041
+G1 X112.717 Y124.402 E.01971
+G1 X112.882 Y125.146 E.0234
+G1 X112.942 Y126.062 E.02821
+G1 X112.836 Y127.117 E.03259
+G1 X112.494 Y128.203 E.03498
+G1 X115.87 Y126.956 E.11059
+G1 X116.327 Y126.875 E.01427
+G1 X139.673 Y126.875 E.71733
+G1 X140.13 Y126.956 E.01427
+G1 X143.506 Y128.203 E.11058
+G1 X143.222 Y127.366 E.02713
+G1 X143.065 Y126.36 E.03131
+G1 X143.118 Y125.157 E.037
+G1 X143.358 Y124.166 E.0313
+G1 X143.512 Y123.796 E.01233
+G1 X140.129 Y125.044 E.11079
+G1 X139.732 Y125.115 E.01241
+G1 X139.673 Y125.502 F30000
+G1 F15000
+G1 X116.327 Y125.502 E.71733
+G3 X115.739 Y125.397 I0 J-1.696 E.01844
+G1 X113.109 Y124.426 E.08617
+G1 X113.25 Y125.064 E.02008
+G1 X113.319 Y126.045 E.03023
+G1 X113.309 Y126.411 E.01125
+G1 X113.21 Y127.166 E.0234
+G1 X113.105 Y127.575 E.01296
+G1 X115.739 Y126.603 E.08628
+G1 X116.179 Y126.504 E.01385
+G1 X116.327 Y126.498 E.00455
+G1 X139.673 Y126.498 E.71733
+G3 X140.261 Y126.603 I0 J1.697 E.01844
+G1 X142.895 Y127.575 E.08629
+G1 X142.79 Y127.164 E.01305
+G1 X142.691 Y126.409 E.0234
+G1 X142.742 Y125.132 E.03927
+G1 X142.898 Y124.424 E.02226
+G1 X140.26 Y125.398 E.0864
+G3 X139.732 Y125.497 I-.542 J-1.428 E.01658
+G1 X139.673 Y125.845 F30000
+; LINE_WIDTH: 0.352297
+G1 F15000
+G1 X116.327 Y125.845 E.58855
+G1 X115.953 Y125.831 E.00943
+; LINE_WIDTH: 0.419241
+G1 X115.609 Y125.751 E.01084
+G1 X113.623 Y125.018 E.06491
+G1 X113.696 Y126.029 E.03108
+G3 X113.614 Y126.985 I-4.735 J.077 E.02949
+G1 X115.609 Y126.249 E.06522
+; LINE_WIDTH: 0.405083
+G1 X115.879 Y126.203 E.00808
+; LINE_WIDTH: 0.35228
+G3 X116.327 Y126.155 I.39 J1.496 E.01141
+G1 X139.673 Y126.155 E.58852
+; LINE_WIDTH: 0.368983
+G1 X139.861 Y126.155 E.005
+; LINE_WIDTH: 0.419541
+G1 X140.049 Y126.155 E.00577
+G1 X140.391 Y126.249 E.01089
+G1 X142.386 Y126.985 E.06527
+G3 X142.304 Y126.044 I4.651 J-.88 E.02905
+G1 X142.381 Y125.017 E.0316
+G1 X140.39 Y125.751 E.0651
+G1 X140.049 Y125.845 E.01087
+; LINE_WIDTH: 0.402988
+G1 X139.891 Y125.845 E.00464
+; LINE_WIDTH: 0.368983
+G1 X139.733 Y125.845 E.0042
+G1 X140.95 Y126 F30000
+; LINE_WIDTH: 0.5202
+G1 F13199.798
+G1 X141.888 Y126.346 E.03886
+G1 X141.902 Y125.649 E.02712
+G1 X141.007 Y125.979 E.03711
+G1 X144.186 Y126.212 F30000
+; LINE_WIDTH: 0.41999
+G1 F15000
+G1 X144.247 Y125.231 E.03021
+G1 X144.45 Y124.459 E.02452
+G1 X144.882 Y123.576 E.03021
+G1 X145.364 Y122.942 E.02446
+G1 X145.948 Y122.404 E.02441
+; LINE_WIDTH: 0.432603
+G1 X146.361 Y122.136 E.01565
+; LINE_WIDTH: 0.460854
+G1 X146.775 Y121.868 E.01678
+G1 X147.271 Y121.676 E.01812
+G1 X148.059 Y121.487 E.0276
+G1 X148.811 Y121.442 E.02566
+G1 X149.64 Y121.531 E.0284
+G1 X150.27 Y121.707 E.02227
+G1 X150.936 Y122.011 E.02493
+G1 X151.586 Y122.462 E.02693
+G1 X152.165 Y123.003 E.02699
+G1 X152.639 Y123.657 E.02749
+G1 X153.007 Y124.422 E.02893
+G1 X153.215 Y125.192 E.02716
+G3 X152.865 Y127.911 I-4.742 J.771 E.09467
+G1 X152.472 Y128.604 E.02714
+G1 X152.098 Y129.07 E.02034
+G1 X151.513 Y129.608 E.02707
+G1 X150.671 Y130.126 E.03367
+G1 X149.735 Y130.45 E.03376
+G1 X148.94 Y130.558 E.02731
+G1 X147.955 Y130.498 E.03361
+G1 X147.182 Y130.293 E.02724
+G1 X146.45 Y129.976 E.02717
+; LINE_WIDTH: 0.47561
+G1 F14560.077
+G1 X146.059 Y129.669 E.01751
+; LINE_WIDTH: 0.422291
+G1 F15000
+G1 X145.669 Y129.362 E.01535
+G1 X145.015 Y128.623 E.03051
+G1 X144.613 Y127.933 E.02467
+G1 X144.294 Y127.003 E.03039
+G1 X144.194 Y126.272 E.02282
+; OBJECT_ID: 194
 ; WIPE_START
-G1 X109.678 Y121.834 E-.76
+G1 X144.294 Y127.003 E-.28054
+G1 X144.613 Y127.933 E-.3736
+G1 X144.753 Y128.174 E-.10586
 ; WIPE_END
 G1 E-.04 F1800
-G1 X111.568 Y128.924 Z1 F30000
-G1 Z.6
-G1 E.8 F1800
-; LINE_WIDTH: 0.109723
-G1 F15000
-G1 X111.478 Y129.075 E.00096
-G1 X111.423 Y129.117 E.00038
-G1 X110.844 Y129.52 F30000
-; LINE_WIDTH: 0.446367
-G1 F15000
-G1 X110.622 Y129.659 E.00862
-; LINE_WIDTH: 0.414647
-G1 X110.531 Y129.713 E.0032
-; LINE_WIDTH: 0.374849
-G1 X110.434 Y129.77 E.00305
-; LINE_WIDTH: 0.33758
-G1 X110.342 Y129.822 E.00253
-; LINE_WIDTH: 0.302937
-G1 X110.246 Y129.876 E.00234
-; LINE_WIDTH: 0.270694
-G1 X110.154 Y129.926 E.00195
-; LINE_WIDTH: 0.240942
-G1 X110.058 Y129.978 E.00176
-; LINE_WIDTH: 0.201014
-G1 X109.869 Y130.074 E.00273
-; LINE_WIDTH: 0.155954
-G1 X109.678 Y130.166 E.00195
-; LINE_WIDTH: 0.113883
-G1 X109.393 Y130.293 E.00181
-; OBJECT_ID: 104
-; WIPE_START
-G1 X109.678 Y130.166 E-.76
-; WIPE_END
-G1 E-.04 F1800
-; stop printing object, unique label id: 72
+; stop printing object, unique label id: 123
 M625
-; start printing object, unique label id: 104
+; start printing object, unique label id: 194
 M624 AgAAAAAAAAA=
-G1 X116.874 Y132.711 Z1 F30000
-G1 X139.546 Y140.73 Z1
+G1 X148.005 Y134.913 Z1 F30000
 G1 Z.6
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X139.819 Y140.73 E.00905
-G1 X143.197 Y139.483 E.11946
-G2 X143.198 Y143.517 I5.525 J2.016 E.13656
-G1 X139.819 Y142.269 E.11948
-G1 X115.964 Y142.269 E.79131
-G1 X112.585 Y143.517 E.11948
-G2 X112.585 Y139.482 I-5.525 J-2.017 E.1366
-G1 X115.964 Y140.73 E.11948
-G1 X139.486 Y140.73 E.78027
-G1 X139.528 Y140.323 F30000
-G1 F15476.087
-G1 X139.746 Y140.323 E.00723
-G1 X143.976 Y138.762 E.14957
-G2 X143.977 Y144.238 I4.781 J2.737 E.19011
-G1 X139.746 Y142.676 E.1496
-G1 X116.037 Y142.676 E.78649
-G1 X111.806 Y144.238 E.1496
-G2 X111.806 Y138.761 I-4.78 J-2.739 E.19016
-G1 X116.037 Y140.323 E.1496
-G1 X139.468 Y140.323 E.77726
-G1 X139.51 Y139.916 F30000
-G1 F15476.087
-G1 X139.673 Y139.916 E.00542
-G1 X144.822 Y138.016 E.18204
-G1 X144.93 Y138.173 E.0063
-G2 X144.932 Y144.828 I3.703 J3.327 E.24181
-G1 X144.824 Y144.985 E.0063
-G1 X139.673 Y143.083 E.18212
-G1 X116.109 Y143.083 E.78166
-G1 X110.959 Y144.985 E.18212
-G1 X110.851 Y144.828 E.0063
-G2 X110.851 Y138.171 I-3.701 J-3.329 E.24191
-G1 X110.959 Y138.014 E.0063
-G1 X116.109 Y139.916 E.18212
-G1 X139.45 Y139.916 E.77424
-; WIPE_START
-G1 X139.673 Y139.916 E-.0849
-G1 X141.34 Y139.301 E-.6751
-; WIPE_END
-G1 E-.04 F1800
-G1 X133.854 Y140.788 Z1 F30000
-G1 X107.365 Y146.05 Z1
-G1 Z.6
-G1 E.8 F1800
-G1 F15476.087
-G1 X107.166 Y146.058 E.00659
-G3 X106.968 Y136.944 I.001 J-4.559 E.46845
-G1 X107.166 Y136.94 E.0066
-G3 X107.564 Y146.04 I.001 J4.559 E.46192
-G1 X107.425 Y146.047 E.00461
-G1 X107.347 Y145.644 F30000
-G1 F15476.087
-G1 X107.166 Y145.651 E.006
-G3 X106.985 Y137.351 I0 J-4.152 E.42662
-G1 X107.166 Y137.347 E.00601
-G3 X107.528 Y145.635 I0 J4.152 E.42067
-G1 X107.407 Y145.641 E.00402
-G1 X107.361 Y145.253 F30000
+G1 X148.183 Y134.881 E.00601
+G3 X148.544 Y134.85 I.542 J4.116 E.01202
+G1 X148.725 Y134.846 E.00601
+G3 X147.826 Y134.944 I0 J4.152 E.83527
+G1 X147.946 Y134.923 E.00401
+G1 X148.148 Y135.287 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
 G1 F2040
 M204 S5000
-G1 X107.33 Y145.252 E.00095
-G3 X106.676 Y145.227 I-.175 J-4.003 E.02015
+G1 X148.561 Y135.241 E.01277
 G1 F2160
-G1 X106.514 Y145.202 E.00504
+G1 X148.725 Y135.238 E.00504
 G1 F2040
-G3 X104.184 Y143.789 I.66 J-3.714 E.08568
+G3 X150.605 Y135.742 I-.028 J3.865 E.06046
 G1 F2160
-G1 X104.086 Y143.656 E.00505
+G1 X150.745 Y135.827 E.00504
 G1 F2040
-G3 X103.535 Y142.473 I3.308 J-2.263 E.0403
+G3 X152.357 Y138.024 I-2.031 J3.179 E.08568
 G1 F2160
-G1 X103.496 Y142.313 E.00505
+G1 X152.396 Y138.184 E.00505
 G1 F2040
-G3 X103.439 Y141.009 I3.923 J-.825 E.0403
+G3 X152.453 Y139.489 I-3.921 J.825 E.0403
 G1 F2160
-G1 X103.464 Y140.847 E.00504
+G1 X152.428 Y139.651 E.00504
 G1 F2040
-G3 X103.91 Y139.619 I3.94 J.739 E.04031
+G3 X151.981 Y140.878 I-3.94 J-.739 E.04031
 G1 F2160
-G1 X103.995 Y139.479 E.00504
+G1 X151.896 Y141.018 E.00504
 G1 F2040
-G3 X107.003 Y137.743 I3.187 J2.048 E.11084
+G3 X150.882 Y142.078 I-3.206 J-2.053 E.04536
 G1 F2160
-G1 X107.166 Y137.739 E.00504
+G1 X150.745 Y142.169 E.00504
 G1 F2040
-G3 X110.338 Y139.479 I-.004 J3.767 E.11593
+G3 X149.698 Y142.63 I-2.052 J-3.243 E.03528
 G1 F2160
-G1 X110.423 Y139.619 E.00504
+G1 X149.539 Y142.669 E.00505
 G1 F2040
-G3 X110.798 Y140.526 I-3.693 J2.061 E.03022
+G3 X148.234 Y142.726 I-.825 J-3.921 E.0403
 G1 F2160
-G1 X110.837 Y140.686 E.00505
+G1 X148.072 Y142.701 E.00504
 G1 F2040
-G3 X110.894 Y141.99 I-3.922 J.825 E.0403
+G3 X145.742 Y141.287 I.66 J-3.714 E.08568
 G1 F2160
-G1 X110.869 Y142.152 E.00504
+G1 X145.645 Y141.154 E.00505
 G1 F2040
-G3 X110.423 Y143.38 I-3.939 J-.739 E.04031
+G3 X145.093 Y139.971 I3.308 J-2.263 E.0403
 G1 F2160
-G1 X110.338 Y143.52 E.00504
+G1 X145.054 Y139.812 E.00505
 G1 F2040
-G3 X108.14 Y145.131 I-3.179 J-2.031 E.08568
+G3 X144.997 Y138.507 I3.922 J-.825 E.0403
 G1 F2160
-G1 X107.98 Y145.17 E.00505
+G1 X145.022 Y138.345 E.00504
 G1 F2040
-G3 X107.657 Y145.225 I-.825 J-3.921 E.01008
-G1 X107.421 Y145.247 E.00729
+G3 X145.469 Y137.118 I3.939 J.739 E.04031
+G1 F2160
+G1 X145.554 Y136.977 E.00504
+G1 F2040
+G3 X147.439 Y135.465 I3.182 J2.033 E.07561
+G1 F2160
+G1 X147.594 Y135.412 E.00504
+G1 F2040
+G3 X148.073 Y135.298 I1.212 J4.048 E.01511
+G1 X148.089 Y135.296 E.0005
 ; WIPE_START
 M204 S10000
-G1 X107.33 Y145.252 E-.03451
-G1 X107.003 Y145.256 E-.12454
-G1 X106.676 Y145.227 E-.12469
-G1 X106.514 Y145.202 E-.0623
-G1 X106.193 Y145.131 E-.12473
-G1 X105.88 Y145.033 E-.12457
-G1 X105.578 Y144.907 E-.12462
-G1 X105.484 Y144.859 E-.04003
+G1 X148.561 Y135.241 E-.18065
+G1 X148.725 Y135.238 E-.06232
+G1 X149.216 Y135.27 E-.18692
+G1 X149.698 Y135.366 E-.18695
+G1 X150.055 Y135.487 E-.14317
 ; WIPE_END
 G1 E-.04 F1800
-G1 X112.989 Y143.468 Z1 F30000
-G1 X147.826 Y137.014 Z1
+G1 X142.543 Y136.837 Z1 F30000
+G1 X107.456 Y143.142 Z1
 G1 Z.6
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X148.021 Y136.979 E.0066
-G3 X148.418 Y136.944 I.596 J4.52 E.0132
-G1 X148.616 Y136.94 E.0066
-G3 X147.63 Y137.048 I.001 J4.559 E.91719
-G1 X147.766 Y137.024 E.0046
-G1 X147.896 Y137.414 F30000
-G1 F15476.087
-G1 X148.075 Y137.383 E.00601
-G3 X148.435 Y137.351 I.542 J4.116 E.01202
-G1 X148.616 Y137.347 E.00601
-G3 X147.718 Y137.446 I0 J4.152 E.83527
-G1 X147.837 Y137.425 E.00401
-G1 X148.04 Y137.788 F30000
+G1 X107.275 Y143.149 E.006
+G3 X107.094 Y134.85 I0 J-4.152 E.42662
+G1 X107.275 Y134.846 E.00601
+G3 X107.637 Y143.133 I0 J4.152 E.42067
+G1 X107.516 Y143.139 E.00402
+G1 X107.47 Y142.752 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
 G1 F2040
 M204 S5000
-G1 X148.453 Y137.743 E.01277
+G1 X107.439 Y142.751 E.00095
+G3 X106.784 Y142.726 I-.175 J-4.003 E.02015
 G1 F2160
-G1 X148.616 Y137.739 E.00504
+G1 X106.622 Y142.701 E.00504
 G1 F2040
-G3 X150.497 Y138.243 I-.028 J3.865 E.06046
+G3 X104.292 Y141.287 I.66 J-3.714 E.08568
 G1 F2160
-G1 X150.637 Y138.328 E.00504
+G1 X104.195 Y141.154 E.00505
 G1 F2040
-G3 X152.248 Y140.526 I-2.031 J3.179 E.08568
+G3 X103.643 Y139.971 I3.308 J-2.263 E.0403
 G1 F2160
-G1 X152.287 Y140.686 E.00505
+G1 X103.604 Y139.812 E.00505
 G1 F2040
-G3 X152.344 Y141.99 I-3.921 J.825 E.0403
+G3 X103.547 Y138.507 I3.923 J-.825 E.0403
 G1 F2160
-M73 P68 R4
-G1 X152.319 Y142.152 E.00504
+G1 X103.572 Y138.345 E.00504
 G1 F2040
-G3 X151.873 Y143.38 I-3.94 J-.739 E.04031
+G3 X104.019 Y137.118 I3.94 J.739 E.04031
 G1 F2160
-G1 X151.788 Y143.52 E.00504
+G1 X104.104 Y136.977 E.00504
 G1 F2040
-G3 X150.773 Y144.58 I-3.206 J-2.053 E.04536
+G3 X107.111 Y135.241 I3.187 J2.048 E.11084
 G1 F2160
-G1 X150.637 Y144.671 E.00504
+G1 X107.275 Y135.238 E.00504
 G1 F2040
-G3 X149.59 Y145.131 I-2.052 J-3.243 E.03528
+G3 X110.446 Y136.977 I-.004 J3.767 E.11593
 G1 F2160
-G1 X149.43 Y145.17 E.00505
+G1 X110.531 Y137.118 E.00504
 G1 F2040
-G3 X148.126 Y145.227 I-.825 J-3.921 E.0403
+G3 X110.907 Y138.024 I-3.693 J2.061 E.03022
 G1 F2160
-G1 X147.964 Y145.202 E.00504
+G1 X110.946 Y138.184 E.00505
 G1 F2040
-G3 X145.633 Y143.789 I.66 J-3.714 E.08568
+G3 X111.003 Y139.489 I-3.922 J.825 E.0403
 G1 F2160
-G1 X145.536 Y143.656 E.00505
+G1 X110.978 Y139.651 E.00504
 G1 F2040
-G3 X144.985 Y142.473 I3.308 J-2.263 E.0403
+G3 X110.531 Y140.878 I-3.939 J-.739 E.04031
 G1 F2160
-G1 X144.946 Y142.313 E.00505
+G1 X110.446 Y141.018 E.00504
 G1 F2040
-G3 X144.889 Y141.009 I3.922 J-.825 E.0403
+G3 X108.248 Y142.63 I-3.179 J-2.031 E.08568
 G1 F2160
-G1 X144.914 Y140.847 E.00504
+G1 X108.089 Y142.669 E.00505
 G1 F2040
-G3 X145.36 Y139.619 I3.939 J.739 E.04031
-G1 F2160
-G1 X145.445 Y139.479 E.00504
-G1 F2040
-G3 X147.33 Y137.966 I3.182 J2.033 E.07561
-G1 F2160
-G1 X147.486 Y137.913 E.00504
-G1 F2040
-G3 X147.964 Y137.8 I1.212 J4.048 E.01511
-G1 X147.98 Y137.798 E.0005
+G3 X107.765 Y142.723 I-.825 J-3.921 E.01008
+G1 X107.529 Y142.746 E.00729
 ; WIPE_START
 M204 S10000
-G1 X148.453 Y137.743 E-.18065
-G1 X148.616 Y137.739 E-.06232
-G1 X149.107 Y137.772 E-.18692
-G1 X149.59 Y137.868 E-.18695
-G1 X149.947 Y137.989 E-.14317
+G1 X107.439 Y142.751 E-.03451
+G1 X107.111 Y142.754 E-.12454
+G1 X106.784 Y142.726 E-.12469
+G1 X106.622 Y142.701 E-.0623
+G1 X106.302 Y142.63 E-.12473
+G1 X105.989 Y142.531 E-.12457
+G1 X105.686 Y142.406 E-.12462
+G1 X105.593 Y142.357 E-.04003
 ; WIPE_END
 G1 E-.04 F1800
-G1 X142.394 Y139.087 Z1 F30000
-G1 X139.492 Y139.509 Z1
+G1 X113.118 Y141.082 Z1 F30000
+G1 X139.582 Y136.6 Z1
 G1 Z.6
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X139.601 Y139.509 E.00361
-G1 X147.032 Y136.767 E.26274
-G3 X148.698 Y136.51 I1.632 J5.049 E.05617
-G3 X146.806 Y146.151 I-.085 J4.989 E.57848
-G1 X139.601 Y143.49 E.25479
-G1 X116.182 Y143.49 E.77683
-G1 X108.976 Y146.151 E.2548
-G3 X108.977 Y136.848 I-1.809 J-4.651 E.64289
-G1 X116.182 Y139.509 E.25479
-G1 X139.432 Y139.509 E.77123
-G1 X139.474 Y139.102 F30000
-G1 F15476.087
-G1 X139.528 Y139.102 E.0018
-G1 X146.9 Y136.382 E.26067
-G3 X148.707 Y136.103 I1.767 J5.461 E.06089
-G3 X146.666 Y146.533 I-.094 J5.396 E.62532
-G1 X139.528 Y143.897 E.25242
-G1 X116.255 Y143.897 E.77201
-G1 X109.116 Y146.533 E.25243
-G3 X109.117 Y136.466 I-1.949 J-5.034 E.6948
-G1 X116.255 Y139.102 E.2524
-G1 X139.414 Y139.102 E.76822
-G1 X139.458 Y138.71 F30000
+G1 X139.636 Y136.6 E.0018
+G1 X147.009 Y133.88 E.26067
+G3 X148.815 Y133.602 I1.767 J5.461 E.06089
+G3 X146.775 Y144.031 I-.094 J5.396 E.62532
+G1 X139.636 Y141.396 E.25242
+G1 X116.364 Y141.396 E.77201
+G1 X109.225 Y144.031 E.25243
+G3 X109.226 Y133.964 I-1.949 J-5.034 E.6948
+G1 X116.364 Y136.6 E.2524
+G1 X139.522 Y136.6 E.76822
+G1 X139.566 Y136.208 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
-G1 X146.774 Y136.01 E.23962
-G3 X148.715 Y135.711 I1.897 J5.859 E.0606
-G3 X146.533 Y146.902 I-.103 J5.788 E.62098
-G1 X139.458 Y144.29 E.23174
-G1 X116.325 Y144.29 E.71081
-G1 X109.25 Y146.902 E.23174
-G3 X109.25 Y136.097 I-2.082 J-5.402 E.68981
-G1 X116.325 Y138.71 E.23173
-G1 X139.398 Y138.71 E.70896
+G1 X146.883 Y133.509 E.23962
+G3 X148.824 Y133.209 I1.897 J5.859 E.0606
+G3 X146.642 Y144.4 I-.103 J5.788 E.62098
+G1 X139.566 Y141.788 E.23174
+G1 X116.434 Y141.788 E.71081
+G1 X109.358 Y144.4 E.23174
+G3 X109.359 Y133.596 I-2.082 J-5.402 E.68981
+G1 X116.434 Y136.208 E.23173
+G1 X139.506 Y136.208 E.70896
 ; WIPE_START
 M204 S10000
-G1 X141.276 Y138.022 E-.76
+G1 X141.385 Y135.521 E-.76
 ; WIPE_END
 G1 E-.04 F1800
-G1 X144.324 Y138.575 Z1 F30000
-G1 Z.6
-G1 E.8 F1800
-; FEATURE: Gap infill
-; LINE_WIDTH: 0.109549
-G1 F15000
-G3 X144.467 Y138.385 I.31 J.085 E.00133
-G1 X145.045 Y137.982 F30000
-; LINE_WIDTH: 0.445842
-G1 F15000
-G1 X145.263 Y137.846 E.0084
-; LINE_WIDTH: 0.414753
-G1 X145.361 Y137.788 E.00347
-; LINE_WIDTH: 0.374593
-G1 X145.452 Y137.733 E.00286
-; LINE_WIDTH: 0.337103
-G1 X145.55 Y137.678 E.00269
-; LINE_WIDTH: 0.302104
-G1 X145.641 Y137.626 E.00223
-; LINE_WIDTH: 0.269745
-G1 X145.738 Y137.574 E.00203
-; LINE_WIDTH: 0.239867
-G1 X145.83 Y137.525 E.00168
-; LINE_WIDTH: 0.224787
-G1 X145.834 Y137.523 E.00006
-; LINE_WIDTH: 0.19962
-G1 X146.021 Y137.427 E.00268
-; LINE_WIDTH: 0.154615
-G1 X146.211 Y137.336 E.00192
-; LINE_WIDTH: 0.113275
-G1 X146.482 Y137.214 E.0017
-; WIPE_START
-G1 X146.211 Y137.336 E-.76
-; WIPE_END
-G1 E-.04 F1800
-G1 X144.324 Y144.424 Z1 F30000
-G1 Z.6
-G1 E.8 F1800
-; LINE_WIDTH: 0.107541
-G1 F15000
-G2 X144.468 Y144.616 I.494 J-.222 E.00128
-G1 X145.047 Y145.019 F30000
-; LINE_WIDTH: 0.446779
-G1 F15000
-G1 X145.262 Y145.153 E.00833
-; LINE_WIDTH: 0.416335
-G1 X145.36 Y145.212 E.00349
-; LINE_WIDTH: 0.376191
-G1 X145.451 Y145.266 E.00287
-; LINE_WIDTH: 0.338724
-G1 X145.549 Y145.322 E.00271
-; LINE_WIDTH: 0.303749
-G1 X145.641 Y145.373 E.00224
-; LINE_WIDTH: 0.271417
-G1 X145.738 Y145.426 E.00205
-; LINE_WIDTH: 0.241568
-G1 X145.83 Y145.475 E.00169
-; LINE_WIDTH: 0.226498
-G1 X145.833 Y145.477 E.00006
-; LINE_WIDTH: 0.201345
-G1 X146.02 Y145.572 E.00271
-; LINE_WIDTH: 0.156396
-G1 X146.211 Y145.664 E.00196
-; LINE_WIDTH: 0.114053
-G1 X146.498 Y145.793 E.00182
-; WIPE_START
-G1 X146.211 Y145.664 E-.76
-; WIPE_END
-G1 E-.04 F1800
-G1 X138.644 Y144.662 Z1 F30000
-G1 X114.772 Y141.5 Z1
+G1 X133.808 Y136.44 Z1 F30000
+G1 X111.812 Y139.109 Z1
 G1 Z.6
 G1 E.8 F1800
 ; FEATURE: Internal solid infill
-; LINE_WIDTH: 0.3975
-G1 F15000
-G1 X114.072 Y141.241 E.02155
-G1 X114.072 Y141.758 E.01493
-G1 X114.715 Y141.52 E.01981
-G1 X115.878 Y141.5 F30000
-; LINE_WIDTH: 0.421045
-G1 F15000
-G1 X139.795 Y141.5 E.73695
-G1 X115.878 Y141.5 F30000
-; LINE_WIDTH: 0.42086
-G1 F15000
-G1 X115.731 Y141.465 E.00465
-G2 X113.662 Y140.7 I-323.491 J871.059 E.06794
-G1 X113.716 Y141.475 E.02392
-G3 X113.662 Y142.299 I-5.005 J.086 E.02547
-G3 X115.82 Y141.513 I28.684 J75.375 E.07072
-G1 X139.855 Y141.122 F30000
 ; LINE_WIDTH: 0.41999
 G1 F15000
-G1 X115.928 Y141.122 E.7352
-G1 X113.178 Y140.119 E.08994
-G1 X113.315 Y140.953 E.02596
-G3 X113.171 Y142.882 I-5.849 J.534 E.05973
-G1 X115.928 Y141.877 E.09015
-G1 X139.855 Y141.877 E.73521
-G1 X142.605 Y142.88 E.08994
-G1 X142.468 Y142.046 E.02596
-G3 X142.612 Y140.117 I5.852 J-.534 E.0597
-G1 X139.914 Y141.111 E.08833
-G1 X139.855 Y141.5 F30000
-; LINE_WIDTH: 0.420139
+G1 X111.714 Y139.967 E.02654
+G1 X111.401 Y140.899 E.03021
+G1 X111.005 Y141.592 E.02452
+G1 X110.635 Y142.057 E.01826
+G1 X110.052 Y142.594 E.02434
+; LINE_WIDTH: 0.433263
+G1 X109.639 Y142.862 E.01568
+; LINE_WIDTH: 0.460551
+G1 X109.225 Y143.131 E.01678
+G3 X104.974 Y142.935 I-1.934 J-4.251 E.1504
+G1 X104.211 Y142.375 E.0322
+M73 P71 R3
+G1 X103.667 Y141.786 E.02727
+G1 X103.149 Y140.944 E.03365
+G1 X102.928 Y140.385 E.02046
+G1 X102.754 Y139.611 E.02699
+G1 X102.716 Y138.817 E.02706
+G3 X103.28 Y136.798 I4.997 J.307 E.07187
+G1 X103.731 Y136.146 E.02699
+G3 X106.272 Y134.547 I3.581 J2.873 E.10408
+G1 X107.06 Y134.44 E.02706
+G1 X108.045 Y134.5 E.03359
+G1 X108.818 Y134.705 E.02721
+G1 X109.55 Y135.022 E.02715
+; LINE_WIDTH: 0.475588
+G1 F14560.836
+G1 X109.941 Y135.329 E.01751
+; LINE_WIDTH: 0.422117
 G1 F15000
-G1 X140.051 Y141.535 E.00612
-G1 X142.121 Y142.299 E.06781
-G1 X142.067 Y141.524 E.02388
-G3 X142.121 Y140.7 I5.005 J-.086 E.02541
-G1 X140.051 Y141.464 E.06782
-G1 X139.914 Y141.489 E.00426
-G1 X141.011 Y141.5 F30000
-; LINE_WIDTH: 0.39742
+G1 X110.331 Y135.636 E.01535
+G1 X110.985 Y136.375 E.0305
+G1 X111.387 Y137.065 E.02466
+G1 X111.604 Y137.618 E.01836
+G1 X111.778 Y138.388 E.02441
+G1 X111.809 Y139.049 E.02043
+G1 X115.05 Y138.998 F30000
+; LINE_WIDTH: 0.52015
+G1 F13201.182
+G1 X114.107 Y138.65 E.03909
+G1 X114.114 Y139.343 E.02698
+G1 X114.993 Y139.019 E.03646
+G1 X139.673 Y136.992 F30000
+; LINE_WIDTH: 0.41999
 G1 F15000
-G1 X141.711 Y141.758 E.02154
-G1 X141.711 Y141.241 E.01492
-G1 X141.068 Y141.479 E.01981
-G1 X111.46 Y138.575 F30000
-; FEATURE: Gap infill
-; LINE_WIDTH: 0.109725
+G1 X116.327 Y136.992 E.71733
+G1 X110.71 Y134.931 E.18384
+; LINE_WIDTH: 0.43436
+G1 X110.26 Y134.78 E.01514
+; LINE_WIDTH: 0.464238
+G1 F14953.104
+G3 X109.099 Y134.361 I4.992 J-15.641 E.04239
+G1 X108.208 Y134.104 E.03185
+G2 X105.613 Y134.308 I-.911 J5.014 E.09035
+G1 X104.877 Y134.631 E.02761
+G2 X103.4 Y135.874 I2.905 J4.951 E.06659
+G1 X102.998 Y136.458 E.02435
+G1 X102.633 Y137.189 E.02803
+G1 X102.423 Y137.893 E.02521
+G1 X102.305 Y138.654 E.02646
+G1 X102.322 Y139.521 E.02977
+G1 X102.488 Y140.374 E.02983
+G1 X102.707 Y140.986 E.02233
+G1 X103.124 Y141.743 E.02967
+G1 X103.661 Y142.422 E.02974
+G1 X104.311 Y142.995 E.02972
+G2 X106.702 Y143.943 I3.078 J-4.271 E.08922
+G1 X107.57 Y143.968 E.02982
+G1 X108.215 Y143.888 E.02232
+G2 X109.342 Y143.544 I-2.191 J-9.204 E.04047
+; LINE_WIDTH: 0.420675
 G1 F15000
-G1 X111.369 Y138.425 E.00096
-G1 X111.315 Y138.383 E.00038
-G1 X110.736 Y137.98 F30000
-; LINE_WIDTH: 0.44638
+G1 X110.31 Y143.213 E.0315
+G1 X116.327 Y141.004 E.1973
+G1 X139.673 Y141.004 E.71863
+G1 X145.289 Y143.065 E.18417
+; LINE_WIDTH: 0.434365
+G1 X145.739 Y143.216 E.01514
+; LINE_WIDTH: 0.463512
+G1 F14978.892
+G3 X146.901 Y143.635 I-4.991 J15.638 E.04233
+G1 X147.792 Y143.891 E.03179
+G2 X150.799 Y143.525 I.913 J-5.029 E.10539
+G1 X151.481 Y143.142 E.0268
+G1 X152.188 Y142.574 E.03109
+G1 X152.736 Y141.952 E.02842
+G1 X153.084 Y141.404 E.02223
+G1 X153.448 Y140.572 E.03113
+G2 X153.651 Y138.259 I-5.279 J-1.629 E.08017
+G1 X153.448 Y137.415 E.02978
+G2 X152.108 Y135.356 I-4.661 J1.57 E.08508
+G1 X151.832 Y135.109 E.01269
+G1 X151.266 Y134.721 E.02354
+G1 X150.555 Y134.365 E.02722
+G1 X149.844 Y134.149 E.02547
+G1 X148.991 Y134.032 E.02952
+G1 X148.125 Y134.058 E.0297
+G1 X147.275 Y134.238 E.02978
+G1 X146.658 Y134.453 E.02238
+; LINE_WIDTH: 0.423337
 G1 F15000
-G1 X110.513 Y137.841 E.00862
-; LINE_WIDTH: 0.414641
-G1 X110.422 Y137.787 E.0032
-; LINE_WIDTH: 0.374846
-G1 X110.325 Y137.729 E.00305
-; LINE_WIDTH: 0.337568
-G1 X110.234 Y137.677 E.00252
-; LINE_WIDTH: 0.302932
-G1 X110.138 Y137.623 E.00234
-; LINE_WIDTH: 0.270689
-G1 X110.045 Y137.573 E.00195
-; LINE_WIDTH: 0.240944
-G1 X109.949 Y137.522 E.00176
-; LINE_WIDTH: 0.201008
-G1 X109.76 Y137.426 E.00273
-; LINE_WIDTH: 0.155951
-G1 X109.57 Y137.334 E.00195
-; LINE_WIDTH: 0.113884
-G1 X109.285 Y137.206 E.0018
-; WIPE_START
-G1 X109.57 Y137.334 E-.76
-; WIPE_END
-G1 E-.04 F1800
-G1 X111.46 Y144.424 Z1 F30000
-G1 Z.6
-G1 E.8 F1800
-; LINE_WIDTH: 0.109723
+G1 X145.691 Y134.784 E.03171
+G1 X139.732 Y136.981 E.19687
+G1 X139.673 Y137.369 F30000
+; LINE_WIDTH: 0.41999
 G1 F15000
-G1 X111.369 Y144.574 E.00096
-G1 X111.315 Y144.616 E.00038
-G1 X110.736 Y145.019 F30000
-; LINE_WIDTH: 0.446367
+G1 X116.327 Y137.369 E.71733
+G1 X116.131 Y137.334 E.00611
+G1 X110.398 Y135.217 E.18777
+G1 X110.645 Y135.415 E.00971
+G1 X111.269 Y136.127 E.02908
+G1 X111.714 Y136.876 E.02678
+G1 X111.956 Y137.481 E.02002
+G1 X112.146 Y138.307 E.02604
+G1 X112.189 Y139.093 E.02418
+G1 X112.088 Y140.016 E.02856
+G1 X111.758 Y141.021 E.03248
+G1 X111.332 Y141.781 E.02678
+G1 X110.929 Y142.293 E.02002
+G1 X110.417 Y142.771 E.02153
+G1 X116.131 Y140.662 E.18716
+G1 X116.327 Y140.627 E.00611
+G1 X139.673 Y140.627 E.71733
+G1 X139.869 Y140.662 E.00611
+G1 X145.602 Y142.778 E.18778
+G1 X145.355 Y142.58 E.00972
+G1 X144.731 Y141.869 E.02907
+G1 X144.286 Y141.119 E.02678
+G1 X143.937 Y140.122 E.03247
+G1 X143.812 Y139.259 E.02679
+G1 X143.871 Y138.204 E.03247
+G1 X144.086 Y137.359 E.02678
+G1 X144.544 Y136.407 E.03247
+G1 X145.065 Y135.711 E.02672
+G1 X145.58 Y135.227 E.02171
+G1 X139.868 Y137.334 E.18705
+G1 X139.732 Y137.358 E.00427
+G1 X139.673 Y137.746 F30000
 G1 F15000
-G1 X110.513 Y145.158 E.00862
-; LINE_WIDTH: 0.414647
-G1 X110.422 Y145.212 E.0032
-; LINE_WIDTH: 0.374849
-G1 X110.325 Y145.27 E.00305
-; LINE_WIDTH: 0.33758
-G1 X110.234 Y145.322 E.00253
-; LINE_WIDTH: 0.302937
-G1 X110.138 Y145.376 E.00234
-; LINE_WIDTH: 0.270694
-G1 X110.045 Y145.426 E.00195
-; LINE_WIDTH: 0.240942
-G1 X109.949 Y145.477 E.00176
-; LINE_WIDTH: 0.201014
-G1 X109.76 Y145.573 E.00273
-; LINE_WIDTH: 0.155954
-G1 X109.57 Y145.665 E.00195
-; LINE_WIDTH: 0.113883
-G1 X109.285 Y145.793 E.00181
+G1 X116.327 Y137.746 E.71733
+G1 X116.001 Y137.688 E.01019
+G1 X111.701 Y136.1 E.14082
+G1 X112.04 Y136.688 E.02083
+G1 X112.307 Y137.344 E.02178
+G1 X112.514 Y138.225 E.0278
+G1 X112.565 Y139.076 E.02619
+G1 X112.462 Y140.066 E.03057
+G1 X112.115 Y141.142 E.03475
+G1 X111.701 Y141.895 E.02641
+G1 X116.001 Y140.308 E.14082
+G1 X116.327 Y140.25 E.01019
+G1 X139.673 Y140.25 E.71733
+G1 X139.999 Y140.308 E.01019
+G1 X144.299 Y141.895 E.14082
+G1 X143.96 Y141.308 E.02084
+G1 X143.58 Y140.243 E.03474
+G1 X143.438 Y139.308 E.02905
+G1 X143.495 Y138.179 E.03473
+G1 X143.722 Y137.262 E.02904
+G1 X144.206 Y136.24 E.03474
+G1 X144.29 Y136.105 E.00489
+G1 X139.999 Y137.688 E.14054
+G1 X139.732 Y137.736 E.00834
+G1 X139.673 Y138.123 F30000
+G1 F15000
+G1 X116.327 Y138.123 E.71733
+G1 X115.87 Y138.041 E.01427
+G1 X112.499 Y136.797 E.11041
+G1 X112.717 Y137.4 E.01971
+G1 X112.882 Y138.143 E.0234
+G1 X112.942 Y139.06 E.02821
+G1 X112.836 Y140.115 E.03259
+G1 X112.494 Y141.201 E.03498
+G1 X115.87 Y139.954 E.11059
+G1 X116.327 Y139.872 E.01427
+G1 X139.673 Y139.872 E.71733
+G1 X140.13 Y139.954 E.01427
+G1 X143.506 Y141.201 E.11058
+G1 X143.222 Y140.364 E.02713
+G1 X143.065 Y139.357 E.03131
+G1 X143.118 Y138.155 E.037
+G1 X143.358 Y137.164 E.0313
+G1 X143.512 Y136.794 E.01233
+G1 X140.129 Y138.042 E.11079
+G1 X139.732 Y138.113 E.01241
+G1 X139.673 Y138.5 F30000
+G1 F15000
+G1 X116.327 Y138.5 E.71733
+G3 X115.739 Y138.395 I0 J-1.696 E.01844
+G1 X113.109 Y137.424 E.08617
+G1 X113.25 Y138.062 E.02008
+G1 X113.319 Y139.043 E.03023
+G1 X113.309 Y139.409 E.01125
+G1 X113.21 Y140.164 E.0234
+G1 X113.105 Y140.573 E.01296
+G1 X115.739 Y139.6 E.08628
+G1 X116.179 Y139.502 E.01385
+G1 X116.327 Y139.495 E.00455
+G1 X139.673 Y139.495 E.71733
+G3 X140.261 Y139.6 I0 J1.697 E.01844
+G1 X142.895 Y140.573 E.08629
+G1 X142.79 Y140.162 E.01305
+G1 X142.691 Y139.407 E.0234
+G1 X142.742 Y138.13 E.03927
+G1 X142.898 Y137.422 E.02226
+G1 X140.26 Y138.395 E.0864
+G3 X139.732 Y138.495 I-.542 J-1.428 E.01658
+G1 X139.673 Y138.843 F30000
+; LINE_WIDTH: 0.352297
+G1 F15000
+G1 X116.327 Y138.843 E.58855
+G1 X115.953 Y138.829 E.00943
+; LINE_WIDTH: 0.419241
+G1 X115.609 Y138.749 E.01084
+G1 X113.623 Y138.016 E.06491
+G1 X113.696 Y139.027 E.03108
+G3 X113.614 Y139.983 I-4.735 J.077 E.02949
+G1 X115.609 Y139.247 E.06522
+; LINE_WIDTH: 0.405083
+G1 X115.879 Y139.201 E.00808
+; LINE_WIDTH: 0.35228
+G3 X116.327 Y139.152 I.39 J1.496 E.01141
+G1 X139.673 Y139.152 E.58852
+; LINE_WIDTH: 0.368983
+G1 X139.861 Y139.153 E.005
+; LINE_WIDTH: 0.419541
+G1 X140.049 Y139.153 E.00577
+G1 X140.391 Y139.247 E.01089
+G1 X142.386 Y139.983 E.06527
+G3 X142.304 Y139.042 I4.651 J-.88 E.02905
+G1 X142.381 Y138.015 E.0316
+G1 X140.39 Y138.749 E.0651
+G1 X140.049 Y138.843 E.01087
+; LINE_WIDTH: 0.402988
+G1 X139.891 Y138.843 E.00464
+; LINE_WIDTH: 0.368983
+G1 X139.733 Y138.843 E.0042
+G1 X140.95 Y138.998 F30000
+; LINE_WIDTH: 0.5202
+G1 F13199.798
+G1 X141.888 Y139.344 E.03886
+G1 X141.902 Y138.647 E.02712
+G1 X141.007 Y138.977 E.03711
+G1 X144.186 Y139.21 F30000
+; LINE_WIDTH: 0.41999
+G1 F15000
+G1 X144.247 Y138.229 E.03021
+G1 X144.45 Y137.457 E.02452
+G1 X144.882 Y136.574 E.03021
+G1 X145.364 Y135.94 E.02446
+G1 X145.948 Y135.401 E.02441
+; LINE_WIDTH: 0.432603
+G1 X146.361 Y135.134 E.01565
+; LINE_WIDTH: 0.460854
+G1 X146.775 Y134.866 E.01678
+G1 X147.271 Y134.673 E.01812
+G1 X148.059 Y134.485 E.0276
+G1 X148.811 Y134.439 E.02566
+G1 X149.64 Y134.529 E.0284
+G1 X150.27 Y134.705 E.02227
+G1 X150.936 Y135.009 E.02493
+G1 X151.586 Y135.46 E.02693
+G1 X152.165 Y136.001 E.02699
+G1 X152.639 Y136.655 E.02749
+G1 X153.007 Y137.42 E.02893
+G1 X153.215 Y138.19 E.02716
+G3 X152.865 Y140.909 I-4.742 J.771 E.09467
+G1 X152.472 Y141.602 E.02714
+G1 X152.098 Y142.068 E.02034
+G1 X151.513 Y142.606 E.02707
+G1 X150.671 Y143.124 E.03367
+G1 X149.735 Y143.448 E.03376
+G1 X148.94 Y143.556 E.02731
+G1 X147.955 Y143.496 E.03361
+G1 X147.182 Y143.291 E.02724
+G1 X146.45 Y142.974 E.02717
+; LINE_WIDTH: 0.47561
+G1 F14560.077
+G1 X146.059 Y142.667 E.01751
+; LINE_WIDTH: 0.422291
+G1 F15000
+G1 X145.669 Y142.36 E.01535
+G1 X145.015 Y141.62 E.03051
+G1 X144.613 Y140.931 E.02467
+G1 X144.294 Y140.001 E.03039
+G1 X144.194 Y139.27 E.02282
 ; CHANGE_LAYER
 ; Z_HEIGHT: 0.8
 ; LAYER_HEIGHT: 0.2
 ; WIPE_START
 G1 F15000
-G1 X109.57 Y145.665 E-.76
+G1 X144.294 Y140.001 E-.28054
+G1 X144.613 Y140.931 E-.3736
+G1 X144.753 Y141.172 E-.10586
 ; WIPE_END
 G1 E-.04 F1800
-; stop printing object, unique label id: 104
+; stop printing object, unique label id: 194
 M625
 ; layer num/total_layer_count: 4/15
 ; update layer progress
@@ -3467,7 +3595,7 @@ M73 L4
 M991 S0 P3 ;notify layer change
 G17
 G3 Z1 I1.217 J0 P1  F30000
-; object ids of layer 4 start: 72,104
+; object ids of layer 4 start: 123,194
 M624 AwAAAAAAAAA=
 ;========Date 20250206========
 ; SKIPPABLE_START
@@ -3482,68 +3610,45 @@ M1004 S5 P1  ; external shutter
 M623
 ; SKIPPABLE_END
 
-; object ids of this layer4 end: 72,104
+; object ids of this layer4 end: 123,194
 M625
-; OBJECT_ID: 72
-; start printing object, unique label id: 72
+; OBJECT_ID: 123
+; start printing object, unique label id: 123
 M624 AQAAAAAAAAA=
-G1 X139.655 Y125.23
+G1 X148.028 Y121.908
 G1 Z.8
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X139.927 Y125.23 E.00904
-G1 X143.306 Y123.984 E.11946
-G2 X143.306 Y128.017 I5.525 J2.016 E.13656
-G1 X139.927 Y126.77 E.11948
-G1 X116.072 Y126.77 E.79131
-G1 X112.694 Y128.017 E.11948
-G2 X112.694 Y123.983 I-5.525 J-2.017 E.1366
-G1 X116.072 Y125.23 E.11948
-G1 X139.595 Y125.23 E.78027
-G1 X139.637 Y124.823 F30000
-G1 F15476.087
-G1 X139.854 Y124.823 E.00723
-G1 X144.085 Y123.263 E.14956
-G2 X144.085 Y128.739 I4.781 J2.737 E.1901
-G1 X139.855 Y127.177 E.1496
-G1 X116.145 Y127.177 E.78649
-G1 X111.915 Y128.739 E.1496
-G2 X111.915 Y123.261 I-4.78 J-2.739 E.19016
-G1 X116.145 Y124.823 E.1496
-G1 X139.577 Y124.823 E.77726
-G1 X139.619 Y124.416 F30000
-G1 F15476.087
-G1 X139.782 Y124.416 E.00541
-G1 X144.93 Y122.517 E.18204
-G1 X145.038 Y122.673 E.0063
-G2 X145.04 Y129.329 I3.703 J3.327 E.24181
-G1 X144.932 Y129.485 E.0063
-G1 X139.782 Y127.584 E.18212
-G1 X116.218 Y127.584 E.78166
-G1 X111.068 Y129.485 E.18212
-G1 X110.96 Y129.329 E.0063
-G2 X110.96 Y122.671 I-3.701 J-3.329 E.24191
-G1 X111.068 Y122.515 E.0063
-G1 X116.218 Y124.416 E.18212
-G1 X139.559 Y124.416 E.77425
+G1 X148.544 Y121.852 E.0172
+G1 X148.712 Y121.848 E.00556
+G3 X147.969 Y121.916 I.007 J4.152 E.84054
+G1 X148.128 Y122.291 F30000
+; FEATURE: Outer wall
+; LINE_WIDTH: 0.42
+G1 F12000
+M204 S5000
+G1 X148.561 Y122.244 E.01339
+G1 X148.712 Y122.24 E.00465
+G3 X148.068 Y122.297 I.007 J3.76 E.70594
 ; WIPE_START
-G1 X139.782 Y124.416 E-.08483
-G1 X141.449 Y123.801 E-.67517
+M204 S10000
+G1 X148.561 Y122.244 E-.18838
+G1 X148.712 Y122.24 E-.05748
+G1 X149.053 Y122.254 E-.12952
+G1 X149.378 Y122.297 E-.12458
+G1 X149.698 Y122.368 E-.12468
+G1 X150.011 Y122.467 E-.12463
+G1 X150.037 Y122.478 E-.01074
 ; WIPE_END
 G1 E-.04 F1800
-G1 X133.963 Y125.288 Z1.2 F30000
-G1 X107.473 Y130.551 Z1.2
+G1 X142.525 Y123.83 Z1.2 F30000
+G1 X107.432 Y130.148 Z1.2
 G1 Z.8
 G1 E.8 F1800
-G1 F15476.087
-G1 X107.275 Y130.558 E.00658
-G3 X107.076 Y121.445 I-.007 J-4.559 E.46894
-G1 X107.261 Y121.441 E.00612
-G3 X107.673 Y130.54 I.007 J4.559 E.46188
-G1 X107.533 Y130.548 E.00463
-G1 X107.432 Y130.148 F30000
+; FEATURE: Inner wall
+; LINE_WIDTH: 0.45
 G1 F15476.087
 G1 X106.913 Y130.136 E.01721
 G3 X107.094 Y121.852 I.355 J-4.136 E.41506
@@ -3552,7 +3657,7 @@ G3 X107.491 Y130.145 I.007 J4.152 E.42548
 G1 X107.476 Y129.753 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
 G1 X107.439 Y129.755 E.00115
 G3 X107.111 Y122.244 I-.17 J-3.756 E.36329
@@ -3569,61 +3674,12 @@ G1 X105.989 Y129.533 E-.12476
 G1 X105.598 Y129.361 E-.16224
 ; WIPE_END
 G1 E-.04 F1800
-G1 X113.103 Y127.97 Z1.2 F30000
-G1 X147.935 Y121.514 Z1.2
+G1 X113.123 Y128.086 Z1.2 F30000
+G1 X139.582 Y123.602 Z1.2
 G1 Z.8
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
-G1 F15476.087
-G1 X148.13 Y121.479 E.00658
-G3 X148.526 Y121.445 I.588 J4.521 E.0132
-G1 X148.711 Y121.441 E.00612
-G3 X147.738 Y121.548 I.007 J4.559 E.91762
-G1 X147.876 Y121.524 E.00463
-G1 X148.028 Y121.908 F30000
-G1 F15476.087
-G1 X148.544 Y121.852 E.0172
-G1 X148.712 Y121.848 E.00556
-G3 X147.969 Y121.916 I.007 J4.152 E.84054
-G1 X148.128 Y122.291 F30000
-; FEATURE: Outer wall
-; LINE_WIDTH: 0.42
-G1 F3600
-M204 S5000
-G1 X148.561 Y122.244 E.01339
-G1 X148.712 Y122.24 E.00465
-G3 X148.068 Y122.297 I.007 J3.76 E.70594
-; WIPE_START
-M204 S10000
-G1 X148.561 Y122.244 E-.18838
-G1 X148.712 Y122.24 E-.05748
-G1 X149.053 Y122.254 E-.12952
-G1 X149.378 Y122.297 E-.12458
-G1 X149.698 Y122.368 E-.12468
-G1 X150.011 Y122.467 E-.12463
-G1 X150.037 Y122.478 E-.01074
-; WIPE_END
-G1 E-.04 F1800
-G1 X142.485 Y123.586 Z1.2 F30000
-G1 X139.6 Y124.009 Z1.2
-G1 Z.8
-G1 E.8 F1800
-; FEATURE: Inner wall
-; LINE_WIDTH: 0.45
-G1 F15476.087
-G1 X139.709 Y124.009 E.0036
-G1 X147.14 Y121.268 E.26274
-G3 X148.79 Y121.011 I1.631 J5.047 E.05563
-G3 X146.915 Y130.651 I-.069 J4.989 E.57898
-G1 X139.709 Y127.991 E.25482
-G1 X116.291 Y127.991 E.77683
-G1 X109.085 Y130.651 E.25481
-G3 X109.085 Y121.349 I-1.809 J-4.651 E.64289
-G1 X116.291 Y124.009 E.25479
-M73 P69 R4
-G1 X139.54 Y124.009 E.77124
-G1 X139.582 Y123.602 F30000
 G1 F15476.087
 G1 X139.636 Y123.602 E.00179
 G1 X147.009 Y120.882 E.26068
@@ -3638,7 +3694,7 @@ G1 X139.522 Y123.602 E.76822
 G1 X139.566 Y123.21 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
 G1 X146.883 Y120.511 E.23962
 G3 X148.807 Y120.212 I1.897 J5.857 E.06008
@@ -3654,536 +3710,386 @@ M204 S10000
 G1 X141.385 Y122.523 E-.76
 ; WIPE_END
 G1 E-.04 F1800
-G1 X139.456 Y126.421 Z1.2 F30000
+G1 X146.809 Y121.618 Z1.2 F30000
+G1 Z.8
+G1 E.8 F1800
+; FEATURE: Internal solid infill
+; LINE_WIDTH: 0.462589
+G1 F15000
+G1 X147.039 Y121.759 E.00925
+G1 X147.659 Y121.573 E.02215
+G1 X148.45 Y121.446 E.02738
+G1 X149.248 Y121.469 E.02732
+G1 X149.891 Y121.589 E.02236
+G3 X152.078 Y122.906 I-1.351 J4.719 E.08833
+G3 X152.686 Y123.733 I-8.479 J6.871 E.0351
+G1 X153.007 Y124.425 E.02609
+G1 X153.171 Y124.984 E.01993
+G1 X153.28 Y125.783 E.02757
+G1 X153.248 Y126.579 E.02727
+G1 X153.05 Y127.434 E.02999
+G1 X152.722 Y128.196 E.02838
+G3 X152.089 Y129.08 I-7.151 J-4.452 E.03718
+G3 X151.257 Y129.784 I-3.022 J-2.724 E.0374
+G1 X150.563 Y130.166 E.02708
+G1 X149.808 Y130.432 E.02736
+G1 X149.23 Y130.525 E.02004
+G1 X148.428 Y130.552 E.02744
+G3 X147.093 Y130.249 I.65 J-5.955 E.04691
+G1 X146.969 Y130.661 E.01472
+G1 X147.47 Y130.809 E.01787
+G1 X148.249 Y130.955 E.02708
+G2 X150.756 Y130.545 I.424 J-5.285 E.08773
+G2 X153.604 Y126.986 I-2.121 J-4.616 E.16167
+G1 X153.702 Y126.127 E.02957
+M73 P72 R3
+G1 X153.648 Y125.263 E.02962
+G1 X153.449 Y124.418 E.02967
+G1 X153.103 Y123.624 E.02962
+G2 X151.863 Y122.132 I-4.827 J2.749 E.0667
+G1 X151.141 Y121.648 E.0297
+G2 X149.417 Y121.072 I-2.519 J4.671 E.06247
+G1 X148.556 Y121.027 E.02949
+G2 X146.895 Y121.366 I.283 J5.632 E.05821
+G1 X146.828 Y121.561 E.00705
+; WIPE_START
+G1 X146.895 Y121.366 E-.07832
+G1 X147.539 Y121.164 E-.25641
+G1 X147.896 Y121.1 E-.1379
+G1 X148.556 Y121.027 E-.25248
+G1 X148.648 Y121.032 E-.0349
+; WIPE_END
+G1 E-.04 F1800
+G1 X141.087 Y122.079 Z1.2 F30000
+G1 X127.579 Y123.95 Z1.2
 G1 Z.8
 G1 E.8 F1800
 ; FEATURE: Sparse infill
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X139.99 Y126.421 E.01771
-G1 X141.016 Y126.8 E.0363
-G1 X142.659 Y125.157 E.07708
-G2 X142.66 Y126.843 I8.666 J.84 E.05602
-G1 X141.016 Y125.2 E.07711
-G1 X139.989 Y125.579 E.03631
-G1 X137.633 Y125.579 E.07818
-G1 X136.79 Y126.421 E.03954
-G1 X137.633 Y126.421 E.02796
-G1 X136.79 Y125.579 E.03954
-G1 X133.027 Y125.579 E.12482
-G1 X132.184 Y126.421 E.03954
-G1 X133.027 Y126.421 E.02796
-G1 X132.184 Y125.579 E.03954
-G1 X128.421 Y125.579 E.12482
-G1 X127.579 Y126.421 E.03954
-G1 X128.421 Y126.421 E.02796
-G1 X127.579 Y125.579 E.03954
-G1 X125.95 Y125.579 E.05401
-G1 X116.544 Y125.579 F30000
-G1 F15476.087
-G1 X116.01 Y125.579 E.01771
-G1 X114.984 Y125.2 E.0363
-G1 X113.341 Y126.843 E.07708
-G2 X113.34 Y125.157 I-8.729 J-.843 E.056
-G1 X114.984 Y126.8 E.07709
-G1 X116.01 Y126.421 E.0363
-G1 X118.367 Y126.421 E.07819
-G1 X119.21 Y125.579 E.03954
-G1 X118.367 Y125.579 E.02796
-G1 X119.21 Y126.421 E.03954
-G1 X122.973 Y126.421 E.12482
-G1 X123.816 Y125.579 E.03954
-G1 X122.973 Y125.579 E.02796
-G1 X123.816 Y126.421 E.03954
-G1 X125.444 Y126.421 E.05401
-G1 X111.568 Y128.925 F30000
-; FEATURE: Gap infill
-; LINE_WIDTH: 0.109687
-G1 F15000
-G1 X111.478 Y129.075 E.00095
-G1 X111.423 Y129.117 E.00037
-G1 X110.844 Y129.52 F30000
-; LINE_WIDTH: 0.446432
-G1 F15000
-G1 X110.622 Y129.658 E.00861
-; LINE_WIDTH: 0.414718
-G1 X110.531 Y129.713 E.00321
-; LINE_WIDTH: 0.374856
-G1 X110.434 Y129.77 E.00305
-; LINE_WIDTH: 0.337559
-G1 X110.342 Y129.822 E.00252
-; LINE_WIDTH: 0.302967
-G1 X110.246 Y129.876 E.00234
-; LINE_WIDTH: 0.270719
-G1 X110.154 Y129.926 E.00195
-; LINE_WIDTH: 0.240911
-G1 X110.057 Y129.978 E.00176
-; LINE_WIDTH: 0.200926
-G1 X109.869 Y130.074 E.00273
-; LINE_WIDTH: 0.155956
-G1 X109.679 Y130.165 E.00194
-; LINE_WIDTH: 0.11393
-G1 X109.394 Y130.293 E.00181
+G1 X125.95 Y123.95 E.05401
+G1 X130.05 Y128.05 E.19231
+G1 X133.626 Y128.05 E.11864
+G1 X137.726 Y123.95 E.19231
+G1 X139.699 Y123.95 E.06545
+G1 X140.87 Y123.518 E.04142
+G1 X144.332 Y126.98 E.16242
+G3 X144.342 Y125.01 I5.092 J-.959 E.06578
+G1 X140.87 Y128.482 E.1629
+G1 X139.699 Y128.05 E.04141
+G1 X137.726 Y128.05 E.06545
+G1 X133.626 Y123.95 E.19231
+G1 X130.05 Y123.95 E.11864
+G1 X125.95 Y128.05 E.19231
+G1 X122.374 Y128.05 E.11864
+G1 X118.274 Y123.95 E.19231
+G1 X116.301 Y123.95 E.06545
+G1 X115.13 Y123.518 E.04141
+G1 X111.662 Y126.986 E.16269
+G2 X111.667 Y125.019 I-4.683 J-.995 E.06572
+G1 X115.13 Y128.482 E.16247
+G1 X116.301 Y128.05 E.04141
+G1 X118.274 Y128.05 E.06545
+G1 X122.374 Y123.95 E.19231
+G1 X120.745 Y123.95 E.05401
 ; WIPE_START
-G1 X109.679 Y130.165 E-.76
+G1 X122.374 Y123.95 E-.61876
+G1 X122.111 Y124.213 E-.14124
 ; WIPE_END
 G1 E-.04 F1800
-G1 X111.568 Y123.075 Z1.2 F30000
+G1 X114.656 Y122.575 Z1.2 F30000
+G1 X109.031 Y121.339 Z1.2
 G1 Z.8
 G1 E.8 F1800
-; LINE_WIDTH: 0.109681
+; FEATURE: Internal solid infill
+; LINE_WIDTH: 0.462197
 G1 F15000
-G1 X111.478 Y122.925 E.00095
-G1 X111.423 Y122.883 E.00037
-G1 X110.844 Y122.48 F30000
-; LINE_WIDTH: 0.446337
-G1 F15000
-G1 X110.622 Y122.341 E.00863
-; LINE_WIDTH: 0.414599
-G1 X110.531 Y122.287 E.0032
-; LINE_WIDTH: 0.374888
-G1 X110.434 Y122.23 E.00304
-; LINE_WIDTH: 0.33764
-G1 X110.343 Y122.178 E.00253
-; LINE_WIDTH: 0.303
-G1 X110.246 Y122.124 E.00234
-; LINE_WIDTH: 0.270744
-G1 X110.154 Y122.074 E.00195
-; LINE_WIDTH: 0.240973
-G1 X110.058 Y122.022 E.00176
-; LINE_WIDTH: 0.200959
-G1 X109.869 Y121.926 E.00273
-; LINE_WIDTH: 0.155924
-G1 X109.679 Y121.834 E.00194
-; LINE_WIDTH: 0.113905
-G1 X109.394 Y121.707 E.00181
+G1 X108.531 Y121.191 E.01782
+G1 X107.751 Y121.045 E.02709
+G2 X105.201 Y121.474 I-.425 J5.271 E.08924
+G1 X104.516 Y121.853 E.02676
+G1 X103.999 Y122.25 E.02228
+G2 X103.055 Y123.355 I4.037 J4.403 E.04975
+G2 X102.455 Y127.228 I4.263 J2.645 E.13759
+G1 X102.745 Y128.058 E.03002
+G1 X103.173 Y128.815 E.02973
+G2 X105.545 Y130.666 I4.21 J-2.952 E.10432
+G1 X106.372 Y130.887 E.02923
+G1 X106.739 Y130.948 E.01272
+G2 X109.029 Y130.661 I.524 J-5.092 E.07953
+G1 X108.911 Y130.259 E.0143
+G1 X108.292 Y130.448 E.02211
+G1 X107.552 Y130.553 E.02551
+G3 X106.465 Y130.488 I-.078 J-7.835 E.03724
+G1 X105.729 Y130.293 E.02601
+G3 X104.734 Y129.779 I1.398 J-3.929 E.03838
+G1 X104.118 Y129.281 E.02706
+G1 X103.587 Y128.686 E.02725
+G1 X103.177 Y128.001 E.02727
+G1 X102.892 Y127.261 E.02711
+G3 X102.718 Y126.181 I7.611 J-1.777 E.03739
+G1 X102.748 Y125.42 E.02601
+G3 X102.998 Y124.417 I8.689 J1.637 E.03534
+G1 X103.381 Y123.629 E.02995
+G1 X103.722 Y123.153 E.02
+G1 X104.273 Y122.576 E.02724
+G1 X104.736 Y122.214 E.02011
+G1 X105.395 Y121.853 E.02566
+G1 X105.788 Y121.688 E.01457
+G1 X106.467 Y121.51 E.02399
+G3 X108.907 Y121.751 I.781 J4.556 E.08476
+G1 X109.014 Y121.396 E.01265
+; OBJECT_ID: 194
 ; WIPE_START
-G1 X109.679 Y121.834 E-.76
+G1 X108.907 Y121.751 E-.14074
+G1 X108.7 Y121.677 E-.08337
+G1 X108.151 Y121.532 E-.21585
+G1 X107.572 Y121.448 E-.22234
+G1 X107.315 Y121.446 E-.0977
 ; WIPE_END
 G1 E-.04 F1800
-G1 X117.306 Y122.107 Z1.2 F30000
-G1 X144.432 Y123.076 Z1.2
-G1 Z.8
-G1 E.8 F1800
-; LINE_WIDTH: 0.109564
-G1 F15000
-G3 X144.576 Y122.885 I.311 J.085 E.00133
-G1 X145.154 Y122.482 F30000
-; LINE_WIDTH: 0.445769
-G1 F15000
-G1 X145.371 Y122.347 E.00842
-; LINE_WIDTH: 0.414611
-G1 X145.47 Y122.288 E.00346
-; LINE_WIDTH: 0.374489
-G1 X145.56 Y122.234 E.00286
-; LINE_WIDTH: 0.337082
-G1 X145.658 Y122.179 E.00269
-; LINE_WIDTH: 0.302152
-G1 X145.75 Y122.127 E.00222
-; LINE_WIDTH: 0.270789
-G1 X145.84 Y122.078 E.00191
-; LINE_WIDTH: 0.242846
-G1 X145.926 Y122.032 E.00159
-; LINE_WIDTH: 0.215511
-G1 X146.028 Y121.98 E.00161
-; LINE_WIDTH: 0.188632
-G1 X146.127 Y121.929 E.00132
-; LINE_WIDTH: 0.154846
-G1 X146.32 Y121.836 E.00195
-; LINE_WIDTH: 0.113283
-G1 X146.59 Y121.715 E.0017
-; WIPE_START
-G1 X146.32 Y121.836 E-.76
-; WIPE_END
-G1 E-.04 F1800
-G1 X144.431 Y128.922 Z1.2 F30000
-G1 Z.8
-G1 E.8 F1800
-; LINE_WIDTH: 0.107629
-G1 F15000
-G2 X144.577 Y129.117 I.473 J-.202 E.0013
-G1 X145.156 Y129.52 F30000
-; LINE_WIDTH: 0.446647
-G1 F15000
-G1 X145.371 Y129.654 E.00835
-; LINE_WIDTH: 0.416136
-G1 X145.469 Y129.713 E.00347
-; LINE_WIDTH: 0.376173
-G1 X145.56 Y129.767 E.00286
-; LINE_WIDTH: 0.338793
-G1 X145.657 Y129.822 E.00271
-; LINE_WIDTH: 0.303809
-G1 X145.749 Y129.874 E.00224
-; LINE_WIDTH: 0.271441
-G1 X145.846 Y129.926 E.00205
-; LINE_WIDTH: 0.241524
-G1 X145.939 Y129.976 E.0017
-; LINE_WIDTH: 0.226423
-G1 X145.942 Y129.978 E.00006
-; LINE_WIDTH: 0.201308
-G1 X146.129 Y130.073 E.0027
-; LINE_WIDTH: 0.156389
-G1 X146.319 Y130.165 E.00196
-; LINE_WIDTH: 0.114043
-G1 X146.606 Y130.293 E.00182
-; OBJECT_ID: 104
-; WIPE_START
-G1 X146.319 Y130.165 E-.76
-; WIPE_END
-G1 E-.04 F1800
-; stop printing object, unique label id: 72
+; stop printing object, unique label id: 123
 M625
-; start printing object, unique label id: 104
+; start printing object, unique label id: 194
 M624 AgAAAAAAAAA=
-G1 X142.2 Y136.59 Z1.2 F30000
-G1 X139.546 Y140.73 Z1.2
+G1 X114.561 Y123.842 Z1.2 F30000
+G1 X148.028 Y134.906 Z1.2
 G1 Z.8
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X139.819 Y140.73 E.00904
-G1 X143.197 Y139.483 E.11946
-G2 X143.198 Y143.517 I5.525 J2.016 E.13656
-G1 X139.819 Y142.269 E.11948
-G1 X115.964 Y142.269 E.79131
-G1 X112.585 Y143.517 E.11948
-G2 X112.585 Y139.482 I-5.525 J-2.017 E.1366
-G1 X115.964 Y140.73 E.11948
-G1 X139.486 Y140.73 E.78027
-G1 X139.528 Y140.323 F30000
-G1 F15476.087
-G1 X139.746 Y140.323 E.00723
-G1 X143.976 Y138.762 E.14956
-G2 X143.977 Y144.238 I4.781 J2.737 E.1901
-G1 X139.746 Y142.676 E.1496
-G1 X116.037 Y142.676 E.78649
-G1 X111.806 Y144.238 E.1496
-G2 X111.806 Y138.761 I-4.78 J-2.739 E.19016
-G1 X116.037 Y140.323 E.1496
-G1 X139.468 Y140.323 E.77726
-G1 X139.51 Y139.916 F30000
-G1 F15476.087
-G1 X139.673 Y139.916 E.00541
-G1 X144.822 Y138.016 E.18204
-G1 X144.93 Y138.173 E.0063
-G2 X144.931 Y144.828 I3.703 J3.327 E.24181
-G1 X144.824 Y144.985 E.0063
-G1 X139.673 Y143.083 E.18212
-G1 X116.109 Y143.083 E.78166
-G1 X110.959 Y144.985 E.18212
-G1 X110.852 Y144.828 E.0063
-G2 X110.851 Y138.171 I-3.701 J-3.329 E.24191
-G1 X110.959 Y138.014 E.0063
-G1 X116.109 Y139.916 E.18212
-G1 X139.45 Y139.916 E.77425
-; WIPE_START
-G1 X139.673 Y139.916 E-.08483
-G1 X141.34 Y139.301 E-.67517
-; WIPE_END
-G1 E-.04 F1800
-G1 X133.854 Y140.788 Z1.2 F30000
-G1 X107.365 Y146.05 Z1.2
-G1 Z.8
-G1 E.8 F1800
-G1 F15476.087
-G1 X107.166 Y146.058 E.00658
-G3 X106.968 Y136.944 I-.007 J-4.559 E.46894
-G1 X107.152 Y136.94 E.00612
-G3 X107.564 Y146.04 I.007 J4.559 E.46188
-G1 X107.424 Y146.047 E.00463
-G1 X107.323 Y145.647 F30000
-G1 F15476.087
-G1 X106.804 Y145.636 E.01721
-G3 X106.985 Y137.351 I.355 J-4.136 E.41506
-G1 X107.153 Y137.348 E.00556
-G3 X107.383 Y145.645 I.007 J4.152 E.42548
-G1 X107.368 Y145.253 F30000
+G1 X148.544 Y134.85 E.0172
+G1 X148.712 Y134.846 E.00556
+G3 X147.969 Y134.914 I.007 J4.152 E.84054
+G1 X148.128 Y135.289 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
-G1 X107.33 Y145.255 E.00115
-G3 X107.003 Y137.743 I-.17 J-3.756 E.36329
-G1 X107.154 Y137.74 E.00465
-G3 X107.657 Y145.226 I.007 J3.76 E.34782
-G1 X107.427 Y145.247 E.00709
+G1 X148.561 Y135.241 E.01339
+G1 X148.712 Y135.238 E.00465
+G3 X148.068 Y135.295 I.007 J3.76 E.70594
 ; WIPE_START
 M204 S10000
-G1 X107.33 Y145.255 E-.03699
-G1 X106.839 Y145.245 E-.18688
-G1 X106.514 Y145.202 E-.12457
-G1 X106.194 Y145.132 E-.12457
-G1 X105.88 Y145.033 E-.12476
-G1 X105.49 Y144.861 E-.16224
+G1 X148.561 Y135.241 E-.18838
+G1 X148.712 Y135.238 E-.05748
+G1 X149.053 Y135.252 E-.12952
+G1 X149.378 Y135.295 E-.12458
+G1 X149.698 Y135.366 E-.12468
+G1 X150.011 Y135.465 E-.12463
+G1 X150.037 Y135.476 E-.01074
 ; WIPE_END
 G1 E-.04 F1800
-G1 X112.994 Y143.47 Z1.2 F30000
-G1 X147.826 Y137.014 Z1.2
+G1 X142.525 Y136.828 Z1.2 F30000
+G1 X107.432 Y143.146 Z1.2
 G1 Z.8
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X148.021 Y136.979 E.00658
-G3 X148.418 Y136.944 I.588 J4.521 E.0132
-G1 X148.602 Y136.94 E.00612
-G3 X147.629 Y137.047 I.007 J4.559 E.91762
-G1 X147.767 Y137.024 E.00463
-G1 X147.92 Y137.408 F30000
-G1 F15476.087
-G1 X148.435 Y137.351 E.0172
-G1 X148.603 Y137.348 E.00556
-G3 X147.861 Y137.416 I.007 J4.152 E.84054
-G1 X148.019 Y137.79 F30000
+G1 X106.913 Y143.134 E.01721
+G3 X107.094 Y134.85 I.355 J-4.136 E.41506
+G1 X107.262 Y134.846 E.00556
+G3 X107.491 Y143.143 I.007 J4.152 E.42548
+G1 X107.476 Y142.751 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
-G1 X148.453 Y137.743 E.01339
-G1 X148.604 Y137.74 E.00465
-G3 X147.96 Y137.796 I.007 J3.76 E.70594
+G1 X107.439 Y142.753 E.00115
+G3 X107.111 Y135.241 I-.17 J-3.756 E.36329
+G1 X107.262 Y135.238 E.00465
+G3 X107.766 Y142.724 I.007 J3.76 E.34782
+G1 X107.536 Y142.745 E.00709
 ; WIPE_START
 M204 S10000
-G1 X148.453 Y137.743 E-.18838
-G1 X148.604 Y137.74 E-.05748
-G1 X148.944 Y137.754 E-.12952
-G1 X149.269 Y137.797 E-.12458
-G1 X149.59 Y137.868 E-.12468
-G1 X149.902 Y137.966 E-.12463
-G1 X149.928 Y137.978 E-.01074
+G1 X107.439 Y142.753 E-.03699
+G1 X106.947 Y142.744 E-.18688
+G1 X106.622 Y142.701 E-.12457
+G1 X106.302 Y142.63 E-.12457
+G1 X105.989 Y142.531 E-.12476
+G1 X105.598 Y142.359 E-.16224
 ; WIPE_END
 G1 E-.04 F1800
-G1 X142.377 Y139.085 Z1.2 F30000
-G1 X139.492 Y139.509 Z1.2
+G1 X113.123 Y141.084 Z1.2 F30000
+G1 X139.582 Y136.6 Z1.2
 G1 Z.8
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X139.601 Y139.509 E.0036
-G1 X147.032 Y136.767 E.26274
-M73 P70 R4
-G3 X148.682 Y136.51 I1.631 J5.047 E.05563
-G3 X146.807 Y146.151 I-.069 J4.989 E.57898
-G1 X139.601 Y143.49 E.25482
-G1 X116.182 Y143.49 E.77683
-G1 X108.976 Y146.151 E.25481
-G3 X108.977 Y136.848 I-1.809 J-4.651 E.64289
-G1 X116.182 Y139.509 E.25479
-G1 X139.432 Y139.509 E.77124
-G1 X139.474 Y139.102 F30000
-G1 F15476.087
-G1 X139.528 Y139.102 E.00179
-G1 X146.901 Y136.382 E.26068
-G3 X148.69 Y136.103 I1.766 J5.459 E.06033
-G3 X146.667 Y146.533 I-.078 J5.396 E.62583
-G1 X139.528 Y143.897 E.25245
-G1 X116.255 Y143.897 E.77201
-G1 X109.116 Y146.533 E.25244
-G3 X109.117 Y136.466 I-1.948 J-5.034 E.69477
-G1 X116.255 Y139.102 E.25242
-G1 X139.414 Y139.102 E.76822
-G1 X139.458 Y138.71 F30000
+G1 X139.636 Y136.6 E.00179
+G1 X147.009 Y133.88 E.26068
+G3 X148.799 Y133.601 I1.766 J5.459 E.06033
+G3 X146.776 Y144.032 I-.078 J5.396 E.62583
+G1 X139.636 Y141.396 E.25245
+G1 X116.364 Y141.396 E.77201
+G1 X109.224 Y144.032 E.25244
+G3 X109.225 Y133.964 I-1.948 J-5.034 E.69477
+G1 X116.364 Y136.6 E.25242
+G1 X139.522 Y136.6 E.76822
+G1 X139.566 Y136.208 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
-G1 X146.774 Y136.01 E.23962
-G3 X148.698 Y135.711 I1.897 J5.857 E.06008
-G3 X146.533 Y146.902 I-.086 J5.788 E.62151
-G1 X139.458 Y144.29 E.23174
-G1 X116.325 Y144.29 E.71081
-G1 X109.25 Y146.902 E.23174
-G3 X109.25 Y136.097 I-2.082 J-5.402 E.68981
-G1 X116.325 Y138.71 E.23173
-G1 X139.398 Y138.71 E.70896
+G1 X146.883 Y133.509 E.23962
+G3 X148.807 Y133.209 I1.897 J5.857 E.06008
+G3 X146.642 Y144.4 I-.086 J5.788 E.62151
+G1 X139.566 Y141.788 E.23174
+G1 X116.434 Y141.788 E.71081
+G1 X109.358 Y144.4 E.23174
+G3 X109.359 Y133.596 I-2.082 J-5.402 E.68981
+G1 X116.434 Y136.208 E.23173
+G1 X139.506 Y136.208 E.70896
 ; WIPE_START
 M204 S10000
-G1 X141.276 Y138.022 E-.76
+G1 X141.385 Y135.521 E-.76
 ; WIPE_END
 G1 E-.04 F1800
-G1 X139.347 Y141.921 Z1.2 F30000
+G1 X146.809 Y134.616 Z1.2 F30000
+G1 Z.8
+G1 E.8 F1800
+; FEATURE: Internal solid infill
+; LINE_WIDTH: 0.462589
+G1 F15000
+G1 X147.039 Y134.757 E.00925
+G1 X147.659 Y134.571 E.02215
+G1 X148.45 Y134.444 E.02738
+G1 X149.248 Y134.467 E.02732
+G1 X149.891 Y134.587 E.02236
+G3 X152.078 Y135.904 I-1.351 J4.719 E.08833
+G3 X152.686 Y136.731 I-8.479 J6.871 E.0351
+G1 X153.007 Y137.423 E.02609
+G1 X153.171 Y137.982 E.01993
+G1 X153.28 Y138.78 E.02757
+G1 X153.248 Y139.577 E.02727
+G1 X153.05 Y140.432 E.02999
+G1 X152.722 Y141.194 E.02838
+G3 X152.089 Y142.077 I-7.151 J-4.452 E.03718
+G3 X151.257 Y142.782 I-3.022 J-2.724 E.0374
+G1 X150.563 Y143.164 E.02708
+G1 X149.808 Y143.429 E.02736
+G1 X149.23 Y143.523 E.02004
+G1 X148.428 Y143.55 E.02744
+G3 X147.093 Y143.247 I.65 J-5.955 E.04691
+G1 X146.969 Y143.659 E.01472
+G1 X147.47 Y143.807 E.01787
+G1 X148.249 Y143.953 E.02708
+G2 X150.756 Y143.543 I.424 J-5.285 E.08773
+G2 X153.604 Y139.984 I-2.121 J-4.616 E.16167
+G1 X153.702 Y139.125 E.02957
+G1 X153.648 Y138.26 E.02962
+G1 X153.449 Y137.416 E.02967
+G1 X153.103 Y136.622 E.02962
+G2 X151.863 Y135.13 I-4.827 J2.749 E.0667
+G1 X151.141 Y134.646 E.0297
+G2 X149.417 Y134.07 I-2.519 J4.671 E.06247
+G1 X148.556 Y134.025 E.02949
+G2 X146.895 Y134.364 I.283 J5.632 E.05821
+G1 X146.828 Y134.559 E.00705
+; WIPE_START
+G1 X146.895 Y134.364 E-.07832
+G1 X147.539 Y134.162 E-.25641
+G1 X147.896 Y134.097 E-.1379
+G1 X148.556 Y134.025 E-.25248
+G1 X148.648 Y134.03 E-.0349
+; WIPE_END
+G1 E-.04 F1800
+G1 X141.087 Y135.077 Z1.2 F30000
+G1 X127.579 Y136.948 Z1.2
 G1 Z.8
 G1 E.8 F1800
 ; FEATURE: Sparse infill
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X139.881 Y141.921 E.01771
-G1 X140.908 Y142.3 E.0363
-G1 X142.551 Y140.657 E.07708
-G2 X142.552 Y142.343 I8.666 J.84 E.05602
-G1 X140.908 Y140.699 E.07711
-G1 X139.881 Y141.078 E.03631
-G1 X137.524 Y141.078 E.07818
-G1 X136.681 Y141.921 E.03954
-G1 X137.524 Y141.921 E.02796
-G1 X136.681 Y141.078 E.03954
-G1 X132.918 Y141.078 E.12482
-G1 X132.076 Y141.921 E.03954
-G1 X132.918 Y141.921 E.02796
-G1 X132.076 Y141.078 E.03954
-G1 X128.313 Y141.078 E.12482
-G1 X127.47 Y141.921 E.03954
-G1 X128.313 Y141.921 E.02796
-G1 X127.47 Y141.078 E.03954
-G1 X125.842 Y141.078 E.05401
-G1 X116.436 Y141.078 F30000
-G1 F15476.087
-G1 X115.902 Y141.078 E.01771
-G1 X114.875 Y140.699 E.0363
-G1 X113.232 Y142.342 E.07708
-G2 X113.232 Y140.657 I-8.729 J-.843 E.056
-G1 X114.875 Y142.3 E.07709
-G1 X115.902 Y141.921 E.0363
-G1 X118.259 Y141.921 E.07819
-G1 X119.102 Y141.078 E.03954
-G1 X118.259 Y141.078 E.02796
-G1 X119.102 Y141.921 E.03954
-G1 X122.865 Y141.921 E.12482
-G1 X123.707 Y141.078 E.03954
-G1 X122.865 Y141.078 E.02796
-G1 X123.707 Y141.921 E.03954
-G1 X125.336 Y141.921 E.05401
-G1 X111.459 Y144.424 F30000
-; FEATURE: Gap infill
-; LINE_WIDTH: 0.109687
-G1 F15000
-G1 X111.369 Y144.574 E.00095
-G1 X111.315 Y144.616 E.00037
-G1 X110.736 Y145.019 F30000
-; LINE_WIDTH: 0.446432
-G1 F15000
-G1 X110.513 Y145.158 E.00861
-; LINE_WIDTH: 0.414718
-G1 X110.422 Y145.212 E.00321
-; LINE_WIDTH: 0.374856
-G1 X110.325 Y145.27 E.00305
-; LINE_WIDTH: 0.337559
-G1 X110.234 Y145.322 E.00252
-; LINE_WIDTH: 0.302967
-G1 X110.138 Y145.376 E.00234
-; LINE_WIDTH: 0.270719
-G1 X110.045 Y145.426 E.00195
-; LINE_WIDTH: 0.240911
-G1 X109.949 Y145.477 E.00176
-; LINE_WIDTH: 0.200926
-G1 X109.76 Y145.573 E.00273
-; LINE_WIDTH: 0.155956
-G1 X109.571 Y145.665 E.00194
-; LINE_WIDTH: 0.11393
-G1 X109.285 Y145.793 E.00181
+G1 X125.95 Y136.948 E.05401
+G1 X130.05 Y141.047 E.19231
+G1 X133.626 Y141.047 E.11864
+G1 X137.726 Y136.948 E.19231
+G1 X139.699 Y136.948 E.06545
+G1 X140.87 Y136.516 E.04142
+G1 X144.332 Y139.978 E.16242
+G3 X144.342 Y138.007 I5.092 J-.959 E.06578
+G1 X140.87 Y141.48 E.1629
+G1 X139.699 Y141.047 E.04141
+G1 X137.726 Y141.047 E.06545
+G1 X133.626 Y136.948 E.19231
+G1 X130.05 Y136.948 E.11864
+G1 X125.95 Y141.047 E.19231
+G1 X122.374 Y141.047 E.11864
+G1 X118.274 Y136.948 E.19231
+G1 X116.301 Y136.948 E.06545
+G1 X115.13 Y136.516 E.04141
+G1 X111.662 Y139.984 E.16269
+G2 X111.667 Y138.017 I-4.683 J-.995 E.06572
+G1 X115.13 Y141.48 E.16247
+G1 X116.301 Y141.047 E.04141
+G1 X118.274 Y141.047 E.06545
+G1 X122.374 Y136.948 E.19231
+G1 X120.745 Y136.948 E.05401
 ; WIPE_START
-G1 X109.571 Y145.665 E-.76
+G1 X122.374 Y136.948 E-.61876
+G1 X122.111 Y137.211 E-.14124
 ; WIPE_END
 G1 E-.04 F1800
-G1 X111.459 Y138.575 Z1.2 F30000
+G1 X114.656 Y135.573 Z1.2 F30000
+G1 X109.031 Y134.337 Z1.2
 G1 Z.8
 G1 E.8 F1800
-; LINE_WIDTH: 0.109681
+; FEATURE: Internal solid infill
+; LINE_WIDTH: 0.462197
 G1 F15000
-G1 X111.369 Y138.425 E.00095
-G1 X111.315 Y138.383 E.00037
-G1 X110.736 Y137.98 F30000
-; LINE_WIDTH: 0.446337
-G1 F15000
-G1 X110.513 Y137.841 E.00863
-; LINE_WIDTH: 0.414599
-G1 X110.422 Y137.787 E.0032
-; LINE_WIDTH: 0.374888
-G1 X110.326 Y137.729 E.00304
-; LINE_WIDTH: 0.33764
-G1 X110.234 Y137.678 E.00253
-; LINE_WIDTH: 0.303
-G1 X110.138 Y137.623 E.00234
-; LINE_WIDTH: 0.270744
-G1 X110.045 Y137.573 E.00195
-; LINE_WIDTH: 0.240973
-G1 X109.949 Y137.522 E.00176
-; LINE_WIDTH: 0.200959
-G1 X109.76 Y137.425 E.00273
-; LINE_WIDTH: 0.155924
-G1 X109.57 Y137.334 E.00194
-; LINE_WIDTH: 0.113905
-G1 X109.285 Y137.206 E.00181
-; WIPE_START
-G1 X109.57 Y137.334 E-.76
-; WIPE_END
-G1 E-.04 F1800
-G1 X117.198 Y137.606 Z1.2 F30000
-G1 X144.323 Y138.575 Z1.2
-G1 Z.8
-G1 E.8 F1800
-; LINE_WIDTH: 0.109564
-G1 F15000
-G3 X144.467 Y138.385 I.311 J.085 E.00133
-G1 X145.045 Y137.982 F30000
-; LINE_WIDTH: 0.445769
-G1 F15000
-G1 X145.263 Y137.846 E.00842
-; LINE_WIDTH: 0.414611
-G1 X145.361 Y137.787 E.00346
-; LINE_WIDTH: 0.374489
-G1 X145.452 Y137.733 E.00286
-; LINE_WIDTH: 0.337082
-G1 X145.549 Y137.678 E.00269
-; LINE_WIDTH: 0.302152
-G1 X145.641 Y137.626 E.00222
-; LINE_WIDTH: 0.270789
-G1 X145.732 Y137.578 E.00191
-; LINE_WIDTH: 0.242846
-G1 X145.818 Y137.531 E.00159
-; LINE_WIDTH: 0.215511
-G1 X145.92 Y137.479 E.00161
-; LINE_WIDTH: 0.188632
-G1 X146.019 Y137.429 E.00132
-; LINE_WIDTH: 0.154846
-G1 X146.211 Y137.336 E.00195
-; LINE_WIDTH: 0.113283
-G1 X146.481 Y137.215 E.0017
-; WIPE_START
-G1 X146.211 Y137.336 E-.76
-; WIPE_END
-G1 E-.04 F1800
-G1 X144.322 Y144.421 Z1.2 F30000
-G1 Z.8
-G1 E.8 F1800
-; LINE_WIDTH: 0.107629
-G1 F15000
-G2 X144.468 Y144.616 I.473 J-.202 E.0013
-G1 X145.047 Y145.019 F30000
-; LINE_WIDTH: 0.446647
-G1 F15000
-G1 X145.263 Y145.154 E.00835
-; LINE_WIDTH: 0.416136
-G1 X145.361 Y145.212 E.00347
-; LINE_WIDTH: 0.376173
-G1 X145.451 Y145.266 E.00286
-; LINE_WIDTH: 0.338793
-G1 X145.549 Y145.321 E.00271
-; LINE_WIDTH: 0.303809
-G1 X145.641 Y145.373 E.00224
-; LINE_WIDTH: 0.271441
-G1 X145.738 Y145.426 E.00205
-; LINE_WIDTH: 0.241524
-G1 X145.83 Y145.475 E.0017
-; LINE_WIDTH: 0.226423
-G1 X145.834 Y145.477 E.00006
-; LINE_WIDTH: 0.201308
-G1 X146.02 Y145.572 E.0027
-; LINE_WIDTH: 0.156389
-G1 X146.211 Y145.664 E.00196
-; LINE_WIDTH: 0.114043
-G1 X146.498 Y145.793 E.00182
+G1 X108.531 Y134.189 E.01782
+G1 X107.751 Y134.043 E.02709
+G2 X105.201 Y134.472 I-.425 J5.271 E.08924
+G1 X104.516 Y134.851 E.02676
+G1 X103.999 Y135.248 E.02228
+G2 X103.055 Y136.353 I4.037 J4.403 E.04975
+G2 X102.455 Y140.226 I4.263 J2.645 E.13759
+G1 X102.745 Y141.055 E.03002
+M73 P73 R3
+G1 X103.173 Y141.813 E.02973
+G2 X105.545 Y143.663 I4.21 J-2.952 E.10432
+G1 X106.372 Y143.885 E.02923
+G1 X106.739 Y143.946 E.01272
+G2 X109.029 Y143.659 I.524 J-5.092 E.07953
+G1 X108.911 Y143.257 E.0143
+G1 X108.292 Y143.446 E.02211
+G1 X107.552 Y143.551 E.02551
+G3 X106.465 Y143.486 I-.078 J-7.835 E.03724
+G1 X105.729 Y143.29 E.02601
+G3 X104.734 Y142.777 I1.398 J-3.929 E.03838
+G1 X104.118 Y142.279 E.02706
+G1 X103.587 Y141.684 E.02725
+G1 X103.177 Y140.999 E.02727
+G1 X102.892 Y140.258 E.02711
+G3 X102.718 Y139.179 I7.611 J-1.777 E.03739
+G1 X102.748 Y138.418 E.02601
+G3 X102.998 Y137.415 I8.689 J1.637 E.03534
+G1 X103.381 Y136.626 E.02995
+G1 X103.722 Y136.151 E.02
+G1 X104.273 Y135.574 E.02724
+G1 X104.736 Y135.212 E.02011
+G1 X105.395 Y134.851 E.02566
+G1 X105.788 Y134.685 E.01457
+G1 X106.467 Y134.508 E.02399
+G3 X108.907 Y134.749 I.781 J4.556 E.08476
+G1 X109.014 Y134.394 E.01265
 ; CHANGE_LAYER
 ; Z_HEIGHT: 1
 ; LAYER_HEIGHT: 0.2
 ; WIPE_START
 G1 F15000
-G1 X146.211 Y145.664 E-.76
+G1 X108.907 Y134.749 E-.14074
+G1 X108.7 Y134.675 E-.08337
+G1 X108.151 Y134.53 E-.21585
+G1 X107.572 Y134.446 E-.22234
+G1 X107.315 Y134.444 E-.0977
 ; WIPE_END
 G1 E-.04 F1800
-; stop printing object, unique label id: 104
+; stop printing object, unique label id: 194
 M625
 ; layer num/total_layer_count: 5/15
 ; update layer progress
@@ -4191,7 +4097,7 @@ M73 L5
 M991 S0 P4 ;notify layer change
 G17
 G3 Z1.2 I1.217 J0 P1  F30000
-; object ids of layer 5 start: 72,104
+; object ids of layer 5 start: 123,194
 M624 AwAAAAAAAAA=
 ;========Date 20250206========
 ; SKIPPABLE_START
@@ -4206,123 +4112,16 @@ M1004 S5 P1  ; external shutter
 M623
 ; SKIPPABLE_END
 
-; object ids of this layer5 end: 72,104
+; object ids of this layer5 end: 123,194
 M625
-; OBJECT_ID: 72
-; start printing object, unique label id: 72
+; OBJECT_ID: 123
+; start printing object, unique label id: 123
 M624 AQAAAAAAAAA=
-G1 X139.655 Y125.23
+G1 X148.028 Y121.908
 G1 Z1
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
-G1 F15476.087
-G1 X139.927 Y125.23 E.00903
-G1 X143.306 Y123.984 E.11946
-G2 X143.306 Y128.017 I5.526 J2.016 E.13656
-G1 X139.927 Y126.77 E.11948
-G1 X116.072 Y126.77 E.79131
-G1 X112.694 Y128.017 E.11948
-G2 X112.694 Y123.983 I-5.526 J-2.017 E.1366
-G1 X116.072 Y125.23 E.11947
-G1 X139.595 Y125.23 E.78028
-; WIPE_START
-G1 X139.927 Y125.23 E-.12629
-G1 X141.492 Y124.653 E-.63371
-; WIPE_END
-G1 E-.04 F1800
-G1 X144.102 Y123.256 Z1.4 F30000
-G1 Z1
-G1 E.8 F1800
-G1 F15476.087
-G1 X143.945 Y123.546 E.01091
-G2 X144.085 Y128.739 I4.873 J2.467 E.17958
-G1 X139.855 Y127.177 E.1496
-G1 X116.145 Y127.177 E.78649
-G1 X111.915 Y128.739 E.1496
-G2 X111.915 Y123.261 I-4.78 J-2.739 E.19016
-G1 X116.145 Y124.823 E.1496
-G1 X139.855 Y124.823 E.78648
-G1 X144.045 Y123.277 E.14817
-; WIPE_START
-G1 X143.945 Y123.546 E-.10892
-G1 X143.675 Y124.162 E-.25568
-G1 X143.473 Y124.866 E-.27844
-G1 X143.427 Y125.171 E-.11696
-; WIPE_END
-G1 E-.04 F1800
-G1 X139.619 Y124.416 Z1.4 F30000
-G1 Z1
-G1 E.8 F1800
-G1 F15476.087
-G1 X139.782 Y124.416 E.00541
-G1 X144.931 Y122.517 E.18204
-G1 X145.038 Y122.673 E.0063
-G2 X145.04 Y129.329 I3.703 J3.327 E.24181
-G1 X144.932 Y129.485 E.0063
-G1 X139.782 Y127.584 E.18212
-G1 X116.218 Y127.584 E.78166
-G1 X111.068 Y129.485 E.18212
-G1 X110.96 Y129.329 E.0063
-G2 X110.96 Y122.671 I-3.701 J-3.329 E.24191
-G1 X111.068 Y122.515 E.0063
-G1 X116.218 Y124.416 E.18212
-G1 X139.559 Y124.416 E.77425
-; WIPE_START
-G1 X139.782 Y124.416 E-.08476
-G1 X141.449 Y123.801 E-.67524
-; WIPE_END
-G1 E-.04 F1800
-G1 X133.962 Y125.283 Z1.4 F30000
-G1 X107.308 Y130.558 Z1.4
-G1 Z1
-G1 E.8 F1800
-G1 F15476.087
-G1 X107.275 Y130.555 E.0011
-G3 X107.076 Y121.445 I.001 J-4.557 E.46827
-G3 X107.471 Y121.445 I.2 J5.23 E.01308
-G3 X107.672 Y130.538 I-.195 J4.553 E.45529
-G1 X107.368 Y130.555 E.01012
-G1 X107.259 Y130.151 F30000
-G1 F15476.087
-G1 X106.913 Y130.132 E.01148
-G3 X107.094 Y121.852 I.362 J-4.134 E.41445
-G3 X107.454 Y121.852 I.182 J4.771 E.01195
-G3 X107.318 Y130.148 I-.179 J4.146 E.42515
-G1 X107.486 Y129.751 F30000
-; FEATURE: Outer wall
-; LINE_WIDTH: 0.42
-G1 F3600
-M204 S5000
-G1 X107.275 Y129.756 E.00649
-G3 X107.111 Y122.244 I0 J-3.758 E.35775
-G3 X107.438 Y122.243 I.164 J4.337 E.01006
-G3 X107.603 Y129.742 I-.163 J3.755 E.34771
-M73 P71 R4
-G1 X107.546 Y129.746 E.00175
-; WIPE_START
-M204 S10000
-G1 X107.275 Y129.756 E-.10299
-G1 X106.947 Y129.746 E-.12464
-G1 X106.486 Y129.676 E-.17721
-G1 X106.144 Y129.586 E-.13426
-G1 X105.836 Y129.474 E-.12471
-G1 X105.607 Y129.367 E-.09619
-; WIPE_END
-G1 E-.04 F1800
-G1 X113.111 Y127.975 Z1.4 F30000
-G1 X147.935 Y121.514 Z1.4
-G1 Z1
-G1 E.8 F1800
-; FEATURE: Inner wall
-; LINE_WIDTH: 0.45
-G1 F15476.087
-G1 X148.13 Y121.48 E.00658
-G3 X148.526 Y121.445 I.596 J4.518 E.0132
-G3 X148.921 Y121.445 I.2 J5.245 E.01308
-G3 X147.738 Y121.549 I-.195 J4.553 E.91036
-G1 X147.876 Y121.525 E.00463
-G1 X148.028 Y121.908 F30000
 G1 F15476.087
 G1 X148.544 Y121.852 E.01721
 G3 X148.904 Y121.852 I.181 J4.786 E.01195
@@ -4330,7 +4129,7 @@ G3 X147.969 Y121.917 I-.179 J4.146 E.83385
 G1 X148.107 Y122.293 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
 G1 X148.561 Y122.244 E.01405
 G3 X148.888 Y122.243 I.164 J4.354 E.01006
@@ -4345,24 +4144,43 @@ G1 X150.01 Y122.466 E-.18661
 G1 X150.017 Y122.469 E-.00295
 ; WIPE_END
 G1 E-.04 F1800
-G1 X142.467 Y123.585 Z1.4 F30000
-G1 X139.601 Y124.009 Z1.4
+G1 X142.505 Y123.819 Z1.4 F30000
+G1 X107.259 Y130.151 Z1.4
 G1 Z1
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X139.709 Y124.009 E.0036
-G1 X147.14 Y121.268 E.26273
-G3 X148.791 Y121.011 I1.632 J5.048 E.05566
-G3 X146.915 Y130.651 I-.067 J4.99 E.57924
-G1 X139.709 Y127.991 E.25479
-G1 X116.291 Y127.991 E.77683
-G1 X109.085 Y130.651 E.25481
-G3 X109.085 Y121.349 I-1.808 J-4.651 E.64286
-G1 X116.291 Y124.009 E.25481
-G1 X139.541 Y124.009 E.77124
-G1 X139.583 Y123.602 F30000
+G1 X106.913 Y130.132 E.01148
+G3 X107.094 Y121.852 I.362 J-4.134 E.41445
+G3 X107.454 Y121.852 I.182 J4.771 E.01195
+G3 X107.318 Y130.148 I-.179 J4.146 E.42515
+G1 X107.486 Y129.751 F30000
+; FEATURE: Outer wall
+; LINE_WIDTH: 0.42
+G1 F12000
+M204 S5000
+G1 X107.275 Y129.756 E.00649
+G3 X107.111 Y122.244 I0 J-3.758 E.35775
+G3 X107.438 Y122.243 I.164 J4.337 E.01006
+G3 X107.602 Y129.742 I-.163 J3.755 E.34771
+G1 X107.546 Y129.746 E.00175
+; WIPE_START
+M204 S10000
+G1 X107.275 Y129.756 E-.10299
+G1 X106.947 Y129.746 E-.12464
+G1 X106.486 Y129.676 E-.17721
+G1 X106.144 Y129.586 E-.13426
+G1 X105.836 Y129.474 E-.12471
+G1 X105.607 Y129.367 E-.09619
+; WIPE_END
+G1 E-.04 F1800
+G1 X113.131 Y128.09 Z1.4 F30000
+G1 X139.583 Y123.602 Z1.4
+G1 Z1
+G1 E.8 F1800
+; FEATURE: Inner wall
+; LINE_WIDTH: 0.45
 G1 F15476.087
 G1 X139.636 Y123.602 E.00178
 G1 X147.009 Y120.882 E.26067
@@ -4377,7 +4195,7 @@ G1 X139.523 Y123.602 E.76823
 G1 X139.566 Y123.21 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
 G1 X146.883 Y120.511 E.23962
 G3 X148.793 Y120.212 I1.896 J5.856 E.05966
@@ -4393,530 +4211,275 @@ M204 S10000
 G1 X141.385 Y122.523 E-.76
 ; WIPE_END
 G1 E-.04 F1800
-G1 X145.154 Y122.482 Z1.4 F30000
+G1 X135.255 Y123.95 Z1.4 F30000
 G1 Z1
 G1 E.8 F1800
-; FEATURE: Gap infill
-; LINE_WIDTH: 0.445789
-G1 F15000
-G1 X145.371 Y122.347 E.00842
-; LINE_WIDTH: 0.414632
-G1 X145.47 Y122.288 E.00347
-; LINE_WIDTH: 0.374498
-G1 X145.561 Y122.234 E.00286
-; LINE_WIDTH: 0.337074
-G1 X145.658 Y122.179 E.00269
-; LINE_WIDTH: 0.302142
-G1 X145.75 Y122.127 E.00222
-; LINE_WIDTH: 0.269787
-G1 X145.847 Y122.075 E.00204
-; LINE_WIDTH: 0.239842
-G1 X145.939 Y122.025 E.00168
-; LINE_WIDTH: 0.224722
-G1 X145.943 Y122.023 E.00006
-; LINE_WIDTH: 0.199591
-G1 X146.129 Y121.928 E.00267
-; LINE_WIDTH: 0.15466
-G1 X146.32 Y121.836 E.00193
-; LINE_WIDTH: 0.113296
-G1 X146.59 Y121.715 E.0017
-; WIPE_START
-G1 X146.32 Y121.836 E-.76
-; WIPE_END
-G1 E-.04 F1800
-G1 X144.432 Y128.925 Z1.4 F30000
-G1 Z1
-G1 E.8 F1800
-; LINE_WIDTH: 0.10753
-G1 F15000
-G2 X144.577 Y129.117 I.494 J-.222 E.00127
-G1 X145.156 Y129.52 F30000
-; LINE_WIDTH: 0.44596
-G1 F15000
-G1 X145.374 Y129.656 E.00845
-; LINE_WIDTH: 0.412523
-G1 X145.484 Y129.721 E.00385
-; LINE_WIDTH: 0.368417
-G1 X145.586 Y129.781 E.00313
-; LINE_WIDTH: 0.331608
-G1 X145.67 Y129.829 E.00227
-; LINE_WIDTH: 0.301464
-G1 X145.749 Y129.874 E.00192
-; LINE_WIDTH: 0.271426
-G1 X145.846 Y129.926 E.00205
-; LINE_WIDTH: 0.24153
-G1 X145.939 Y129.976 E.0017
-; LINE_WIDTH: 0.226432
-G1 X145.942 Y129.978 E.00006
-; LINE_WIDTH: 0.201324
-G1 X146.129 Y130.073 E.0027
-; LINE_WIDTH: 0.156422
-G1 X146.319 Y130.165 E.00196
-; LINE_WIDTH: 0.114057
-G1 X146.606 Y130.293 E.00182
-G1 X121.345 Y125.579 F30000
 ; FEATURE: Sparse infill
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X122.973 Y125.579 E.05401
-G1 X123.816 Y126.421 E.03954
-G1 X122.973 Y126.421 E.02796
-G1 X123.816 Y125.579 E.03954
-G1 X127.579 Y125.579 E.12482
-G1 X128.421 Y126.421 E.03954
-G1 X127.579 Y126.421 E.02796
-G1 X128.421 Y125.579 E.03954
-G1 X132.184 Y125.579 E.12482
-G1 X133.027 Y126.421 E.03954
-G1 X132.184 Y126.421 E.02796
-G1 X133.027 Y125.579 E.03954
-G1 X136.79 Y125.579 E.12482
-G1 X137.633 Y126.421 E.03954
-G1 X136.79 Y126.421 E.02796
-G1 X137.633 Y125.579 E.03954
-G1 X139.989 Y125.579 E.07818
-M73 P71 R3
-G1 X141.016 Y125.2 E.03631
-G1 X142.66 Y126.843 E.07708
-G3 X142.659 Y125.157 I8.719 J-.843 E.056
-G1 X141.016 Y126.8 E.07709
-G1 X139.99 Y126.421 E.0363
-G1 X139.456 Y126.421 E.01771
-G1 X120.839 Y126.421 F30000
-G1 F15476.087
-G1 X119.21 Y126.421 E.05401
-G1 X118.367 Y125.579 E.03954
-G1 X119.21 Y125.579 E.02796
-G1 X118.367 Y126.421 E.03954
-G1 X116.01 Y126.421 E.07819
-G1 X114.984 Y126.8 E.0363
-G1 X113.34 Y125.157 E.07709
-G3 X113.341 Y126.843 I-8.739 J.843 E.056
-G1 X114.984 Y125.2 E.07708
-G1 X116.01 Y125.579 E.0363
-G1 X116.544 Y125.579 E.01771
-G1 X111.567 Y123.075 F30000
-; FEATURE: Gap infill
-; LINE_WIDTH: 0.109664
-G1 F15000
-G1 X111.478 Y122.925 E.00095
-G1 X111.423 Y122.883 E.00037
-G1 X110.844 Y122.48 F30000
-; LINE_WIDTH: 0.446332
-G1 F15000
-G1 X110.622 Y122.341 E.00863
-; LINE_WIDTH: 0.414599
-G1 X110.531 Y122.287 E.0032
-; LINE_WIDTH: 0.374887
-G1 X110.434 Y122.23 E.00304
-; LINE_WIDTH: 0.337629
-G1 X110.343 Y122.178 E.00253
-; LINE_WIDTH: 0.302964
-G1 X110.246 Y122.124 E.00234
-; LINE_WIDTH: 0.270701
-G1 X110.154 Y122.074 E.00195
-; LINE_WIDTH: 0.240928
-G1 X110.058 Y122.022 E.00176
-; LINE_WIDTH: 0.200959
-G1 X109.869 Y121.926 E.00273
-; LINE_WIDTH: 0.155936
-G1 X109.679 Y121.834 E.00194
-; LINE_WIDTH: 0.113913
-G1 X109.394 Y121.707 E.00181
+G1 X133.626 Y123.95 E.05401
+G1 X137.726 Y128.05 E.19231
+G1 X139.699 Y128.05 E.06545
+G1 X140.87 Y128.482 E.04141
+G1 X144.342 Y125.01 E.1629
+G2 X144.338 Y126.986 I4.316 J.998 E.06612
+G1 X140.87 Y123.518 E.16268
+G1 X139.699 Y123.95 E.04142
+G1 X137.726 Y123.95 E.06545
+G1 X133.626 Y128.05 E.19231
+G1 X130.05 Y128.05 E.11864
+G1 X125.95 Y123.95 E.19231
+G1 X122.374 Y123.95 E.11864
+G1 X118.274 Y128.05 E.19231
+G1 X116.301 Y128.05 E.06545
+G1 X115.13 Y128.482 E.04141
+G1 X111.666 Y125.018 E.16251
+G3 X111.668 Y126.98 I-5.242 J.986 E.06547
+G1 X115.13 Y123.518 E.16243
+G1 X116.301 Y123.95 E.04141
+G1 X118.274 Y123.95 E.06545
+G1 X122.374 Y128.05 E.19231
+G1 X125.95 Y128.05 E.11864
+G1 X130.05 Y123.95 E.19231
+G1 X128.421 Y123.95 E.05401
 ; WIPE_START
-G1 X109.679 Y121.834 E-.76
+G1 X130.05 Y123.95 E-.61876
+G1 X129.787 Y124.213 E-.14124
 ; WIPE_END
 G1 E-.04 F1800
-G1 X111.567 Y128.925 Z1.4 F30000
+G1 X137.34 Y123.117 Z1.4 F30000
+G1 X144.95 Y122.013 Z1.4
 G1 Z1
 G1 E.8 F1800
-; LINE_WIDTH: 0.109735
-G1 F15000
-G3 X111.423 Y129.117 I-.312 J-.085 E.00134
-G1 X110.844 Y129.52 F30000
-; LINE_WIDTH: 0.446384
-G1 F15000
-G1 X110.622 Y129.658 E.00861
-; LINE_WIDTH: 0.414684
-G1 X110.531 Y129.713 E.0032
-; LINE_WIDTH: 0.374911
-G1 X110.434 Y129.77 E.00305
-; LINE_WIDTH: 0.337614
-G1 X110.342 Y129.822 E.00253
-; LINE_WIDTH: 0.302939
-G1 X110.246 Y129.876 E.00235
-; LINE_WIDTH: 0.270675
-G1 X110.154 Y129.926 E.00195
-; LINE_WIDTH: 0.24092
-G1 X110.058 Y129.978 E.00176
-; LINE_WIDTH: 0.200936
-G1 X109.869 Y130.074 E.00273
-; LINE_WIDTH: 0.155904
-G1 X109.679 Y130.166 E.00194
-; LINE_WIDTH: 0.113892
-G1 X109.394 Y130.293 E.0018
-; OBJECT_ID: 104
+G1 F15476.087
+G1 X146.477 Y121.45 E.05401
+G1 X146.912 Y121.884 E.02038
+G3 X147.739 Y121.613 I1.841 J4.22 E.02892
+G1 X148.389 Y120.963 E.0305
+G3 X153.249 Y123.779 I.252 J5.166 E.19695
+G1 X152.841 Y124.187 E.01912
+G3 X152.841 Y127.813 I-4.129 J1.813 E.12379
+G1 X153.256 Y128.228 E.01945
+G3 X148.388 Y131.036 I-4.541 J-2.247 E.1976
+G1 X147.739 Y130.387 E.03045
+G3 X146.912 Y130.116 I1.018 J-4.502 E.02892
+G1 X146.476 Y130.552 E.02045
+G1 X144.948 Y129.988 E.05401
 ; WIPE_START
-G1 X109.679 Y130.166 E-.76
+G1 X146.476 Y130.552 E-.61876
+G1 X146.739 Y130.289 E-.14124
 ; WIPE_END
 G1 E-.04 F1800
-; stop printing object, unique label id: 72
+G1 X139.107 Y130.225 Z1.4 F30000
+G1 X111.052 Y129.988 Z1.4
+G1 Z1
+G1 E.8 F1800
+G1 F15476.087
+G1 X109.524 Y130.552 E.05401
+G1 X109.087 Y130.115 E.02049
+G3 X108.261 Y130.387 I-1.811 J-4.108 E.0289
+G1 X107.611 Y131.037 E.03049
+G3 X102.744 Y128.228 I-.324 J-5.06 E.19757
+G1 X103.16 Y127.812 E.01951
+G3 X103.159 Y124.187 I4.12 J-1.814 E.12377
+G1 X102.748 Y123.775 E.0193
+G3 X107.612 Y120.964 I4.577 J2.306 E.19725
+G1 X108.266 Y121.617 E.03066
+G3 X109.088 Y121.884 I-.873 J4.095 E.02873
+G1 X109.524 Y121.448 E.02045
+G1 X111.052 Y122.012 E.05401
+; OBJECT_ID: 194
+; WIPE_START
+G1 X109.524 Y121.448 E-.61876
+G1 X109.261 Y121.711 E-.14124
+; WIPE_END
+G1 E-.04 F1800
+; stop printing object, unique label id: 123
 M625
-; start printing object, unique label id: 104
+; start printing object, unique label id: 194
 M624 AgAAAAAAAAA=
-G1 X116.874 Y132.711 Z1.4 F30000
-G1 X139.546 Y140.73 Z1.4
+G1 X116.487 Y124.17 Z1.4 F30000
+G1 X148.028 Y134.906 Z1.4
+G1 Z1
+G1 E.8 F1800
+; FEATURE: Inner wall
+G1 F15476.087
+G1 X148.544 Y134.85 E.01721
+G3 X148.904 Y134.849 I.181 J4.786 E.01195
+G3 X147.969 Y134.915 I-.179 J4.146 E.83385
+G1 X148.107 Y135.291 F30000
+; FEATURE: Outer wall
+; LINE_WIDTH: 0.42
+G1 F12000
+M204 S5000
+G1 X148.561 Y135.241 E.01405
+G3 X148.888 Y135.241 I.164 J4.354 E.01006
+G3 X148.047 Y135.299 I-.163 J3.755 E.69963
+; WIPE_START
+M204 S10000
+G1 X148.561 Y135.241 E-.19651
+G1 X148.888 Y135.241 E-.12436
+G1 X149.216 Y135.27 E-.12492
+G1 X149.539 Y135.327 E-.12465
+G1 X150.01 Y135.464 E-.18661
+G1 X150.017 Y135.467 E-.00295
+; WIPE_END
+G1 E-.04 F1800
+G1 X142.505 Y136.817 Z1.4 F30000
+G1 X107.259 Y143.149 Z1.4
 G1 Z1
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X139.819 Y140.73 E.00903
-G1 X143.197 Y139.483 E.11946
-G2 X143.198 Y143.517 I5.526 J2.016 E.13656
-G1 X139.819 Y142.269 E.11948
-G1 X115.964 Y142.269 E.79131
-G1 X112.585 Y143.517 E.11948
-G2 X112.585 Y139.482 I-5.526 J-2.017 E.1366
-G1 X115.964 Y140.73 E.11947
-G1 X139.486 Y140.73 E.78028
-; WIPE_START
-G1 X139.819 Y140.73 E-.12629
-G1 X141.383 Y140.153 E-.63371
-; WIPE_END
-G1 E-.04 F1800
-G1 X143.993 Y138.756 Z1.4 F30000
-G1 Z1
-G1 E.8 F1800
-G1 F15476.087
-G1 X143.837 Y139.045 E.01091
-G2 X143.977 Y144.238 I4.873 J2.467 E.17958
-G1 X139.746 Y142.676 E.1496
-G1 X116.037 Y142.676 E.78649
-G1 X111.806 Y144.238 E.1496
-G2 X111.806 Y138.761 I-4.78 J-2.739 E.19016
-G1 X116.037 Y140.323 E.1496
-G1 X139.746 Y140.323 E.78648
-G1 X143.937 Y138.777 E.14817
-; WIPE_START
-G1 X143.837 Y139.045 E-.10892
-G1 X143.567 Y139.662 E-.25568
-G1 X143.364 Y140.366 E-.27844
-G1 X143.318 Y140.67 E-.11696
-; WIPE_END
-G1 E-.04 F1800
-G1 X139.51 Y139.916 Z1.4 F30000
-G1 Z1
-G1 E.8 F1800
-G1 F15476.087
-G1 X139.673 Y139.916 E.00541
-G1 X144.822 Y138.016 E.18204
-G1 X144.93 Y138.173 E.0063
-G2 X144.931 Y144.828 I3.703 J3.327 E.24181
-G1 X144.824 Y144.985 E.0063
-M73 P72 R3
-G1 X139.673 Y143.083 E.18212
-G1 X116.109 Y143.083 E.78166
-G1 X110.959 Y144.985 E.18212
-G1 X110.851 Y144.828 E.0063
-G2 X110.851 Y138.171 I-3.701 J-3.329 E.24191
-G1 X110.959 Y138.014 E.0063
-G1 X116.109 Y139.916 E.18212
-G1 X139.45 Y139.916 E.77425
-; WIPE_START
-G1 X139.673 Y139.916 E-.08476
-G1 X141.34 Y139.301 E-.67524
-; WIPE_END
-G1 E-.04 F1800
-G1 X133.853 Y140.782 Z1.4 F30000
-G1 X107.199 Y146.057 Z1.4
-G1 Z1
-G1 E.8 F1800
-G1 F15476.087
-G1 X107.166 Y146.055 E.0011
-G3 X106.968 Y136.944 I.001 J-4.557 E.46827
-G3 X107.362 Y136.944 I.2 J5.23 E.01308
-G3 X107.564 Y146.037 I-.195 J4.553 E.45529
-G1 X107.259 Y146.054 E.01012
-G1 X107.15 Y145.651 F30000
-G1 F15476.087
-G1 X106.805 Y145.632 E.01148
-G3 X106.985 Y137.351 I.362 J-4.134 E.41445
-G3 X107.346 Y137.351 I.182 J4.771 E.01195
-G3 X107.21 Y145.648 I-.179 J4.146 E.42515
-G1 X107.377 Y145.25 F30000
+G1 X106.913 Y143.13 E.01148
+G3 X107.094 Y134.85 I.362 J-4.134 E.41445
+G3 X107.454 Y134.849 I.182 J4.771 E.01195
+G3 X107.318 Y143.146 I-.179 J4.146 E.42515
+G1 X107.486 Y142.749 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
-G1 X107.166 Y145.256 E.00649
-G3 X107.003 Y137.743 I0 J-3.758 E.35775
-G3 X107.33 Y137.743 I.164 J4.337 E.01006
-G3 X107.494 Y145.242 I-.163 J3.755 E.34771
-G1 X107.437 Y145.246 E.00175
+G1 X107.275 Y142.754 E.00649
+G3 X107.111 Y135.241 I0 J-3.758 E.35775
+G3 X107.438 Y135.241 I.164 J4.337 E.01006
+G3 X107.603 Y142.74 I-.163 J3.755 E.34771
+G1 X107.546 Y142.744 E.00175
 ; WIPE_START
 M204 S10000
-G1 X107.166 Y145.256 E-.10299
-G1 X106.839 Y145.245 E-.12464
-G1 X106.378 Y145.175 E-.17721
-G1 X106.036 Y145.086 E-.13426
-G1 X105.727 Y144.973 E-.12471
-G1 X105.498 Y144.866 E-.09619
+G1 X107.275 Y142.754 E-.10299
+G1 X106.947 Y142.744 E-.12464
+G1 X106.486 Y142.674 E-.17721
+G1 X106.144 Y142.584 E-.13426
+G1 X105.836 Y142.472 E-.12471
+G1 X105.607 Y142.365 E-.09619
 ; WIPE_END
 G1 E-.04 F1800
-G1 X113.002 Y143.474 Z1.4 F30000
-G1 X147.826 Y137.014 Z1.4
+G1 X113.131 Y141.088 Z1.4 F30000
+G1 X139.583 Y136.6 Z1.4
 G1 Z1
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X148.022 Y136.979 E.00658
-G3 X148.418 Y136.944 I.596 J4.518 E.0132
-G3 X148.812 Y136.944 I.2 J5.245 E.01308
-G3 X147.63 Y137.048 I-.195 J4.553 E.91036
-G1 X147.767 Y137.024 E.00463
-G1 X147.92 Y137.408 F30000
-G1 F15476.087
-G1 X148.436 Y137.351 E.01721
-G3 X148.796 Y137.351 I.181 J4.786 E.01195
-G3 X147.861 Y137.417 I-.179 J4.146 E.83385
-G1 X147.998 Y137.793 F30000
+G1 X139.636 Y136.6 E.00178
+G1 X147.009 Y133.88 E.26067
+G3 X148.792 Y133.601 I1.767 J5.46 E.06012
+G3 X146.776 Y144.032 I-.068 J5.397 E.62634
+G1 X139.636 Y141.396 E.25244
+G1 X116.364 Y141.396 E.77201
+G1 X109.225 Y144.031 E.25243
+G3 X109.225 Y133.964 I-1.949 J-5.034 E.69477
+G1 X116.364 Y136.6 E.25243
+G1 X139.523 Y136.6 E.76823
+G1 X139.566 Y136.208 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
-G1 X148.453 Y137.743 E.01405
-G3 X148.78 Y137.743 I.164 J4.354 E.01006
-G3 X147.939 Y137.801 I-.163 J3.755 E.69963
+G1 X146.883 Y133.509 E.23962
+G3 X148.793 Y133.209 I1.896 J5.856 E.05966
+G3 X146.642 Y144.4 I-.069 J5.789 E.6222
+G1 X139.566 Y141.788 E.23174
+G1 X116.434 Y141.788 E.71081
+G1 X109.359 Y144.4 E.23173
+G3 X109.359 Y133.596 I-2.083 J-5.402 E.68982
+G1 X116.434 Y136.208 E.23173
+G1 X139.506 Y136.208 E.70896
 ; WIPE_START
 M204 S10000
-G1 X148.453 Y137.743 E-.19651
-G1 X148.78 Y137.743 E-.12436
-G1 X149.107 Y137.772 E-.12492
-G1 X149.43 Y137.829 E-.12465
-G1 X149.902 Y137.966 E-.18661
-G1 X149.909 Y137.969 E-.00295
+M73 P74 R3
+G1 X141.385 Y135.521 E-.76
 ; WIPE_END
 G1 E-.04 F1800
-G1 X142.359 Y139.085 Z1.4 F30000
-G1 X139.492 Y139.509 Z1.4
+G1 X135.255 Y136.948 Z1.4 F30000
 G1 Z1
 G1 E.8 F1800
-; FEATURE: Inner wall
-; LINE_WIDTH: 0.45
-G1 F15476.087
-G1 X139.601 Y139.509 E.0036
-G1 X147.031 Y136.767 E.26273
-G3 X148.682 Y136.51 I1.632 J5.048 E.05566
-G3 X146.806 Y146.151 I-.067 J4.99 E.57924
-G1 X139.601 Y143.49 E.25479
-G1 X116.182 Y143.49 E.77683
-G1 X108.976 Y146.151 E.25481
-G3 X108.976 Y136.848 I-1.808 J-4.651 E.64286
-G1 X116.182 Y139.509 E.25481
-G1 X139.432 Y139.509 E.77124
-G1 X139.474 Y139.102 F30000
-G1 F15476.087
-G1 X139.528 Y139.102 E.00178
-G1 X146.9 Y136.382 E.26067
-G3 X148.683 Y136.103 I1.767 J5.46 E.06012
-G3 X146.667 Y146.533 I-.068 J5.397 E.62634
-G1 X139.528 Y143.897 E.25244
-G1 X116.255 Y143.897 E.77201
-G1 X109.116 Y146.533 E.25243
-G3 X109.116 Y136.466 I-1.949 J-5.034 E.69477
-G1 X116.255 Y139.102 E.25243
-G1 X139.414 Y139.102 E.76823
-G1 X139.458 Y138.71 F30000
-; FEATURE: Outer wall
-; LINE_WIDTH: 0.42
-G1 F3600
-M204 S5000
-G1 X146.774 Y136.011 E.23962
-G3 X148.684 Y135.711 I1.896 J5.856 E.05966
-G3 X146.533 Y146.902 I-.069 J5.789 E.6222
-G1 X139.458 Y144.29 E.23174
-G1 X116.325 Y144.29 E.71081
-G1 X109.25 Y146.902 E.23173
-G3 X109.25 Y136.097 I-2.083 J-5.402 E.68982
-G1 X116.325 Y138.71 E.23173
-G1 X139.398 Y138.71 E.70896
-; WIPE_START
-M204 S10000
-G1 X141.276 Y138.022 E-.76
-; WIPE_END
-G1 E-.04 F1800
-G1 X145.045 Y137.982 Z1.4 F30000
-G1 Z1
-G1 E.8 F1800
-; FEATURE: Gap infill
-; LINE_WIDTH: 0.445789
-G1 F15000
-G1 X145.263 Y137.846 E.00842
-; LINE_WIDTH: 0.414632
-G1 X145.361 Y137.787 E.00347
-; LINE_WIDTH: 0.374498
-G1 X145.452 Y137.733 E.00286
-; LINE_WIDTH: 0.337074
-G1 X145.55 Y137.678 E.00269
-; LINE_WIDTH: 0.302142
-G1 X145.641 Y137.626 E.00222
-; LINE_WIDTH: 0.269787
-G1 X145.738 Y137.574 E.00204
-; LINE_WIDTH: 0.239842
-G1 X145.831 Y137.524 E.00168
-; LINE_WIDTH: 0.224722
-G1 X145.834 Y137.523 E.00006
-; LINE_WIDTH: 0.199591
-G1 X146.021 Y137.428 E.00267
-; LINE_WIDTH: 0.15466
-G1 X146.211 Y137.336 E.00193
-; LINE_WIDTH: 0.113296
-G1 X146.482 Y137.214 E.0017
-; WIPE_START
-G1 X146.211 Y137.336 E-.76
-; WIPE_END
-G1 E-.04 F1800
-G1 X144.324 Y144.425 Z1.4 F30000
-G1 Z1
-G1 E.8 F1800
-; LINE_WIDTH: 0.10753
-G1 F15000
-G2 X144.468 Y144.616 I.494 J-.222 E.00127
-G1 X145.047 Y145.019 F30000
-; LINE_WIDTH: 0.44596
-G1 F15000
-G1 X145.266 Y145.156 E.00845
-; LINE_WIDTH: 0.412523
-G1 X145.376 Y145.221 E.00385
-; LINE_WIDTH: 0.368417
-G1 X145.477 Y145.281 E.00313
-; LINE_WIDTH: 0.331608
-G1 X145.562 Y145.329 E.00227
-; LINE_WIDTH: 0.301464
-G1 X145.641 Y145.373 E.00192
-; LINE_WIDTH: 0.271426
-G1 X145.738 Y145.426 E.00205
-; LINE_WIDTH: 0.24153
-G1 X145.83 Y145.475 E.0017
-; LINE_WIDTH: 0.226432
-G1 X145.834 Y145.477 E.00006
-; LINE_WIDTH: 0.201324
-G1 X146.02 Y145.572 E.0027
-; LINE_WIDTH: 0.156422
-G1 X146.211 Y145.664 E.00196
-; LINE_WIDTH: 0.114057
-G1 X146.498 Y145.793 E.00182
-G1 X121.236 Y141.078 F30000
 ; FEATURE: Sparse infill
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X122.865 Y141.078 E.05401
-G1 X123.707 Y141.921 E.03954
-G1 X122.865 Y141.921 E.02796
-G1 X123.707 Y141.078 E.03954
-G1 X127.47 Y141.078 E.12482
-G1 X128.313 Y141.921 E.03954
-G1 X127.47 Y141.921 E.02796
-G1 X128.313 Y141.078 E.03954
-G1 X132.076 Y141.078 E.12482
-G1 X132.918 Y141.921 E.03954
-G1 X132.076 Y141.921 E.02796
-G1 X132.918 Y141.078 E.03954
-G1 X136.681 Y141.078 E.12482
-G1 X137.524 Y141.921 E.03954
-G1 X136.681 Y141.921 E.02796
-G1 X137.524 Y141.078 E.03954
-G1 X139.881 Y141.078 E.07818
-G1 X140.908 Y140.699 E.03631
-G1 X142.551 Y142.342 E.07708
-G3 X142.551 Y140.657 I8.719 J-.843 E.056
-G1 X140.908 Y142.3 E.07709
-G1 X139.881 Y141.921 E.0363
-G1 X139.347 Y141.921 E.01771
-G1 X120.73 Y141.921 F30000
-G1 F15476.087
-G1 X119.102 Y141.921 E.05401
-G1 X118.259 Y141.078 E.03954
-G1 X119.102 Y141.078 E.02796
-G1 X118.259 Y141.921 E.03954
-G1 X115.902 Y141.921 E.07819
-G1 X114.875 Y142.3 E.0363
-G1 X113.232 Y140.657 E.07709
-G3 X113.232 Y142.342 I-8.739 J.843 E.056
-G1 X114.875 Y140.699 E.07708
-G1 X115.902 Y141.078 E.0363
-G1 X116.436 Y141.078 E.01771
-G1 X111.459 Y138.574 F30000
-; FEATURE: Gap infill
-; LINE_WIDTH: 0.109664
-G1 F15000
-G1 X111.369 Y138.425 E.00095
-G1 X111.315 Y138.383 E.00037
-G1 X110.736 Y137.98 F30000
-; LINE_WIDTH: 0.446332
-G1 F15000
-G1 X110.513 Y137.841 E.00863
-; LINE_WIDTH: 0.414599
-G1 X110.422 Y137.787 E.0032
-; LINE_WIDTH: 0.374887
-G1 X110.326 Y137.729 E.00304
-; LINE_WIDTH: 0.337629
-G1 X110.234 Y137.678 E.00253
-; LINE_WIDTH: 0.302964
-G1 X110.138 Y137.623 E.00234
-; LINE_WIDTH: 0.270701
-G1 X110.045 Y137.573 E.00195
-; LINE_WIDTH: 0.240928
-G1 X109.949 Y137.522 E.00176
-; LINE_WIDTH: 0.200959
-G1 X109.76 Y137.426 E.00273
-; LINE_WIDTH: 0.155936
-G1 X109.57 Y137.334 E.00194
-; LINE_WIDTH: 0.113913
-G1 X109.285 Y137.206 E.00181
+G1 X133.626 Y136.948 E.05401
+G1 X137.726 Y141.047 E.19231
+G1 X139.699 Y141.047 E.06545
+G1 X140.87 Y141.48 E.04141
+G1 X144.342 Y138.007 E.1629
+G2 X144.338 Y139.984 I4.316 J.998 E.06612
+G1 X140.87 Y136.516 E.16268
+G1 X139.699 Y136.948 E.04142
+G1 X137.726 Y136.948 E.06545
+G1 X133.626 Y141.047 E.19231
+G1 X130.05 Y141.047 E.11864
+G1 X125.95 Y136.948 E.19231
+G1 X122.374 Y136.948 E.11864
+G1 X118.274 Y141.047 E.19231
+G1 X116.301 Y141.047 E.06545
+G1 X115.13 Y141.48 E.04141
+G1 X111.666 Y138.016 E.16251
+G3 X111.668 Y139.978 I-5.242 J.986 E.06547
+G1 X115.13 Y136.516 E.16243
+G1 X116.301 Y136.948 E.04141
+G1 X118.274 Y136.948 E.06545
+G1 X122.374 Y141.047 E.19231
+G1 X125.95 Y141.047 E.11864
+G1 X130.05 Y136.948 E.19231
+G1 X128.421 Y136.948 E.05401
 ; WIPE_START
-G1 X109.57 Y137.334 E-.76
+G1 X130.05 Y136.948 E-.61876
+G1 X129.787 Y137.211 E-.14124
 ; WIPE_END
 G1 E-.04 F1800
-G1 X111.459 Y144.425 Z1.4 F30000
+G1 X137.34 Y136.115 Z1.4 F30000
+G1 X144.95 Y135.011 Z1.4
 G1 Z1
 G1 E.8 F1800
-; LINE_WIDTH: 0.109735
-G1 F15000
-G3 X111.315 Y144.616 I-.312 J-.085 E.00134
-G1 X110.736 Y145.019 F30000
-; LINE_WIDTH: 0.446384
-G1 F15000
-G1 X110.513 Y145.158 E.00861
-; LINE_WIDTH: 0.414684
-G1 X110.422 Y145.212 E.0032
-; LINE_WIDTH: 0.374911
-G1 X110.326 Y145.27 E.00305
-; LINE_WIDTH: 0.337614
-G1 X110.234 Y145.322 E.00253
-; LINE_WIDTH: 0.302939
-G1 X110.138 Y145.376 E.00235
-; LINE_WIDTH: 0.270675
-G1 X110.045 Y145.426 E.00195
-; LINE_WIDTH: 0.24092
-G1 X109.949 Y145.477 E.00176
-; LINE_WIDTH: 0.200936
-G1 X109.76 Y145.574 E.00273
-; LINE_WIDTH: 0.155904
-G1 X109.57 Y145.665 E.00194
-; LINE_WIDTH: 0.113892
-G1 X109.285 Y145.793 E.0018
+G1 F15476.087
+G1 X146.477 Y134.447 E.05401
+G1 X146.912 Y134.882 E.02038
+G3 X147.739 Y134.611 I1.841 J4.22 E.02892
+G1 X148.389 Y133.961 E.0305
+G3 X153.249 Y136.777 I.252 J5.166 E.19695
+G1 X152.841 Y137.185 E.01912
+G3 X152.841 Y140.811 I-4.129 J1.813 E.12379
+G1 X153.256 Y141.226 E.01945
+G3 X148.388 Y144.034 I-4.541 J-2.247 E.1976
+G1 X147.739 Y143.385 E.03045
+G3 X146.912 Y143.114 I1.018 J-4.502 E.02892
+G1 X146.476 Y143.55 E.02045
+G1 X144.948 Y142.986 E.05401
+; WIPE_START
+G1 X146.476 Y143.55 E-.61876
+G1 X146.739 Y143.287 E-.14124
+; WIPE_END
+G1 E-.04 F1800
+G1 X139.107 Y143.222 Z1.4 F30000
+G1 X111.052 Y142.986 Z1.4
+G1 Z1
+G1 E.8 F1800
+G1 F15476.087
+G1 X109.524 Y143.55 E.05401
+G1 X109.087 Y143.113 E.02049
+G3 X108.261 Y143.385 I-1.811 J-4.108 E.0289
+G1 X107.611 Y144.035 E.03049
+G3 X102.744 Y141.226 I-.324 J-5.06 E.19757
+G1 X103.16 Y140.81 E.01951
+G3 X103.159 Y137.185 I4.12 J-1.814 E.12377
+G1 X102.748 Y136.773 E.0193
+G3 X107.612 Y133.962 I4.577 J2.306 E.19725
+G1 X108.266 Y134.615 E.03066
+G3 X109.088 Y134.882 I-.873 J4.095 E.02873
+G1 X109.524 Y134.446 E.02045
+G1 X111.052 Y135.01 E.05401
 ; CHANGE_LAYER
 ; Z_HEIGHT: 1.2
 ; LAYER_HEIGHT: 0.2
 ; WIPE_START
-G1 F15000
-G1 X109.57 Y145.665 E-.76
+G1 F15476.087
+G1 X109.524 Y134.446 E-.61876
+G1 X109.261 Y134.709 E-.14124
 ; WIPE_END
 G1 E-.04 F1800
-; stop printing object, unique label id: 104
+; stop printing object, unique label id: 194
 M625
 ; layer num/total_layer_count: 6/15
 ; update layer progress
@@ -4924,7 +4487,7 @@ M73 L6
 M991 S0 P5 ;notify layer change
 G17
 G3 Z1.4 I1.217 J0 P1  F30000
-; object ids of layer 6 start: 72,104
+; object ids of layer 6 start: 123,194
 M624 AwAAAAAAAAA=
 ;========Date 20250206========
 ; SKIPPABLE_START
@@ -4939,105 +4502,15 @@ M1004 S5 P1  ; external shutter
 M623
 ; SKIPPABLE_END
 
-; object ids of this layer6 end: 72,104
+; object ids of this layer6 end: 123,194
 M625
-; OBJECT_ID: 72
-; start printing object, unique label id: 72
+; OBJECT_ID: 123
+; start printing object, unique label id: 123
 M624 AQAAAAAAAAA=
-G1 X139.655 Y125.23
+G1 X148.028 Y121.908
 G1 Z1.2
 G1 E.8 F1800
 ; FEATURE: Inner wall
-; LINE_WIDTH: 0.45
-G1 F15476.087
-G1 X139.927 Y125.23 E.00903
-G1 X143.306 Y123.984 E.11946
-G2 X143.306 Y128.017 I5.525 J2.016 E.13656
-G1 X139.927 Y126.77 E.11948
-M73 P73 R3
-G1 X116.072 Y126.77 E.79131
-G1 X112.694 Y128.017 E.11948
-G2 X112.694 Y123.983 I-5.525 J-2.017 E.1366
-G1 X116.072 Y125.23 E.11948
-G1 X139.595 Y125.23 E.78029
-G1 X139.637 Y124.823 F30000
-G1 F15476.087
-G1 X139.855 Y124.823 E.00721
-G1 X144.085 Y123.263 E.14957
-G2 X144.085 Y128.739 I4.78 J2.737 E.19011
-G1 X139.855 Y127.177 E.1496
-G1 X116.145 Y127.177 E.78649
-G1 X111.915 Y128.739 E.1496
-G2 X111.915 Y123.261 I-4.78 J-2.739 E.19016
-G1 X116.145 Y124.823 E.1496
-G1 X139.577 Y124.823 E.77727
-G1 X139.619 Y124.416 F30000
-G1 F15476.087
-G1 X139.782 Y124.416 E.0054
-G1 X144.931 Y122.517 E.18204
-G1 X145.038 Y122.673 E.0063
-G2 X145.04 Y129.329 I3.703 J3.327 E.24181
-G1 X144.932 Y129.485 E.0063
-G1 X139.782 Y127.584 E.18212
-G1 X116.218 Y127.584 E.78166
-G1 X111.068 Y129.485 E.18212
-G1 X110.96 Y129.329 E.0063
-G2 X110.96 Y122.671 I-3.701 J-3.329 E.24191
-G1 X111.068 Y122.515 E.0063
-G1 X116.218 Y124.416 E.18212
-G1 X139.559 Y124.416 E.77426
-; WIPE_START
-G1 X139.782 Y124.416 E-.08469
-G1 X141.449 Y123.801 E-.67531
-; WIPE_END
-G1 E-.04 F1800
-G1 X133.962 Y125.283 Z1.6 F30000
-G1 X107.308 Y130.558 Z1.6
-G1 Z1.2
-G1 E.8 F1800
-G1 F15476.087
-G1 X107.275 Y130.555 E.0011
-G3 X107.076 Y121.445 I.001 J-4.557 E.46827
-G3 X107.47 Y121.445 I.2 J5.591 E.01305
-G3 X107.672 Y130.538 I-.194 J4.553 E.45533
-G1 X107.368 Y130.555 E.01012
-G1 X107.259 Y130.151 F30000
-G1 F15476.087
-G1 X106.913 Y130.132 E.01148
-G3 X107.094 Y121.852 I.362 J-4.134 E.41445
-G3 X107.453 Y121.852 I.182 J5.116 E.01193
-G3 X107.318 Y130.148 I-.178 J4.146 E.42518
-G1 X107.492 Y129.751 F30000
-; FEATURE: Outer wall
-; LINE_WIDTH: 0.42
-G1 F3600
-M204 S5000
-G1 X107.275 Y129.756 E.00667
-G3 X107.111 Y122.244 I0 J-3.758 E.35775
-G3 X107.438 Y122.243 I.164 J4.651 E.01005
-G3 X107.603 Y129.742 I-.163 J3.755 E.34771
-G1 X107.552 Y129.746 E.00156
-; WIPE_START
-M204 S10000
-G1 X107.275 Y129.756 E-.10528
-G1 X106.947 Y129.746 E-.12464
-G1 X106.461 Y129.671 E-.18683
-G1 X106.145 Y129.586 E-.12431
-G1 X105.836 Y129.474 E-.12505
-G1 X105.612 Y129.369 E-.09389
-; WIPE_END
-G1 E-.04 F1800
-G1 X113.116 Y127.976 Z1.6 F30000
-G1 X147.982 Y121.505 Z1.6
-G1 Z1.2
-G1 E.8 F1800
-; FEATURE: Inner wall
-; LINE_WIDTH: 0.45
-G1 F15476.087
-G1 X148.526 Y121.445 E.01815
-G3 X148.92 Y121.445 I.2 J5.591 E.01305
-G3 X147.923 Y121.512 I-.194 J4.553 E.91664
-G1 X148.028 Y121.908 F30000
 G1 F15476.087
 G1 X148.544 Y121.852 E.01721
 G3 X148.903 Y121.852 I.182 J5.116 E.01193
@@ -5045,7 +4518,7 @@ G3 X147.969 Y121.917 I-.178 J4.146 E.83387
 G1 X148.084 Y122.296 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
 G1 X148.561 Y122.244 E.01474
 G3 X148.888 Y122.243 I.164 J4.651 E.01005
@@ -5060,24 +4533,43 @@ G1 X149.855 Y122.414 E-.12432
 G1 X149.994 Y122.468 E-.05679
 ; WIPE_END
 G1 E-.04 F1800
-G1 X142.444 Y123.587 Z1.6 F30000
-G1 X139.601 Y124.009 Z1.6
+G1 X142.482 Y123.818 Z1.6 F30000
+G1 X107.259 Y130.151 Z1.6
 G1 Z1.2
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X139.709 Y124.009 E.00359
-G1 X147.14 Y121.268 E.26274
-G3 X148.773 Y121.011 I1.632 J5.048 E.05507
-G3 X146.915 Y130.651 I-.052 J4.989 E.57954
-G1 X139.709 Y127.991 E.25482
-G1 X116.291 Y127.991 E.77683
-G1 X109.085 Y130.651 E.2548
-G3 X109.085 Y121.349 I-1.806 J-4.651 E.64261
-G1 X116.291 Y124.009 E.25479
-G1 X139.541 Y124.009 E.77125
-G1 X139.583 Y123.602 F30000
+G1 X106.913 Y130.132 E.01148
+G3 X107.094 Y121.852 I.362 J-4.134 E.41445
+G3 X107.453 Y121.852 I.182 J5.116 E.01193
+G3 X107.318 Y130.148 I-.178 J4.146 E.42518
+G1 X107.492 Y129.751 F30000
+; FEATURE: Outer wall
+; LINE_WIDTH: 0.42
+G1 F12000
+M204 S5000
+G1 X107.275 Y129.756 E.00667
+G3 X107.111 Y122.244 I0 J-3.758 E.35775
+G3 X107.438 Y122.243 I.164 J4.651 E.01005
+G3 X107.602 Y129.742 I-.163 J3.755 E.34771
+G1 X107.552 Y129.746 E.00156
+; WIPE_START
+M204 S10000
+G1 X107.275 Y129.756 E-.10528
+G1 X106.947 Y129.746 E-.12464
+G1 X106.461 Y129.671 E-.18683
+G1 X106.145 Y129.586 E-.12431
+G1 X105.836 Y129.474 E-.12505
+G1 X105.612 Y129.369 E-.09389
+; WIPE_END
+G1 E-.04 F1800
+G1 X113.137 Y128.092 Z1.6 F30000
+G1 X139.583 Y123.602 Z1.6
+G1 Z1.2
+G1 E.8 F1800
+; FEATURE: Inner wall
+; LINE_WIDTH: 0.45
 G1 F15476.087
 G1 X139.636 Y123.602 E.00178
 G1 X147.009 Y120.882 E.26068
@@ -5092,7 +4584,7 @@ G1 X139.523 Y123.602 E.76824
 G1 X139.566 Y123.21 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
 G1 X146.883 Y120.511 E.23962
 G3 X148.776 Y120.212 I1.897 J5.858 E.05912
@@ -5110,528 +4602,280 @@ M204 S10000
 G1 X141.385 Y122.523 E-.76
 ; WIPE_END
 G1 E-.04 F1800
-G1 X139.456 Y126.421 Z1.6 F30000
+G1 X144.673 Y129.411 Z1.6 F30000
+G1 X144.948 Y129.988 Z1.6
 G1 Z1.2
 G1 E.8 F1800
 ; FEATURE: Sparse infill
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X139.99 Y126.421 E.01771
-G1 X141.016 Y126.8 E.0363
-G1 X142.659 Y125.157 E.07709
-G2 X142.66 Y126.843 I8.722 J.843 E.056
-G1 X141.016 Y125.2 E.07708
-G1 X139.989 Y125.579 E.03631
-G1 X137.633 Y125.579 E.07818
-G1 X136.79 Y126.421 E.03954
-G1 X137.633 Y126.421 E.02796
-G1 X136.79 Y125.579 E.03954
-G1 X133.027 Y125.579 E.12482
-G1 X132.184 Y126.421 E.03954
-G1 X133.027 Y126.421 E.02796
-G1 X132.184 Y125.579 E.03954
-G1 X128.421 Y125.579 E.12482
-G1 X127.579 Y126.421 E.03954
-G1 X128.421 Y126.421 E.02796
-G1 X127.579 Y125.579 E.03954
-G1 X123.816 Y125.579 E.12482
-G1 X122.973 Y126.421 E.03954
-G1 X123.816 Y126.421 E.02796
-G1 X122.973 Y125.579 E.03954
-G1 X121.345 Y125.579 E.05401
-G1 X116.544 Y125.579 F30000
+G1 X146.476 Y130.552 E.05401
+G1 X146.912 Y130.116 E.02045
+G2 X147.736 Y130.384 I1.827 J-4.213 E.0288
+G1 X148.388 Y131.036 E.03058
+G2 X153.249 Y128.221 I.29 J-5.102 E.19727
+G1 X152.836 Y127.809 E.01934
+G2 X152.841 Y124.187 I-4.089 J-1.816 E.12368
+G1 X153.255 Y123.77 E.01949
+G2 X148.389 Y120.963 I-4.621 J2.388 E.19686
+G1 X147.739 Y121.613 E.0305
+G2 X146.912 Y121.884 I1.014 J4.491 E.02892
+G1 X146.477 Y121.45 E.02038
+G1 X144.95 Y122.013 E.05401
+; WIPE_START
+G1 X146.477 Y121.45 E-.61877
+G1 X146.74 Y121.712 E-.14123
+; WIPE_END
+G1 E-.04 F1800
+G1 X139.164 Y122.638 Z1.6 F30000
+G1 X128.421 Y123.95 Z1.6
+G1 Z1.2
+G1 E.8 F1800
 G1 F15476.087
-G1 X116.01 Y125.579 E.01771
-G1 X114.984 Y125.2 E.0363
-G1 X113.34 Y126.843 E.07709
-G2 X113.339 Y125.155 I-8.551 J-.834 E.05607
-G1 X114.984 Y126.8 E.07718
-G1 X116.01 Y126.421 E.0363
-G1 X118.367 Y126.421 E.07819
-G1 X119.21 Y125.579 E.03954
-G1 X118.367 Y125.579 E.02796
-G1 X119.21 Y126.421 E.03954
-G1 X120.839 Y126.421 E.05401
-G1 X111.568 Y128.924 F30000
-; FEATURE: Gap infill
-; LINE_WIDTH: 0.109716
-G1 F15000
-G1 X111.478 Y129.075 E.00096
-G1 X111.423 Y129.117 E.00038
-G1 X110.844 Y129.52 F30000
-; LINE_WIDTH: 0.446367
-G1 F15000
-G1 X110.622 Y129.659 E.00862
-; LINE_WIDTH: 0.414646
-G1 X110.531 Y129.713 E.0032
-; LINE_WIDTH: 0.374896
-G1 X110.434 Y129.77 E.00305
-; LINE_WIDTH: 0.337602
-G1 X110.342 Y129.822 E.00253
-; LINE_WIDTH: 0.302897
-G1 X110.246 Y129.877 E.00235
-; LINE_WIDTH: 0.261519
-G1 X110.096 Y129.957 E.00304
-; LINE_WIDTH: 0.222878
-G1 X109.986 Y130.014 E.00181
-; LINE_WIDTH: 0.192488
-G1 X109.874 Y130.072 E.00154
-; LINE_WIDTH: 0.15648
-G1 X109.679 Y130.166 E.002
-; LINE_WIDTH: 0.113925
-G1 X109.394 Y130.293 E.00181
+G1 X130.05 Y123.95 E.05401
+G1 X125.95 Y128.05 E.19231
+G1 X122.374 Y128.05 E.11864
+G1 X118.274 Y123.95 E.19231
+G1 X116.301 Y123.95 E.06545
+G1 X115.13 Y123.518 E.04141
+G1 X111.659 Y126.989 E.16283
+G2 X111.658 Y125.01 I-4.274 J-.986 E.06623
+G1 X115.13 Y128.482 E.1629
+G1 X116.301 Y128.05 E.04141
+G1 X118.274 Y128.05 E.06545
+G1 X122.374 Y123.95 E.19231
+G1 X125.95 Y123.95 E.11864
+G1 X130.05 Y128.05 E.19231
+G1 X133.626 Y128.05 E.11864
+G1 X137.726 Y123.95 E.19231
+G1 X139.699 Y123.95 E.06545
+G1 X140.87 Y123.518 E.04142
+G1 X144.342 Y126.991 E.1629
+G3 X144.342 Y125.01 I4.249 J-.991 E.06629
+G1 X140.87 Y128.482 E.1629
+G1 X139.699 Y128.05 E.04141
+G1 X137.726 Y128.05 E.06545
+G1 X133.626 Y123.95 E.19231
+G1 X135.255 Y123.95 E.05401
 ; WIPE_START
-G1 X109.679 Y130.166 E-.76
+G1 X133.626 Y123.95 E-.61876
+G1 X133.889 Y124.213 E-.14124
 ; WIPE_END
 G1 E-.04 F1800
-G1 X111.568 Y123.075 Z1.6 F30000
+G1 X126.292 Y123.481 Z1.6 F30000
+G1 X111.052 Y122.012 Z1.6
 G1 Z1.2
 G1 E.8 F1800
-; LINE_WIDTH: 0.109689
-G1 F15000
-G1 X111.478 Y122.925 E.00095
-G1 X111.423 Y122.883 E.00037
-G1 X110.844 Y122.48 F30000
-; LINE_WIDTH: 0.445173
-G1 F15000
-G1 X110.616 Y122.338 E.00882
-; LINE_WIDTH: 0.409005
-G1 X110.509 Y122.275 E.00371
-; LINE_WIDTH: 0.363739
-G1 X110.397 Y122.209 E.00339
-; LINE_WIDTH: 0.327246
-G1 X110.324 Y122.167 E.00194
-; LINE_WIDTH: 0.299449
-G1 X110.246 Y122.123 E.00187
-; LINE_WIDTH: 0.270657
-G1 X110.154 Y122.074 E.00194
-; LINE_WIDTH: 0.240943
-G1 X110.058 Y122.022 E.00176
-; LINE_WIDTH: 0.200966
-G1 X109.869 Y121.926 E.00273
-; LINE_WIDTH: 0.155929
-G1 X109.679 Y121.834 E.00194
-; LINE_WIDTH: 0.113903
-G1 X109.394 Y121.707 E.00181
+G1 F15476.087
+G1 X109.524 Y121.448 E.05401
+G1 X109.088 Y121.884 E.02045
+G2 X108.264 Y121.616 I-1.827 J4.213 E.0288
+G1 X107.612 Y120.964 E.03058
+G2 X102.744 Y123.772 I-.327 J5.056 E.1976
+G1 X103.163 Y124.191 E.01964
+G2 X103.159 Y127.813 I4.095 J1.816 E.1237
+G1 X102.748 Y128.225 E.0193
+G2 X107.612 Y131.036 I4.534 J-2.231 E.19762
+G1 X108.256 Y130.392 E.0302
+G2 X109.087 Y130.115 I-.851 J-3.931 E.02912
+G1 X109.524 Y130.552 E.02051
+G1 X111.052 Y129.988 E.05401
+; OBJECT_ID: 194
 ; WIPE_START
-G1 X109.679 Y121.834 E-.76
+G1 X109.524 Y130.552 E-.61877
+G1 X109.261 Y130.289 E-.14123
 ; WIPE_END
 G1 E-.04 F1800
-G1 X117.306 Y122.107 Z1.6 F30000
-G1 X144.432 Y123.075 Z1.6
-G1 Z1.2
-G1 E.8 F1800
-; LINE_WIDTH: 0.109548
-G1 F15000
-G3 X144.576 Y122.885 I.31 J.085 E.00133
-G1 X145.154 Y122.482 F30000
-; LINE_WIDTH: 0.4458
-G1 F15000
-G1 X145.371 Y122.347 E.00842
-; LINE_WIDTH: 0.414652
-G1 X145.47 Y122.288 E.00346
-; LINE_WIDTH: 0.374524
-G1 X145.561 Y122.234 E.00286
-; LINE_WIDTH: 0.337083
-G1 X145.658 Y122.179 E.00269
-; LINE_WIDTH: 0.302153
-G1 X145.75 Y122.127 E.00222
-; LINE_WIDTH: 0.269792
-G1 X145.847 Y122.075 E.00204
-; LINE_WIDTH: 0.239842
-G1 X145.939 Y122.025 E.00168
-; LINE_WIDTH: 0.205036
-G1 X146.091 Y121.947 E.00226
-; LINE_WIDTH: 0.160063
-G1 X146.314 Y121.839 E.00237
-; LINE_WIDTH: 0.113703
-G1 X146.59 Y121.715 E.00174
-; WIPE_START
-G1 X146.314 Y121.839 E-.76
-; WIPE_END
-G1 E-.04 F1800
-G1 X144.432 Y128.924 Z1.6 F30000
-M73 P74 R3
-G1 Z1.2
-G1 E.8 F1800
-; LINE_WIDTH: 0.107567
-G1 F15000
-G2 X144.577 Y129.117 I.494 J-.221 E.00128
-G1 X145.154 Y129.522 F30000
-; LINE_WIDTH: 0.415811
-G1 F15000
-G2 X145.488 Y129.724 I11.422 J-18.515 E.01184
-; LINE_WIDTH: 0.372265
-G1 X145.56 Y129.767 E.00225
-; LINE_WIDTH: 0.338782
-G1 X145.658 Y129.822 E.00271
-; LINE_WIDTH: 0.303756
-G1 X145.749 Y129.874 E.00224
-; LINE_WIDTH: 0.271372
-G1 X145.846 Y129.926 E.00205
-; LINE_WIDTH: 0.241479
-G1 X145.939 Y129.976 E.0017
-; LINE_WIDTH: 0.226397
-G1 X145.942 Y129.978 E.00006
-; LINE_WIDTH: 0.201311
-G1 X146.129 Y130.073 E.0027
-; LINE_WIDTH: 0.156432
-G1 X146.319 Y130.165 E.00196
-; LINE_WIDTH: 0.114064
-G1 X146.606 Y130.293 E.00182
-; OBJECT_ID: 104
-; WIPE_START
-G1 X146.319 Y130.165 E-.76
-; WIPE_END
-G1 E-.04 F1800
-; stop printing object, unique label id: 72
+; stop printing object, unique label id: 123
 M625
-; start printing object, unique label id: 104
+; start printing object, unique label id: 194
 M624 AgAAAAAAAAA=
-G1 X142.2 Y136.59 Z1.6 F30000
-G1 X139.547 Y140.73 Z1.6
+G1 X116.84 Y131.192 Z1.6 F30000
+G1 X148.028 Y134.906 Z1.6
+G1 Z1.2
+M73 P75 R3
+G1 E.8 F1800
+; FEATURE: Inner wall
+G1 F15476.087
+G1 X148.544 Y134.85 E.01721
+G3 X148.903 Y134.849 I.182 J5.116 E.01193
+M73 P75 R2
+G3 X147.969 Y134.915 I-.178 J4.146 E.83387
+G1 X148.084 Y135.294 F30000
+; FEATURE: Outer wall
+; LINE_WIDTH: 0.42
+G1 F12000
+M204 S5000
+G1 X148.561 Y135.241 E.01474
+G3 X148.888 Y135.241 I.164 J4.651 E.01005
+G3 X148.025 Y135.304 I-.163 J3.755 E.69895
+; WIPE_START
+M204 S10000
+G1 X148.561 Y135.241 E-.20501
+G1 X148.888 Y135.241 E-.12425
+G1 X149.216 Y135.27 E-.12501
+G1 X149.539 Y135.327 E-.12462
+G1 X149.855 Y135.411 E-.12432
+G1 X149.994 Y135.466 E-.05679
+; WIPE_END
+G1 E-.04 F1800
+G1 X142.482 Y136.816 Z1.6 F30000
+G1 X107.259 Y143.149 Z1.6
 G1 Z1.2
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X139.819 Y140.73 E.00903
-G1 X143.197 Y139.483 E.11946
-G2 X143.198 Y143.517 I5.525 J2.016 E.13656
-G1 X139.819 Y142.269 E.11948
-G1 X115.964 Y142.269 E.79131
-G1 X112.585 Y143.517 E.11948
-G2 X112.585 Y139.482 I-5.525 J-2.017 E.1366
-G1 X115.964 Y140.73 E.11948
-G1 X139.487 Y140.73 E.78029
-G1 X139.528 Y140.323 F30000
-G1 F15476.087
-G1 X139.746 Y140.323 E.00721
-G1 X143.976 Y138.762 E.14957
-G2 X143.977 Y144.238 I4.78 J2.737 E.19011
-G1 X139.746 Y142.676 E.1496
-G1 X116.037 Y142.676 E.78649
-G1 X111.806 Y144.238 E.1496
-G2 X111.806 Y138.761 I-4.78 J-2.739 E.19016
-G1 X116.037 Y140.323 E.1496
-G1 X139.468 Y140.323 E.77727
-G1 X139.51 Y139.916 F30000
-G1 F15476.087
-G1 X139.673 Y139.916 E.0054
-G1 X144.822 Y138.016 E.18204
-G1 X144.93 Y138.173 E.0063
-G2 X144.931 Y144.828 I3.703 J3.327 E.24181
-G1 X144.824 Y144.985 E.0063
-G1 X139.673 Y143.083 E.18212
-G1 X116.109 Y143.083 E.78166
-G1 X110.959 Y144.985 E.18212
-G1 X110.851 Y144.828 E.0063
-G2 X110.851 Y138.171 I-3.701 J-3.329 E.24191
-G1 X110.959 Y138.014 E.0063
-G1 X116.109 Y139.916 E.18212
-G1 X139.45 Y139.916 E.77426
-; WIPE_START
-G1 X139.673 Y139.916 E-.08469
-G1 X141.341 Y139.301 E-.67531
-; WIPE_END
-G1 E-.04 F1800
-G1 X133.853 Y140.782 Z1.6 F30000
-G1 X107.199 Y146.057 Z1.6
-G1 Z1.2
-G1 E.8 F1800
-G1 F15476.087
-G1 X107.166 Y146.055 E.0011
-G3 X106.968 Y136.944 I.001 J-4.557 E.46827
-G3 X107.361 Y136.944 I.2 J5.591 E.01305
-G3 X107.564 Y146.037 I-.194 J4.553 E.45533
-G1 X107.259 Y146.054 E.01012
-G1 X107.15 Y145.651 F30000
-G1 F15476.087
-G1 X106.805 Y145.632 E.01148
-G3 X106.986 Y137.351 I.362 J-4.134 E.41445
-G3 X107.345 Y137.351 I.182 J5.116 E.01193
-G3 X107.21 Y145.648 I-.178 J4.146 E.42518
-G1 X107.384 Y145.25 F30000
+G1 X106.913 Y143.13 E.01148
+G3 X107.094 Y134.85 I.362 J-4.134 E.41445
+G3 X107.453 Y134.849 I.182 J5.116 E.01193
+G3 X107.318 Y143.146 I-.178 J4.146 E.42518
+G1 X107.492 Y142.748 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
-G1 X107.166 Y145.256 E.00667
-G3 X107.003 Y137.743 I0 J-3.758 E.35775
-G3 X107.33 Y137.743 I.164 J4.651 E.01005
-G3 X107.494 Y145.242 I-.163 J3.755 E.34771
-G1 X107.443 Y145.246 E.00156
+G1 X107.275 Y142.754 E.00667
+G3 X107.111 Y135.241 I0 J-3.758 E.35775
+G3 X107.438 Y135.241 I.164 J4.651 E.01005
+G3 X107.603 Y142.74 I-.163 J3.755 E.34771
+G1 X107.552 Y142.744 E.00156
 ; WIPE_START
 M204 S10000
-G1 X107.166 Y145.256 E-.10528
-G1 X106.839 Y145.245 E-.12464
-G1 X106.353 Y145.17 E-.18683
-G1 X106.037 Y145.086 E-.12431
-G1 X105.727 Y144.973 E-.12505
-G1 X105.504 Y144.869 E-.09389
+G1 X107.275 Y142.754 E-.10528
+G1 X106.947 Y142.744 E-.12464
+G1 X106.461 Y142.669 E-.18683
+G1 X106.145 Y142.584 E-.12431
+G1 X105.836 Y142.472 E-.12505
+G1 X105.612 Y142.367 E-.09389
 ; WIPE_END
 G1 E-.04 F1800
-G1 X113.008 Y143.476 Z1.6 F30000
-G1 X147.874 Y137.004 Z1.6
+G1 X113.137 Y141.09 Z1.6 F30000
+G1 X139.583 Y136.6 Z1.6
 G1 Z1.2
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X148.418 Y136.944 E.01815
-G3 X148.811 Y136.944 I.2 J5.591 E.01305
-G3 X147.814 Y137.011 I-.194 J4.553 E.91664
-G1 X147.92 Y137.408 F30000
-G1 F15476.087
-G1 X148.436 Y137.351 E.01721
-G3 X148.795 Y137.351 I.182 J5.116 E.01193
-G3 X147.86 Y137.417 I-.178 J4.146 E.83387
-G1 X147.976 Y137.795 F30000
+G1 X139.636 Y136.6 E.00178
+G1 X147.009 Y133.88 E.26068
+G3 X148.774 Y133.601 I1.767 J5.46 E.05953
+G3 X146.776 Y144.032 I-.054 J5.396 E.62664
+G1 X139.636 Y141.396 E.25244
+G1 X116.364 Y141.396 E.77201
+G1 X109.225 Y144.031 E.25243
+G3 X109.225 Y133.964 I-1.946 J-5.034 E.69448
+G1 X116.364 Y136.6 E.25242
+G1 X139.523 Y136.6 E.76824
+G1 X139.566 Y136.208 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
-G1 X148.453 Y137.743 E.01474
-G3 X148.78 Y137.743 I.164 J4.651 E.01005
-G3 X147.917 Y137.805 I-.163 J3.755 E.69895
+G1 X146.883 Y133.509 E.23962
+G3 X148.776 Y133.209 I1.897 J5.858 E.05912
+G3 X147.703 Y144.696 I-.051 J5.788 E.58881
+G3 X146.641 Y144.4 I1.058 J-5.851 E.03391
+G1 X139.566 Y141.788 E.23173
+G1 X116.434 Y141.788 E.71081
+G1 X109.358 Y144.4 E.23174
+G3 X108.297 Y133.3 I-2.083 J-5.402 E.65587
+G3 X109.359 Y133.596 I-1.058 J5.851 E.03391
+G1 X116.434 Y136.208 E.23173
+G1 X139.506 Y136.208 E.70896
 ; WIPE_START
 M204 S10000
-G1 X148.453 Y137.743 E-.20501
-G1 X148.78 Y137.743 E-.12425
-G1 X149.107 Y137.772 E-.12501
-G1 X149.43 Y137.829 E-.12462
-G1 X149.746 Y137.913 E-.12432
-G1 X149.886 Y137.967 E-.05679
+G1 X141.385 Y135.521 E-.76
 ; WIPE_END
 G1 E-.04 F1800
-G1 X142.336 Y139.087 Z1.6 F30000
-G1 X139.492 Y139.509 Z1.6
-G1 Z1.2
-G1 E.8 F1800
-; FEATURE: Inner wall
-; LINE_WIDTH: 0.45
-G1 F15476.087
-G1 X139.601 Y139.509 E.00359
-G1 X147.032 Y136.767 E.26274
-G3 X148.665 Y136.51 I1.632 J5.048 E.05507
-G3 X146.807 Y146.151 I-.052 J4.989 E.57954
-G1 X139.601 Y143.49 E.25482
-G1 X116.182 Y143.49 E.77683
-G1 X108.976 Y146.151 E.2548
-G3 X108.977 Y136.848 I-1.806 J-4.651 E.64261
-G1 X116.182 Y139.509 E.25479
-G1 X139.432 Y139.509 E.77125
-G1 X139.474 Y139.102 F30000
-G1 F15476.087
-G1 X139.528 Y139.102 E.00178
-G1 X146.901 Y136.382 E.26068
-G3 X148.666 Y136.103 I1.767 J5.46 E.05953
-G3 X146.667 Y146.533 I-.054 J5.396 E.62664
-G1 X139.528 Y143.897 E.25244
-G1 X116.255 Y143.897 E.77201
-G1 X109.116 Y146.533 E.25243
-G3 X109.117 Y136.466 I-1.946 J-5.034 E.69448
-G1 X116.255 Y139.102 E.25242
-G1 X139.414 Y139.102 E.76824
-G1 X139.458 Y138.71 F30000
-; FEATURE: Outer wall
-; LINE_WIDTH: 0.42
-G1 F3600
-M204 S5000
-G1 X146.774 Y136.01 E.23962
-G3 X148.667 Y135.711 I1.897 J5.858 E.05912
-G3 X147.594 Y147.197 I-.051 J5.788 E.58881
-G3 X146.533 Y146.902 I1.058 J-5.851 E.03391
-G1 X139.458 Y144.29 E.23173
-G1 X116.325 Y144.29 E.71081
-G1 X109.25 Y146.902 E.23174
-G3 X108.189 Y135.802 I-2.083 J-5.402 E.65587
-G3 X109.25 Y136.097 I-1.058 J5.851 E.03391
-G1 X116.325 Y138.71 E.23173
-G1 X139.398 Y138.71 E.70896
-; WIPE_START
-M204 S10000
-G1 X141.276 Y138.022 E-.76
-; WIPE_END
-G1 E-.04 F1800
-G1 X139.347 Y141.921 Z1.6 F30000
+G1 X144.673 Y142.408 Z1.6 F30000
+G1 X144.948 Y142.986 Z1.6
 G1 Z1.2
 G1 E.8 F1800
 ; FEATURE: Sparse infill
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X139.881 Y141.921 E.01771
-G1 X140.908 Y142.3 E.0363
-G1 X142.551 Y140.657 E.07709
-G2 X142.551 Y142.342 I8.722 J.843 E.056
-G1 X140.908 Y140.699 E.07708
-G1 X139.881 Y141.078 E.03631
-G1 X137.524 Y141.078 E.07818
-G1 X136.681 Y141.921 E.03954
-G1 X137.524 Y141.921 E.02796
-G1 X136.681 Y141.078 E.03954
-G1 X132.918 Y141.078 E.12482
-G1 X132.076 Y141.921 E.03954
-G1 X132.918 Y141.921 E.02796
-G1 X132.076 Y141.078 E.03954
-G1 X128.313 Y141.078 E.12482
-G1 X127.47 Y141.921 E.03954
-G1 X128.313 Y141.921 E.02796
-G1 X127.47 Y141.078 E.03954
-G1 X123.707 Y141.078 E.12482
-G1 X122.865 Y141.921 E.03954
-G1 X123.707 Y141.921 E.02796
-G1 X122.865 Y141.078 E.03954
-G1 X121.236 Y141.078 E.05401
-G1 X116.436 Y141.078 F30000
+G1 X146.476 Y143.55 E.05401
+G1 X146.912 Y143.114 E.02045
+G2 X147.736 Y143.382 I1.827 J-4.213 E.0288
+G1 X148.388 Y144.034 E.03058
+G2 X153.249 Y141.219 I.29 J-5.102 E.19727
+G1 X152.836 Y140.806 E.01934
+G2 X152.841 Y137.185 I-4.089 J-1.816 E.12368
+G1 X153.255 Y136.768 E.01949
+G2 X148.389 Y133.961 I-4.621 J2.388 E.19686
+G1 X147.739 Y134.611 E.0305
+G2 X146.912 Y134.882 I1.014 J4.491 E.02892
+G1 X146.477 Y134.447 E.02038
+G1 X144.95 Y135.011 E.05401
+; WIPE_START
+G1 X146.477 Y134.447 E-.61877
+G1 X146.74 Y134.71 E-.14123
+; WIPE_END
+G1 E-.04 F1800
+G1 X139.164 Y135.636 Z1.6 F30000
+G1 X128.421 Y136.948 Z1.6
+G1 Z1.2
+G1 E.8 F1800
 G1 F15476.087
-G1 X115.902 Y141.078 E.01771
-G1 X114.875 Y140.699 E.0363
-G1 X113.232 Y142.342 E.07709
-G2 X113.23 Y140.655 I-8.551 J-.834 E.05607
-G1 X114.875 Y142.3 E.07718
-G1 X115.902 Y141.921 E.0363
-G1 X118.259 Y141.921 E.07819
-G1 X119.102 Y141.078 E.03954
-G1 X118.259 Y141.078 E.02796
-G1 X119.102 Y141.921 E.03954
-G1 X120.73 Y141.921 E.05401
-G1 X111.46 Y144.424 F30000
-; FEATURE: Gap infill
-; LINE_WIDTH: 0.109716
-G1 F15000
-G1 X111.369 Y144.574 E.00096
-G1 X111.315 Y144.616 E.00038
-G1 X110.736 Y145.019 F30000
-; LINE_WIDTH: 0.446367
-G1 F15000
-G1 X110.513 Y145.158 E.00862
-; LINE_WIDTH: 0.414646
-G1 X110.422 Y145.212 E.0032
-; LINE_WIDTH: 0.374896
-G1 X110.326 Y145.27 E.00305
-; LINE_WIDTH: 0.337602
-G1 X110.234 Y145.322 E.00253
-; LINE_WIDTH: 0.302897
-G1 X110.137 Y145.376 E.00235
-; LINE_WIDTH: 0.261519
-G1 X109.987 Y145.457 E.00304
-; LINE_WIDTH: 0.222878
-G1 X109.878 Y145.513 E.00181
-; LINE_WIDTH: 0.192488
-G1 X109.765 Y145.571 E.00154
-; LINE_WIDTH: 0.15648
-G1 X109.57 Y145.665 E.002
-; LINE_WIDTH: 0.113925
-G1 X109.285 Y145.793 E.00181
+G1 X130.05 Y136.948 E.05401
+G1 X125.95 Y141.047 E.19231
+G1 X122.374 Y141.047 E.11864
+G1 X118.274 Y136.948 E.19231
+G1 X116.301 Y136.948 E.06545
+G1 X115.13 Y136.516 E.04141
+G1 X111.659 Y139.987 E.16283
+G2 X111.658 Y138.007 I-4.274 J-.986 E.06623
+G1 X115.13 Y141.48 E.1629
+G1 X116.301 Y141.047 E.04141
+G1 X118.274 Y141.047 E.06545
+G1 X122.374 Y136.948 E.19231
+G1 X125.95 Y136.948 E.11864
+G1 X130.05 Y141.047 E.19231
+G1 X133.626 Y141.047 E.11864
+G1 X137.726 Y136.948 E.19231
+G1 X139.699 Y136.948 E.06545
+G1 X140.87 Y136.516 E.04142
+G1 X144.342 Y139.988 E.1629
+G3 X144.342 Y138.007 I4.249 J-.991 E.06629
+G1 X140.87 Y141.48 E.1629
+G1 X139.699 Y141.047 E.04141
+G1 X137.726 Y141.047 E.06545
+G1 X133.626 Y136.948 E.19231
+G1 X135.255 Y136.948 E.05401
 ; WIPE_START
-G1 X109.57 Y145.665 E-.76
+G1 X133.626 Y136.948 E-.61876
+G1 X133.889 Y137.211 E-.14124
 ; WIPE_END
 G1 E-.04 F1800
-G1 X111.459 Y138.575 Z1.6 F30000
+G1 X126.292 Y136.479 Z1.6 F30000
+G1 X111.052 Y135.01 Z1.6
 G1 Z1.2
 G1 E.8 F1800
-; LINE_WIDTH: 0.109689
-G1 F15000
-G1 X111.369 Y138.425 E.00095
-G1 X111.315 Y138.383 E.00037
-G1 X110.736 Y137.98 F30000
-; LINE_WIDTH: 0.445173
-G1 F15000
-G1 X110.507 Y137.837 E.00882
-; LINE_WIDTH: 0.409005
-G1 X110.4 Y137.774 E.00371
-; LINE_WIDTH: 0.363739
-G1 X110.288 Y137.708 E.00339
-; LINE_WIDTH: 0.327246
-G1 X110.215 Y137.667 E.00194
-; LINE_WIDTH: 0.299449
-G1 X110.137 Y137.623 E.00187
-; LINE_WIDTH: 0.270657
-G1 X110.045 Y137.573 E.00194
-; LINE_WIDTH: 0.240943
-G1 X109.949 Y137.522 E.00176
-; LINE_WIDTH: 0.200966
-G1 X109.76 Y137.426 E.00273
-; LINE_WIDTH: 0.155929
-G1 X109.57 Y137.334 E.00194
-; LINE_WIDTH: 0.113903
-G1 X109.285 Y137.207 E.00181
-; WIPE_START
-G1 X109.57 Y137.334 E-.76
-; WIPE_END
-G1 E-.04 F1800
-G1 X117.198 Y137.606 Z1.6 F30000
-G1 X144.324 Y138.575 Z1.6
-G1 Z1.2
-G1 E.8 F1800
-; LINE_WIDTH: 0.109548
-G1 F15000
-G3 X144.467 Y138.385 I.31 J.085 E.00133
-G1 X145.045 Y137.982 F30000
-; LINE_WIDTH: 0.4458
-G1 F15000
-G1 X145.263 Y137.846 E.00842
-; LINE_WIDTH: 0.414652
-G1 X145.361 Y137.787 E.00346
-; LINE_WIDTH: 0.374524
-G1 X145.452 Y137.733 E.00286
-; LINE_WIDTH: 0.337083
-G1 X145.55 Y137.678 E.00269
-; LINE_WIDTH: 0.302153
-G1 X145.641 Y137.626 E.00222
-; LINE_WIDTH: 0.269792
-G1 X145.738 Y137.574 E.00204
-; LINE_WIDTH: 0.239842
-G1 X145.831 Y137.524 E.00168
-; LINE_WIDTH: 0.205036
-G1 X145.983 Y137.447 E.00226
-; LINE_WIDTH: 0.160063
-G1 X146.206 Y137.338 E.00237
-; LINE_WIDTH: 0.113703
-G1 X146.482 Y137.214 E.00174
-; WIPE_START
-G1 X146.206 Y137.338 E-.76
-; WIPE_END
-G1 E-.04 F1800
-G1 X144.323 Y144.424 Z1.6 F30000
-M73 P75 R3
-G1 Z1.2
-G1 E.8 F1800
-; LINE_WIDTH: 0.107567
-G1 F15000
-G2 X144.468 Y144.616 I.494 J-.221 E.00128
-G1 X145.046 Y145.022 F30000
-; LINE_WIDTH: 0.415811
-G1 F15000
-G2 X145.379 Y145.223 I11.422 J-18.515 E.01184
-; LINE_WIDTH: 0.372265
-G1 X145.451 Y145.266 E.00225
-; LINE_WIDTH: 0.338782
-G1 X145.549 Y145.321 E.00271
-; LINE_WIDTH: 0.303756
-G1 X145.641 Y145.373 E.00224
-; LINE_WIDTH: 0.271372
-G1 X145.738 Y145.426 E.00205
-; LINE_WIDTH: 0.241479
-G1 X145.83 Y145.475 E.0017
-; LINE_WIDTH: 0.226397
-G1 X145.834 Y145.477 E.00006
-; LINE_WIDTH: 0.201311
-G1 X146.02 Y145.572 E.0027
-; LINE_WIDTH: 0.156432
-G1 X146.211 Y145.664 E.00196
-; LINE_WIDTH: 0.114064
-G1 X146.498 Y145.793 E.00182
+G1 F15476.087
+G1 X109.524 Y134.446 E.05401
+G1 X109.088 Y134.882 E.02045
+G2 X108.264 Y134.614 I-1.827 J4.213 E.0288
+G1 X107.612 Y133.962 E.03058
+G2 X102.744 Y136.77 I-.327 J5.056 E.1976
+G1 X103.163 Y137.189 E.01964
+G2 X103.159 Y140.811 I4.095 J1.816 E.1237
+G1 X102.748 Y141.222 E.0193
+G2 X107.612 Y144.034 I4.534 J-2.231 E.19762
+G1 X108.256 Y143.39 E.0302
+G2 X109.087 Y143.112 I-.851 J-3.931 E.02912
+G1 X109.524 Y143.55 E.02051
+G1 X111.052 Y142.986 E.05401
 ; CHANGE_LAYER
 ; Z_HEIGHT: 1.4
 ; LAYER_HEIGHT: 0.2
 ; WIPE_START
-G1 F15000
-G1 X146.211 Y145.664 E-.76
+G1 F15476.087
+G1 X109.524 Y143.55 E-.61876
+G1 X109.261 Y143.287 E-.14124
 ; WIPE_END
 G1 E-.04 F1800
-; stop printing object, unique label id: 104
+; stop printing object, unique label id: 194
 M625
 ; layer num/total_layer_count: 7/15
 ; update layer progress
@@ -5639,7 +4883,7 @@ M73 L7
 M991 S0 P6 ;notify layer change
 G17
 G3 Z1.6 I1.217 J0 P1  F30000
-; object ids of layer 7 start: 72,104
+; object ids of layer 7 start: 123,194
 M624 AwAAAAAAAAA=
 ;========Date 20250206========
 ; SKIPPABLE_START
@@ -5654,105 +4898,15 @@ M1004 S5 P1  ; external shutter
 M623
 ; SKIPPABLE_END
 
-; object ids of this layer7 end: 72,104
+; object ids of this layer7 end: 123,194
 M625
-; OBJECT_ID: 72
-; start printing object, unique label id: 72
+; OBJECT_ID: 123
+; start printing object, unique label id: 123
 M624 AQAAAAAAAAA=
-G1 X139.655 Y125.23
+G1 X147.98 Y121.917
 G1 Z1.4
 G1 E.8 F1800
 ; FEATURE: Inner wall
-; LINE_WIDTH: 0.45
-G1 F15476.087
-G1 X139.927 Y125.23 E.00902
-G1 X143.306 Y123.984 E.11946
-G2 X143.306 Y128.017 I5.459 J2.016 E.13662
-G1 X139.927 Y126.77 E.11948
-G1 X116.072 Y126.77 E.79131
-G1 X112.694 Y128.017 E.11948
-G2 X112.694 Y123.983 I-5.525 J-2.017 E.1366
-G1 X116.072 Y125.23 E.11948
-G1 X139.595 Y125.23 E.78029
-G1 X139.637 Y124.823 F30000
-G1 F15476.087
-G1 X139.855 Y124.823 E.00721
-G1 X144.085 Y123.263 E.14957
-G2 X144.085 Y128.739 I4.752 J2.737 E.19019
-G1 X139.855 Y127.177 E.1496
-G1 X116.145 Y127.177 E.78649
-G1 X111.915 Y128.739 E.1496
-G2 X111.915 Y123.261 I-4.78 J-2.739 E.19016
-G1 X116.145 Y124.823 E.1496
-G1 X139.577 Y124.823 E.77728
-G1 X139.619 Y124.416 F30000
-G1 F15476.087
-G1 X139.782 Y124.416 E.0054
-G1 X144.93 Y122.517 E.18204
-G1 X145.038 Y122.673 E.0063
-G2 X145.04 Y129.329 I3.689 J3.327 E.24192
-G1 X144.932 Y129.485 E.0063
-G1 X139.782 Y127.584 E.18212
-G1 X116.218 Y127.584 E.78166
-G1 X111.068 Y129.485 E.18212
-G1 X110.96 Y129.329 E.0063
-G2 X110.96 Y122.671 I-3.687 J-3.329 E.24202
-G1 X111.068 Y122.515 E.0063
-G1 X116.218 Y124.416 E.18212
-G1 X139.559 Y124.416 E.77427
-; WIPE_START
-G1 X139.782 Y124.416 E-.08461
-G1 X141.449 Y123.801 E-.67539
-; WIPE_END
-G1 E-.04 F1800
-G1 X133.962 Y125.28 Z1.8 F30000
-G1 X107.242 Y130.558 Z1.8
-G1 Z1.4
-G1 E.8 F1800
-G1 F15476.087
-G1 X106.878 Y130.54 E.01211
-G3 X106.877 Y121.458 I.403 J-4.541 E.44828
-G1 X107.087 Y121.444 E.00698
-G3 X107.302 Y130.558 I.194 J4.555 E.48082
-G1 X107.259 Y130.151 F30000
-G1 F15476.087
-G1 X106.913 Y130.135 E.01148
-G3 X106.913 Y121.864 I.366 J-4.136 E.40836
-G1 X107.101 Y121.851 E.00624
-G3 X107.319 Y130.151 I.178 J4.148 E.43725
-G1 X107.499 Y129.75 F30000
-; FEATURE: Outer wall
-; LINE_WIDTH: 0.42
-G1 F3600
-M204 S5000
-G1 X107.275 Y129.759 E.0069
-G3 X106.947 Y122.254 I.002 J-3.76 E.35274
-G1 X107.113 Y122.243 E.00512
-G3 X107.603 Y129.745 I.163 J3.756 E.35791
-G1 X107.559 Y129.747 E.00134
-; WIPE_START
-M204 S10000
-G1 X107.275 Y129.759 E-.10808
-G1 X106.947 Y129.746 E-.12467
-G1 X106.622 Y129.703 E-.12459
-G1 X106.144 Y129.586 E-.18686
-G1 X105.836 Y129.474 E-.12473
-G1 X105.621 Y129.368 E-.09106
-; WIPE_END
-G1 E-.04 F1800
-G1 X113.125 Y127.975 Z1.8 F30000
-G1 X147.885 Y121.522 Z1.8
-G1 Z1.4
-G1 E.8 F1800
-; FEATURE: Inner wall
-; LINE_WIDTH: 0.45
-G1 F15476.087
-G1 X147.933 Y121.51 E.00163
-G3 X148.327 Y121.458 I.798 J4.489 E.01318
-G1 X148.537 Y121.444 E.00698
-G3 X147.355 Y121.653 I.194 J4.555 E.91026
-G1 X147.827 Y121.536 E.01615
-G1 X147.98 Y121.917 F30000
 G1 F15476.087
 G1 X148.004 Y121.911 E.00081
 G3 X148.363 Y121.864 I.725 J4.088 E.01201
@@ -5762,7 +4916,7 @@ G1 X147.922 Y121.931 E.01521
 G1 X148.069 Y122.298 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
 G1 X148.072 Y122.297 E.00009
 G3 X148.397 Y122.254 I.654 J3.702 E.01008
@@ -5780,30 +4934,50 @@ G1 X149.649 Y122.356 E-.10542
 G1 X149.981 Y122.458 E-.13211
 ; WIPE_END
 G1 E-.04 F1800
-G1 X142.433 Y123.586 Z1.8 F30000
-G1 X139.601 Y124.009 Z1.8
+G1 X142.47 Y123.81 Z1.8 F30000
+G1 X107.259 Y130.151 Z1.8
 G1 Z1.4
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X139.709 Y124.009 E.00358
-G1 X147.14 Y121.268 E.26274
-G3 X148.756 Y121.011 I1.632 J5.051 E.05449
-G3 X146.915 Y130.651 I-.035 J4.989 E.58014
-G1 X139.709 Y127.991 E.25479
-G1 X116.291 Y127.991 E.77683
-G1 X109.084 Y130.652 E.25484
-G3 X109.085 Y121.349 I-1.805 J-4.652 E.64254
-G1 X116.291 Y124.009 E.25481
-G1 X139.541 Y124.009 E.77126
-G1 X139.583 Y123.602 F30000
+G1 X106.913 Y130.135 E.01148
+G3 X106.913 Y121.864 I.366 J-4.136 E.40836
+G1 X107.101 Y121.851 E.00624
+G3 X107.319 Y130.151 I.178 J4.148 E.43725
+G1 X107.499 Y129.75 F30000
+; FEATURE: Outer wall
+; LINE_WIDTH: 0.42
+G1 F12000
+M204 S5000
+G1 X107.275 Y129.759 E.0069
+G3 X106.947 Y122.254 I.002 J-3.76 E.35274
+G1 X107.113 Y122.243 E.00512
+G3 X107.603 Y129.745 I.163 J3.756 E.35791
+G1 X107.559 Y129.747 E.00134
+; WIPE_START
+M204 S10000
+G1 X107.275 Y129.759 E-.10808
+G1 X106.947 Y129.746 E-.12467
+G1 X106.622 Y129.703 E-.12459
+G1 X106.144 Y129.586 E-.18686
+G1 X105.836 Y129.474 E-.12473
+G1 X105.621 Y129.368 E-.09106
+; WIPE_END
+G1 E-.04 F1800
+G1 X113.146 Y128.09 Z1.8 F30000
+G1 X139.583 Y123.602 Z1.8
+G1 Z1.4
+G1 E.8 F1800
+; FEATURE: Inner wall
+; LINE_WIDTH: 0.45
 G1 F15476.087
 G1 X139.636 Y123.602 E.00177
 G1 X147.009 Y120.882 E.26067
 G3 X148.757 Y120.604 I1.768 J5.463 E.05896
 G3 X146.776 Y131.034 I-.036 J5.396 E.62721
 G1 X139.636 Y128.398 E.25244
+M73 P76 R2
 G1 X116.364 Y128.398 E.77201
 G1 X109.224 Y131.034 E.25245
 G3 X109.225 Y120.966 I-1.948 J-5.034 E.69475
@@ -5812,7 +4986,7 @@ G1 X139.523 Y123.602 E.76824
 G1 X139.566 Y123.21 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
 G1 X146.883 Y120.511 E.23962
 G3 X148.758 Y120.211 I1.898 J5.861 E.05859
@@ -5829,529 +5003,281 @@ M204 S10000
 G1 X141.385 Y122.523 E-.76
 ; WIPE_END
 G1 E-.04 F1800
-G1 X144.433 Y123.075 Z1.8 F30000
+G1 X144.95 Y122.013 Z1.8 F30000
 G1 Z1.4
 G1 E.8 F1800
-; FEATURE: Gap infill
-; LINE_WIDTH: 0.109499
-G1 F15000
-G3 X144.576 Y122.885 I.309 J.084 E.00132
-G1 X145.154 Y122.482 F30000
-; LINE_WIDTH: 0.445793
-G1 F15000
-G1 X145.371 Y122.346 E.00842
-; LINE_WIDTH: 0.414643
-G1 X145.47 Y122.288 E.00346
-; LINE_WIDTH: 0.374549
-G1 X145.56 Y122.234 E.00285
-; LINE_WIDTH: 0.337111
-G1 X145.658 Y122.179 E.00269
-; LINE_WIDTH: 0.302133
-G1 X145.75 Y122.127 E.00223
-; LINE_WIDTH: 0.26974
-G1 X145.847 Y122.075 E.00204
-; LINE_WIDTH: 0.239787
-G1 X145.939 Y122.025 E.00168
-; LINE_WIDTH: 0.224671
-G1 X145.943 Y122.023 E.00006
-; LINE_WIDTH: 0.199568
-G1 X146.129 Y121.928 E.00267
-; LINE_WIDTH: 0.154649
-G1 X146.32 Y121.836 E.00192
-; LINE_WIDTH: 0.113306
-G1 X146.59 Y121.715 E.0017
-; WIPE_START
-G1 X146.32 Y121.836 E-.76
-; WIPE_END
-G1 E-.04 F1800
-G1 X144.432 Y128.924 Z1.8 F30000
-G1 Z1.4
-G1 E.8 F1800
-; LINE_WIDTH: 0.107558
-G1 F15000
-G2 X144.577 Y129.117 I.494 J-.221 E.00128
-G1 X145.156 Y129.52 F30000
-; LINE_WIDTH: 0.446798
-G1 F15000
-G1 X145.371 Y129.654 E.00833
-; LINE_WIDTH: 0.416333
-G1 X145.469 Y129.713 E.00348
-; LINE_WIDTH: 0.376205
-G1 X145.56 Y129.767 E.00287
-; LINE_WIDTH: 0.338755
-G1 X145.658 Y129.822 E.00271
-; LINE_WIDTH: 0.303797
-G1 X145.749 Y129.874 E.00224
-; LINE_WIDTH: 0.271424
-G1 X145.846 Y129.926 E.00205
-; LINE_WIDTH: 0.241491
-G1 X145.939 Y129.976 E.0017
-; LINE_WIDTH: 0.226389
-G1 X145.942 Y129.978 E.00006
-; LINE_WIDTH: 0.201311
-G1 X146.129 Y130.073 E.0027
-; LINE_WIDTH: 0.156438
-G1 X146.319 Y130.165 E.00196
-; LINE_WIDTH: 0.114064
-G1 X146.606 Y130.293 E.00182
-G1 X125.95 Y125.579 F30000
 ; FEATURE: Sparse infill
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X127.579 Y125.579 E.05401
-G1 X128.421 Y126.421 E.03954
-G1 X127.579 Y126.421 E.02796
-G1 X128.421 Y125.579 E.03954
-G1 X132.184 Y125.579 E.12482
-G1 X133.027 Y126.421 E.03954
-G1 X132.184 Y126.421 E.02796
-G1 X133.027 Y125.579 E.03954
-G1 X136.79 Y125.579 E.12482
-G1 X137.633 Y126.421 E.03954
-G1 X136.79 Y126.421 E.02796
-G1 X137.633 Y125.579 E.03954
-G1 X139.989 Y125.579 E.07818
-G1 X141.016 Y125.2 E.03631
-G1 X142.666 Y126.849 E.07739
-G3 X142.659 Y125.157 I8.147 J-.878 E.05623
-G1 X141.016 Y126.8 E.07708
-G1 X139.99 Y126.421 E.0363
-G1 X139.456 Y126.421 E.01771
-G1 X125.444 Y126.421 F30000
-G1 F15476.087
-G1 X123.816 Y126.421 E.05401
-G1 X122.973 Y125.579 E.03954
-G1 X123.816 Y125.579 E.02796
-G1 X122.973 Y126.421 E.03954
-G1 X119.21 Y126.421 E.12482
-G1 X118.367 Y125.579 E.03954
-G1 X119.21 Y125.579 E.02796
-G1 X118.367 Y126.421 E.03954
-G1 X116.01 Y126.421 E.07819
-G1 X114.984 Y126.8 E.0363
-G1 X113.341 Y125.157 E.07708
-G3 X113.341 Y126.843 I-8.738 J.843 E.056
-G1 X114.984 Y125.2 E.07708
-G1 X116.01 Y125.579 E.0363
-G1 X116.544 Y125.579 E.01771
-G1 X111.568 Y123.076 F30000
-; FEATURE: Gap infill
-; LINE_WIDTH: 0.109704
-G1 F15000
-G1 X111.478 Y122.925 E.00096
-G1 X111.423 Y122.883 E.00037
-G1 X110.844 Y122.48 F30000
-; LINE_WIDTH: 0.446396
-G1 F15000
-G1 X110.622 Y122.342 E.00862
-; LINE_WIDTH: 0.414693
-G1 X110.531 Y122.287 E.0032
-; LINE_WIDTH: 0.374913
-G1 X110.434 Y122.23 E.00305
-; LINE_WIDTH: 0.337604
-G1 X110.342 Y122.178 E.00253
-; LINE_WIDTH: 0.302895
-G1 X110.246 Y122.123 E.00235
-; LINE_WIDTH: 0.270661
-G1 X110.154 Y122.074 E.00194
-; LINE_WIDTH: 0.240979
-G1 X110.058 Y122.022 E.00176
-; LINE_WIDTH: 0.200978
-G1 X109.869 Y121.926 E.00274
-; LINE_WIDTH: 0.155942
-G1 X109.679 Y121.835 E.00194
-; LINE_WIDTH: 0.113938
-G1 X109.394 Y121.707 E.00181
+G1 X146.477 Y121.45 E.05401
+G1 X146.912 Y121.884 E.02038
+G3 X147.733 Y121.619 I1.732 J3.955 E.02868
+G1 X148.389 Y120.963 E.03076
+G3 X153.256 Y123.772 I.324 J5.06 E.19757
+G1 X152.841 Y124.187 E.01947
+G3 X152.841 Y127.813 I-4.286 J1.813 E.12356
+G1 X153.252 Y128.225 E.0193
+G3 X148.389 Y131.037 I-4.58 J-2.308 E.19722
+G1 X147.744 Y130.392 E.03025
+G3 X146.912 Y130.116 I1.163 J-4.893 E.02913
+G1 X146.476 Y130.552 E.02045
+G1 X144.948 Y129.988 E.05401
 ; WIPE_START
-G1 X109.679 Y121.835 E-.76
+G1 X146.476 Y130.552 E-.61877
+G1 X146.739 Y130.289 E-.14123
 ; WIPE_END
 G1 E-.04 F1800
-G1 X111.576 Y128.908 Z1.8 F30000
+G1 X139.163 Y129.363 Z1.8 F30000
+G1 X128.421 Y128.05 Z1.8
 G1 Z1.4
 G1 E.8 F1800
-; LINE_WIDTH: 0.10964
-M73 P76 R3
-G1 F15000
-G1 X111.477 Y129.075 E.00105
-G1 X111.422 Y129.117 E.00038
-G1 X110.844 Y129.52 F30000
-; LINE_WIDTH: 0.446355
-G1 F15000
-G1 X110.622 Y129.659 E.00862
-; LINE_WIDTH: 0.414628
-G1 X110.531 Y129.713 E.0032
-; LINE_WIDTH: 0.374881
-G1 X110.434 Y129.77 E.00305
-; LINE_WIDTH: 0.337591
-G1 X110.342 Y129.822 E.00253
-; LINE_WIDTH: 0.302886
-G1 X110.246 Y129.877 E.00235
-; LINE_WIDTH: 0.270631
-G1 X110.154 Y129.926 E.00194
-; LINE_WIDTH: 0.240929
-G1 X110.058 Y129.978 E.00176
-; LINE_WIDTH: 0.200977
-G1 X109.869 Y130.074 E.00273
-; LINE_WIDTH: 0.155943
-G1 X109.679 Y130.165 E.00194
-; LINE_WIDTH: 0.113921
-G1 X109.394 Y130.293 E.00181
-; OBJECT_ID: 104
+G1 F15476.087
+G1 X130.05 Y128.05 E.05401
+G1 X125.95 Y123.95 E.19231
+G1 X122.374 Y123.95 E.11864
+G1 X118.274 Y128.05 E.19231
+G1 X116.301 Y128.05 E.06545
+G1 X115.13 Y128.482 E.04141
+G1 X111.656 Y125.008 E.16296
+G3 X111.657 Y126.992 I-4.762 J.992 E.06625
+G1 X115.13 Y123.518 E.16295
+G1 X116.301 Y123.95 E.04141
+G1 X118.274 Y123.95 E.06545
+G1 X122.374 Y128.05 E.19231
+G1 X125.95 Y128.05 E.11864
+G1 X130.05 Y123.95 E.19231
+G1 X133.626 Y123.95 E.11864
+G1 X137.726 Y128.05 E.19231
+G1 X139.699 Y128.05 E.06545
+G1 X140.87 Y128.482 E.04141
+G1 X144.337 Y125.015 E.16265
+G2 X144.333 Y126.981 I5.122 J.994 E.06561
+G1 X140.87 Y123.518 E.16245
+G1 X139.699 Y123.95 E.04142
+G1 X137.726 Y123.95 E.06545
+G1 X133.626 Y128.05 E.19231
+G1 X135.255 Y128.05 E.05401
 ; WIPE_START
-G1 X109.679 Y130.165 E-.76
+G1 X133.626 Y128.05 E-.61876
+G1 X133.889 Y127.787 E-.14124
 ; WIPE_END
 G1 E-.04 F1800
-; stop printing object, unique label id: 72
+G1 X126.292 Y128.519 Z1.8 F30000
+G1 X111.052 Y129.988 Z1.8
+G1 Z1.4
+G1 E.8 F1800
+G1 F15476.087
+G1 X109.524 Y130.552 E.05401
+G1 X109.088 Y130.116 E.02045
+G3 X108.261 Y130.387 I-2.316 J-5.666 E.0289
+G1 X107.611 Y131.037 E.03047
+G3 X102.744 Y128.228 I-.306 J-5.092 E.19742
+G1 X103.159 Y127.813 E.01947
+G3 X103.159 Y124.187 I4.287 J-1.813 E.12355
+G1 X102.748 Y123.775 E.0193
+G3 X107.611 Y120.963 I4.58 J2.308 E.19722
+G1 X108.267 Y121.618 E.03076
+G3 X109.088 Y121.884 I-.915 J4.233 E.02869
+G1 X109.524 Y121.448 E.02045
+G1 X111.052 Y122.012 E.05401
+; OBJECT_ID: 194
+; WIPE_START
+G1 X109.524 Y121.448 E-.61876
+G1 X109.261 Y121.711 E-.14124
+; WIPE_END
+G1 E-.04 F1800
+; stop printing object, unique label id: 123
 M625
-; start printing object, unique label id: 104
+; start printing object, unique label id: 194
 M624 AgAAAAAAAAA=
-G1 X116.875 Y132.711 Z1.8 F30000
-G1 X139.547 Y140.73 Z1.8
+G1 X116.485 Y124.174 Z1.8 F30000
+G1 X147.98 Y134.914 Z1.8
+G1 Z1.4
+G1 E.8 F1800
+; FEATURE: Inner wall
+G1 F15476.087
+G1 X148.004 Y134.909 E.00081
+G3 X148.363 Y134.861 I.725 J4.088 E.01201
+G1 X148.551 Y134.849 E.00624
+G3 X147.477 Y135.039 I.178 J4.148 E.82907
+G1 X147.922 Y134.929 E.01521
+G1 X148.069 Y135.296 F30000
+; FEATURE: Outer wall
+; LINE_WIDTH: 0.42
+G1 F12000
+M204 S5000
+G1 X148.072 Y135.295 E.00009
+G3 X148.397 Y135.252 I.654 J3.702 E.01008
+G1 X148.563 Y135.241 E.00512
+G3 X147.752 Y135.366 I.163 J3.756 E.70057
+G1 X148.011 Y135.309 E.00814
+; WIPE_START
+M204 S10000
+G1 X148.072 Y135.295 E-.02397
+G1 X148.397 Y135.252 E-.1246
+G1 X148.563 Y135.241 E-.06327
+G1 X149.053 Y135.252 E-.18604
+G1 X149.378 Y135.295 E-.12459
+G1 X149.649 Y135.354 E-.10542
+G1 X149.981 Y135.455 E-.13211
+; WIPE_END
+G1 E-.04 F1800
+G1 X142.47 Y136.808 Z1.8 F30000
+G1 X107.259 Y143.149 Z1.8
 G1 Z1.4
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X139.819 Y140.73 E.00902
-G1 X143.197 Y139.483 E.11946
-G2 X143.198 Y143.517 I5.459 J2.016 E.13662
-G1 X139.819 Y142.269 E.11948
-G1 X115.964 Y142.269 E.79131
-G1 X112.585 Y143.517 E.11948
-G2 X112.585 Y139.482 I-5.525 J-2.017 E.1366
-G1 X115.964 Y140.73 E.11948
-G1 X139.487 Y140.73 E.78029
-G1 X139.529 Y140.323 F30000
-G1 F15476.087
-G1 X139.746 Y140.323 E.00721
-G1 X143.976 Y138.762 E.14957
-G2 X143.977 Y144.238 I4.752 J2.737 E.19019
-G1 X139.746 Y142.676 E.1496
-G1 X116.037 Y142.676 E.78649
-G1 X111.806 Y144.238 E.1496
-G2 X111.806 Y138.761 I-4.78 J-2.739 E.19016
-G1 X116.037 Y140.323 E.1496
-G1 X139.469 Y140.323 E.77728
-G1 X139.511 Y139.916 F30000
-G1 F15476.087
-G1 X139.673 Y139.916 E.0054
-G1 X144.822 Y138.016 E.18204
-G1 X144.93 Y138.173 E.0063
-G2 X144.931 Y144.828 I3.689 J3.327 E.24192
-G1 X144.824 Y144.985 E.0063
-G1 X139.673 Y143.083 E.18212
-G1 X116.109 Y143.083 E.78166
-G1 X110.959 Y144.985 E.18212
-G1 X110.851 Y144.828 E.0063
-G2 X110.851 Y138.171 I-3.687 J-3.329 E.24202
-G1 X110.959 Y138.014 E.0063
-G1 X116.109 Y139.916 E.18212
-G1 X139.451 Y139.916 E.77427
-; WIPE_START
-G1 X139.673 Y139.916 E-.08461
-G1 X141.341 Y139.301 E-.67539
-; WIPE_END
-G1 E-.04 F1800
-G1 X133.853 Y140.78 Z1.8 F30000
-G1 X107.134 Y146.057 Z1.8
-G1 Z1.4
-G1 E.8 F1800
-G1 F15476.087
-G1 X106.769 Y146.04 E.01211
-G3 X106.769 Y136.958 I.403 J-4.541 E.44828
-G1 X106.979 Y136.944 E.00698
-G3 X107.194 Y146.057 I.194 J4.555 E.48082
-G1 X107.15 Y145.651 F30000
-G1 F15476.087
-G1 X106.805 Y145.634 E.01148
-G3 X106.804 Y137.363 I.366 J-4.136 E.40836
-G1 X106.992 Y137.351 E.00624
-G3 X107.21 Y145.65 I.178 J4.148 E.43725
-G1 X107.391 Y145.25 F30000
+G1 X106.913 Y143.133 E.01148
+G3 X106.913 Y134.861 I.366 J-4.136 E.40836
+G1 X107.101 Y134.849 E.00624
+G3 X107.319 Y143.149 I.178 J4.148 E.43725
+G1 X107.499 Y142.748 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
-G1 X107.166 Y145.259 E.0069
-G3 X106.839 Y137.754 I.002 J-3.76 E.35274
-G1 X107.005 Y137.743 E.00512
-G3 X107.494 Y145.244 I.163 J3.756 E.35791
-G1 X107.451 Y145.247 E.00134
+G1 X107.275 Y142.757 E.0069
+G3 X106.947 Y135.252 I.002 J-3.76 E.35274
+G1 X107.113 Y135.241 E.00512
+G3 X107.603 Y142.743 I.163 J3.756 E.35791
+G1 X107.559 Y142.745 E.00134
 ; WIPE_START
 M204 S10000
-G1 X107.166 Y145.259 E-.10808
-G1 X106.839 Y145.245 E-.12467
-G1 X106.514 Y145.202 E-.12459
-G1 X106.036 Y145.086 E-.18686
-G1 X105.727 Y144.973 E-.12473
-G1 X105.513 Y144.867 E-.09106
+G1 X107.275 Y142.757 E-.10808
+G1 X106.947 Y142.744 E-.12467
+G1 X106.622 Y142.701 E-.12459
+G1 X106.144 Y142.584 E-.18686
+G1 X105.836 Y142.472 E-.12473
+G1 X105.621 Y142.366 E-.09106
 ; WIPE_END
 G1 E-.04 F1800
-G1 X113.017 Y143.474 Z1.8 F30000
-G1 X147.777 Y137.021 Z1.8
+G1 X113.146 Y141.088 Z1.8 F30000
+G1 X139.583 Y136.6 Z1.8
 G1 Z1.4
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X147.825 Y137.01 E.00163
-G3 X148.219 Y136.958 I.798 J4.489 E.01318
-G1 X148.429 Y136.944 E.00698
-G3 X147.246 Y137.152 I.194 J4.555 E.91026
-G1 X147.719 Y137.036 E.01615
-G1 X147.872 Y137.416 F30000
-G1 F15476.087
-G1 X147.895 Y137.411 E.00081
-G3 X148.254 Y137.363 I.725 J4.088 E.01201
-G1 X148.442 Y137.351 E.00624
-G3 X147.368 Y137.54 I.178 J4.148 E.82907
-G1 X147.814 Y137.431 E.01521
-G1 X147.961 Y137.797 F30000
+G1 X139.636 Y136.6 E.00177
+G1 X147.009 Y133.88 E.26067
+G3 X148.757 Y133.601 I1.768 J5.463 E.05896
+G3 X146.776 Y144.032 I-.036 J5.396 E.62721
+G1 X139.636 Y141.396 E.25244
+G1 X116.364 Y141.396 E.77201
+G1 X109.224 Y144.032 E.25245
+G3 X109.225 Y133.964 I-1.948 J-5.034 E.69475
+G1 X116.364 Y136.6 E.25243
+G1 X139.523 Y136.6 E.76824
+G1 X139.566 Y136.208 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
-G1 X147.964 Y137.797 E.00009
-G3 X148.289 Y137.754 I.654 J3.702 E.01008
-G1 X148.455 Y137.743 E.00512
-G3 X147.643 Y137.868 I.163 J3.756 E.70057
-G1 X147.902 Y137.81 E.00814
+G1 X146.883 Y133.509 E.23962
+G3 X148.758 Y133.209 I1.898 J5.861 E.05859
+G3 X146.642 Y144.4 I-.037 J5.788 E.62299
+G1 X139.566 Y141.788 E.23174
+G1 X116.434 Y141.788 E.71081
+G1 X109.358 Y144.4 E.23174
+G3 X108.246 Y144.704 I-2.113 J-5.538 E.0355
+G3 X109.359 Y133.596 I-.967 J-5.707 E.65398
+G1 X116.434 Y136.208 E.23173
+G1 X139.506 Y136.208 E.70896
 ; WIPE_START
 M204 S10000
-G1 X147.964 Y137.797 E-.02397
-G1 X148.289 Y137.754 E-.1246
-G1 X148.455 Y137.743 E-.06327
-G1 X148.944 Y137.754 E-.18604
-G1 X149.269 Y137.797 E-.12459
-G1 X149.54 Y137.856 E-.10542
-G1 X149.873 Y137.957 E-.13211
+G1 X141.385 Y135.521 E-.76
 ; WIPE_END
 G1 E-.04 F1800
-G1 X142.324 Y139.085 Z1.8 F30000
-G1 X139.493 Y139.509 Z1.8
+G1 X144.95 Y135.011 Z1.8 F30000
 G1 Z1.4
 G1 E.8 F1800
-; FEATURE: Inner wall
-; LINE_WIDTH: 0.45
-G1 F15476.087
-G1 X139.601 Y139.509 E.00358
-G1 X147.032 Y136.767 E.26274
-G3 X148.647 Y136.51 I1.632 J5.051 E.05449
-G3 X146.806 Y146.151 I-.035 J4.989 E.58014
-G1 X139.601 Y143.49 E.25479
-G1 X116.182 Y143.49 E.77683
-G1 X108.975 Y146.151 E.25484
-G3 X108.976 Y136.848 I-1.805 J-4.652 E.64254
-G1 X116.182 Y139.509 E.25481
-G1 X139.433 Y139.509 E.77126
-G1 X139.474 Y139.102 F30000
-G1 F15476.087
-G1 X139.528 Y139.102 E.00177
-G1 X146.9 Y136.382 E.26067
-G3 X148.649 Y136.103 I1.768 J5.463 E.05896
-G3 X146.667 Y146.533 I-.036 J5.396 E.62721
-G1 X139.528 Y143.897 E.25244
-G1 X116.255 Y143.897 E.77201
-G1 X109.116 Y146.533 E.25245
-G3 X109.116 Y136.466 I-1.948 J-5.034 E.69475
-G1 X116.255 Y139.102 E.25243
-G1 X139.414 Y139.102 E.76824
-G1 X139.458 Y138.71 F30000
-; FEATURE: Outer wall
-; LINE_WIDTH: 0.42
-G1 F3600
-M204 S5000
-G1 X146.774 Y136.01 E.23962
-G3 X148.65 Y135.711 I1.898 J5.861 E.05859
-G3 X146.533 Y146.902 I-.037 J5.788 E.62299
-G1 X139.458 Y144.29 E.23174
-G1 X116.325 Y144.29 E.71081
-G1 X109.25 Y146.902 E.23174
-G3 X108.137 Y147.206 I-2.113 J-5.538 E.0355
-G3 X109.25 Y136.097 I-.967 J-5.707 E.65398
-G1 X116.325 Y138.71 E.23173
-G1 X139.398 Y138.71 E.70896
-; WIPE_START
-M204 S10000
-G1 X141.276 Y138.022 E-.76
-; WIPE_END
-G1 E-.04 F1800
-G1 X144.324 Y138.574 Z1.8 F30000
-G1 Z1.4
-G1 E.8 F1800
-; FEATURE: Gap infill
-; LINE_WIDTH: 0.109499
-G1 F15000
-G3 X144.467 Y138.385 I.309 J.084 E.00132
-G1 X145.045 Y137.982 F30000
-; LINE_WIDTH: 0.445793
-G1 F15000
-G1 X145.263 Y137.846 E.00842
-; LINE_WIDTH: 0.414643
-G1 X145.361 Y137.788 E.00346
-; LINE_WIDTH: 0.374549
-G1 X145.452 Y137.734 E.00285
-; LINE_WIDTH: 0.337111
-G1 X145.55 Y137.678 E.00269
-; LINE_WIDTH: 0.302133
-G1 X145.641 Y137.626 E.00223
-; LINE_WIDTH: 0.26974
-G1 X145.738 Y137.574 E.00204
-; LINE_WIDTH: 0.239787
-G1 X145.831 Y137.524 E.00168
-; LINE_WIDTH: 0.224671
-G1 X145.834 Y137.523 E.00006
-; LINE_WIDTH: 0.199568
-G1 X146.021 Y137.428 E.00267
-; LINE_WIDTH: 0.154649
-G1 X146.211 Y137.336 E.00192
-; LINE_WIDTH: 0.113306
-G1 X146.482 Y137.214 E.0017
-; WIPE_START
-G1 X146.211 Y137.336 E-.76
-; WIPE_END
-G1 E-.04 F1800
-G1 X144.324 Y144.424 Z1.8 F30000
-G1 Z1.4
-G1 E.8 F1800
-; LINE_WIDTH: 0.107558
-G1 F15000
-G2 X144.468 Y144.616 I.494 J-.221 E.00128
-G1 X145.047 Y145.019 F30000
-; LINE_WIDTH: 0.446798
-G1 F15000
-G1 X145.262 Y145.153 E.00833
-; LINE_WIDTH: 0.416333
-G1 X145.36 Y145.212 E.00348
-; LINE_WIDTH: 0.376205
-G1 X145.451 Y145.266 E.00287
-; LINE_WIDTH: 0.338755
-G1 X145.549 Y145.322 E.00271
-; LINE_WIDTH: 0.303797
-G1 X145.641 Y145.373 E.00224
-; LINE_WIDTH: 0.271424
-G1 X145.738 Y145.426 E.00205
-; LINE_WIDTH: 0.241491
-G1 X145.83 Y145.475 E.0017
-; LINE_WIDTH: 0.226389
-G1 X145.834 Y145.477 E.00006
-; LINE_WIDTH: 0.201311
-G1 X146.02 Y145.572 E.0027
-; LINE_WIDTH: 0.156438
-G1 X146.211 Y145.664 E.00196
-; LINE_WIDTH: 0.114064
-G1 X146.498 Y145.793 E.00182
-G1 X125.842 Y141.078 F30000
 ; FEATURE: Sparse infill
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X127.47 Y141.078 E.05401
-G1 X128.313 Y141.921 E.03954
-G1 X127.47 Y141.921 E.02796
-G1 X128.313 Y141.078 E.03954
-G1 X132.076 Y141.078 E.12482
-G1 X132.918 Y141.921 E.03954
-G1 X132.076 Y141.921 E.02796
-G1 X132.918 Y141.078 E.03954
-G1 X136.681 Y141.078 E.12482
-G1 X137.524 Y141.921 E.03954
-G1 X136.681 Y141.921 E.02796
-G1 X137.524 Y141.078 E.03954
-G1 X139.881 Y141.078 E.07818
-G1 X140.908 Y140.699 E.03631
-G1 X142.558 Y142.349 E.07739
-G3 X142.551 Y140.657 I8.147 J-.878 E.05623
-G1 X140.908 Y142.3 E.07708
-G1 X139.881 Y141.921 E.0363
-G1 X139.347 Y141.921 E.01771
-G1 X125.336 Y141.921 F30000
-G1 F15476.087
-G1 X123.707 Y141.921 E.05401
-G1 X122.865 Y141.078 E.03954
-G1 X123.707 Y141.078 E.02796
-G1 X122.865 Y141.921 E.03954
-G1 X119.102 Y141.921 E.12482
-G1 X118.259 Y141.078 E.03954
-G1 X119.102 Y141.078 E.02796
-G1 X118.259 Y141.921 E.03954
-G1 X115.902 Y141.921 E.07819
-G1 X114.875 Y142.3 E.0363
-G1 X113.232 Y140.657 E.07708
-G3 X113.232 Y142.342 I-8.738 J.843 E.056
-G1 X114.875 Y140.699 E.07708
-G1 X115.902 Y141.078 E.0363
-G1 X116.436 Y141.078 E.01771
-G1 X111.46 Y138.575 F30000
-; FEATURE: Gap infill
-; LINE_WIDTH: 0.109704
-G1 F15000
-G1 X111.369 Y138.425 E.00096
-G1 X111.315 Y138.383 E.00037
-G1 X110.736 Y137.98 F30000
-; LINE_WIDTH: 0.446396
-G1 F15000
-G1 X110.513 Y137.841 E.00862
-; LINE_WIDTH: 0.414693
-G1 X110.422 Y137.787 E.0032
-; LINE_WIDTH: 0.374913
-G1 X110.326 Y137.729 E.00305
-; LINE_WIDTH: 0.337604
-G1 X110.234 Y137.677 E.00253
-; LINE_WIDTH: 0.302895
-G1 X110.137 Y137.623 E.00235
-; LINE_WIDTH: 0.270661
-G1 X110.045 Y137.573 E.00194
-; LINE_WIDTH: 0.240979
-G1 X109.949 Y137.522 E.00176
-; LINE_WIDTH: 0.200978
-G1 X109.76 Y137.425 E.00274
-; LINE_WIDTH: 0.155942
-G1 X109.57 Y137.334 E.00194
-; LINE_WIDTH: 0.113938
-G1 X109.285 Y137.207 E.00181
+G1 X146.477 Y134.447 E.05401
+G1 X146.912 Y134.882 E.02038
+G3 X147.733 Y134.616 I1.732 J3.955 E.02868
+G1 X148.389 Y133.961 E.03076
+G3 X153.256 Y136.77 I.324 J5.06 E.19757
+G1 X152.841 Y137.185 E.01947
+G3 X152.841 Y140.811 I-4.286 J1.813 E.12356
+G1 X153.252 Y141.222 E.0193
+G3 X148.389 Y144.035 I-4.58 J-2.308 E.19722
+G1 X147.744 Y143.39 E.03025
+G3 X146.912 Y143.114 I1.163 J-4.893 E.02913
+G1 X146.476 Y143.55 E.02045
+G1 X144.948 Y142.986 E.05401
 ; WIPE_START
-G1 X109.57 Y137.334 E-.76
+G1 X146.476 Y143.55 E-.61877
+G1 X146.739 Y143.287 E-.14123
 ; WIPE_END
 G1 E-.04 F1800
-M73 P77 R3
-G1 X111.468 Y144.407 Z1.8 F30000
+G1 X139.163 Y142.361 Z1.8 F30000
+G1 X128.421 Y141.047 Z1.8
 G1 Z1.4
 G1 E.8 F1800
-; LINE_WIDTH: 0.10964
-G1 F15000
-G1 X111.369 Y144.574 E.00105
-G1 X111.314 Y144.617 E.00038
-G1 X110.736 Y145.019 F30000
-; LINE_WIDTH: 0.446355
-G1 F15000
-G1 X110.513 Y145.158 E.00862
-; LINE_WIDTH: 0.414628
-G1 X110.422 Y145.212 E.0032
-; LINE_WIDTH: 0.374881
-G1 X110.326 Y145.27 E.00305
-; LINE_WIDTH: 0.337591
-G1 X110.234 Y145.322 E.00253
-; LINE_WIDTH: 0.302886
-G1 X110.137 Y145.376 E.00235
-; LINE_WIDTH: 0.270631
-G1 X110.045 Y145.426 E.00194
-; LINE_WIDTH: 0.240929
-G1 X109.949 Y145.477 E.00176
-; LINE_WIDTH: 0.200977
-G1 X109.76 Y145.573 E.00273
-; LINE_WIDTH: 0.155943
-G1 X109.57 Y145.665 E.00194
-; LINE_WIDTH: 0.113921
-G1 X109.285 Y145.793 E.00181
+G1 F15476.087
+G1 X130.05 Y141.047 E.05401
+G1 X125.95 Y136.948 E.19231
+G1 X122.374 Y136.948 E.11864
+G1 X118.274 Y141.047 E.19231
+G1 X116.301 Y141.047 E.06545
+G1 X115.13 Y141.48 E.04141
+G1 X111.656 Y138.006 E.16296
+G3 X111.657 Y139.989 I-4.762 J.992 E.06625
+G1 X115.13 Y136.516 E.16295
+G1 X116.301 Y136.948 E.04141
+G1 X118.274 Y136.948 E.06545
+G1 X122.374 Y141.047 E.19231
+G1 X125.95 Y141.047 E.11864
+G1 X130.05 Y136.948 E.19231
+G1 X133.626 Y136.948 E.11864
+G1 X137.726 Y141.047 E.19231
+G1 X139.699 Y141.047 E.06545
+G1 X140.87 Y141.48 E.04141
+G1 X144.337 Y138.013 E.16265
+G2 X144.333 Y139.979 I5.122 J.994 E.06561
+G1 X140.87 Y136.516 E.16245
+G1 X139.699 Y136.948 E.04142
+G1 X137.726 Y136.948 E.06545
+G1 X133.626 Y141.047 E.19231
+G1 X135.255 Y141.047 E.05401
+; WIPE_START
+G1 X133.626 Y141.047 E-.61876
+G1 X133.889 Y140.785 E-.14124
+; WIPE_END
+G1 E-.04 F1800
+G1 X126.292 Y141.517 Z1.8 F30000
+G1 X111.052 Y142.986 Z1.8
+G1 Z1.4
+G1 E.8 F1800
+G1 F15476.087
+G1 X109.524 Y143.55 E.05401
+G1 X109.088 Y143.114 E.02045
+G3 X108.261 Y143.385 I-2.316 J-5.666 E.0289
+G1 X107.611 Y144.034 E.03047
+M73 P77 R2
+G3 X102.744 Y141.226 I-.306 J-5.092 E.19742
+G1 X103.159 Y140.811 E.01947
+G3 X103.159 Y137.185 I4.287 J-1.813 E.12355
+G1 X102.748 Y136.773 E.0193
+G3 X107.611 Y133.961 I4.58 J2.308 E.19722
+G1 X108.267 Y134.616 E.03076
+G3 X109.088 Y134.882 I-.915 J4.233 E.02869
+G1 X109.524 Y134.446 E.02045
+G1 X111.052 Y135.01 E.05401
 ; CHANGE_LAYER
 ; Z_HEIGHT: 1.6
 ; LAYER_HEIGHT: 0.2
 ; WIPE_START
-G1 F15000
-G1 X109.57 Y145.665 E-.76
+G1 F15476.087
+G1 X109.524 Y134.446 E-.61876
+G1 X109.261 Y134.709 E-.14124
 ; WIPE_END
 G1 E-.04 F1800
-; stop printing object, unique label id: 104
+; stop printing object, unique label id: 194
 M625
 ; layer num/total_layer_count: 8/15
 ; update layer progress
@@ -6359,7 +5285,7 @@ M73 L8
 M991 S0 P7 ;notify layer change
 G17
 G3 Z1.8 I1.217 J0 P1  F30000
-; object ids of layer 8 start: 72,104
+; object ids of layer 8 start: 123,194
 M624 AwAAAAAAAAA=
 ;========Date 20250206========
 ; SKIPPABLE_START
@@ -6374,108 +5300,15 @@ M1004 S5 P1  ; external shutter
 M623
 ; SKIPPABLE_END
 
-; object ids of this layer8 end: 72,104
+; object ids of this layer8 end: 123,194
 M625
-; OBJECT_ID: 72
-; start printing object, unique label id: 72
+; OBJECT_ID: 123
+; start printing object, unique label id: 123
 M624 AQAAAAAAAAA=
-G1 X139.655 Y125.23
+G1 X147.98 Y121.917
 G1 Z1.6
 G1 E.8 F1800
 ; FEATURE: Inner wall
-; LINE_WIDTH: 0.45
-G1 F15476.087
-G1 X139.927 Y125.23 E.00901
-G1 X143.306 Y123.984 E.11946
-G2 X143.306 Y128.017 I5.526 J2.016 E.13656
-G1 X139.927 Y126.77 E.11947
-G1 X116.072 Y126.77 E.79131
-G1 X112.694 Y128.017 E.11948
-G2 X112.694 Y123.983 I-5.458 J-2.017 E.13666
-G1 X116.072 Y125.23 E.11948
-G1 X139.595 Y125.23 E.7803
-G1 X139.637 Y124.823 F30000
-G1 F15476.087
-G1 X139.855 Y124.823 E.0072
-G1 X144.085 Y123.263 E.14956
-G2 X144.085 Y128.739 I4.781 J2.737 E.1901
-G1 X139.855 Y127.177 E.1496
-G1 X116.145 Y127.177 E.78649
-G1 X111.915 Y128.739 E.1496
-G2 X111.915 Y123.261 I-4.752 J-2.739 E.19025
-G1 X116.145 Y124.823 E.1496
-G1 X139.577 Y124.823 E.77729
-G1 X139.619 Y124.416 F30000
-G1 F15476.087
-G1 X139.782 Y124.416 E.00539
-G1 X144.931 Y122.517 E.18204
-G1 X145.038 Y122.673 E.0063
-G2 X145.04 Y129.329 I3.703 J3.327 E.24181
-G1 X144.932 Y129.485 E.0063
-G1 X139.782 Y127.584 E.18212
-G1 X116.218 Y127.584 E.78166
-G1 X111.068 Y129.485 E.18212
-G1 X110.96 Y129.329 E.0063
-G2 X110.96 Y122.671 I-3.687 J-3.329 E.24202
-G1 X111.068 Y122.515 E.0063
-G1 X116.218 Y124.416 E.18212
-G1 X139.559 Y124.416 E.77428
-; WIPE_START
-G1 X139.782 Y124.416 E-.08453
-G1 X141.449 Y123.801 E-.67547
-; WIPE_END
-G1 E-.04 F1800
-G1 X133.963 Y125.288 Z2 F30000
-G1 X107.473 Y130.551 Z2
-G1 Z1.6
-G1 E.8 F1800
-G1 F15476.087
-G1 X107.275 Y130.558 E.00657
-G3 X106.878 Y121.458 I.006 J-4.559 E.46149
-G1 X107.087 Y121.444 E.00697
-G3 X107.672 Y130.541 I.194 J4.555 E.46853
-G1 X107.533 Y130.548 E.00463
-G1 X107.456 Y130.144 F30000
-G1 F15476.087
-G1 X107.275 Y130.151 E.006
-G3 X106.913 Y121.864 I.004 J-4.152 E.42038
-G1 X107.101 Y121.851 E.00623
-G3 X107.637 Y130.135 I.178 J4.148 E.42669
-G1 X107.516 Y130.141 E.00403
-G1 X107.505 Y129.751 F30000
-; FEATURE: Outer wall
-; LINE_WIDTH: 0.42
-G1 F3600
-M204 S5000
-G1 X107.439 Y129.756 E.00203
-G3 X106.947 Y122.254 I-.162 J-3.756 E.35777
-G1 X107.113 Y122.243 E.00512
-G3 X107.766 Y129.727 I.163 J3.756 E.35288
-G1 X107.564 Y129.745 E.00621
-; WIPE_START
-M204 S10000
-G1 X107.439 Y129.756 E-.04786
-G1 X106.947 Y129.746 E-.18688
-G1 X106.622 Y129.703 E-.1246
-G1 X106.302 Y129.632 E-.12471
-G1 X105.989 Y129.533 E-.12459
-G1 X105.686 Y129.408 E-.12462
-G1 X105.624 Y129.375 E-.02674
-; WIPE_END
-G1 E-.04 F1800
-G1 X113.128 Y127.981 Z2 F30000
-G1 X147.886 Y121.522 Z2
-G1 Z1.6
-G1 E.8 F1800
-; FEATURE: Inner wall
-; LINE_WIDTH: 0.45
-G1 F15476.087
-G1 X147.933 Y121.51 E.00163
-G3 X148.328 Y121.458 I.798 J4.489 E.0132
-G1 X148.537 Y121.444 E.00697
-G3 X147.355 Y121.653 I.194 J4.555 E.91023
-G1 X147.827 Y121.536 E.01615
-G1 X147.98 Y121.917 F30000
 G1 F15476.087
 G1 X148.004 Y121.911 E.0008
 G3 X148.363 Y121.864 I.725 J4.088 E.01202
@@ -6485,7 +5318,7 @@ G1 X147.922 Y121.931 E.01522
 G1 X148.045 Y122.304 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
 G1 X148.072 Y122.297 E.00085
 G3 X148.397 Y122.254 I.655 J3.702 E.01008
@@ -6503,28 +5336,49 @@ G1 X149.637 Y122.353 E-.10062
 G1 X149.958 Y122.451 E-.1276
 ; WIPE_END
 G1 E-.04 F1800
-G1 X142.411 Y123.586 Z2 F30000
-G1 X139.601 Y124.009 Z2
+G1 X142.448 Y123.81 Z2 F30000
+G1 X107.456 Y130.144 Z2
 G1 Z1.6
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X139.709 Y124.009 E.00358
-G1 X147.14 Y121.268 E.26273
-G3 X148.739 Y121.011 I1.634 J5.057 E.05393
-G3 X146.915 Y130.651 I-.014 J4.99 E.58095
-G1 X139.709 Y127.991 E.25482
-G1 X116.291 Y127.991 E.77683
-G1 X109.085 Y130.651 E.2548
-G3 X109.085 Y121.349 I-1.806 J-4.651 E.64261
-G1 X116.291 Y124.009 E.25479
-G1 X139.541 Y124.009 E.77126
-G1 X139.583 Y123.602 F30000
+G1 X107.275 Y130.151 E.006
+G3 X106.913 Y121.864 I.004 J-4.152 E.42038
+G1 X107.101 Y121.851 E.00623
+G3 X107.637 Y130.135 I.178 J4.148 E.42669
+G1 X107.516 Y130.141 E.00403
+G1 X107.505 Y129.751 F30000
+; FEATURE: Outer wall
+; LINE_WIDTH: 0.42
+G1 F12000
+M204 S5000
+G1 X107.439 Y129.756 E.00203
+G3 X106.947 Y122.254 I-.162 J-3.756 E.35777
+G1 X107.113 Y122.243 E.00512
+G3 X107.766 Y129.727 I.163 J3.756 E.35288
+G1 X107.564 Y129.745 E.00621
+; WIPE_START
+M204 S10000
+G1 X107.439 Y129.756 E-.04786
+G1 X106.947 Y129.746 E-.18688
+G1 X106.622 Y129.703 E-.1246
+G1 X106.302 Y129.632 E-.12471
+G1 X105.989 Y129.533 E-.12459
+G1 X105.686 Y129.408 E-.12462
+G1 X105.624 Y129.375 E-.02674
+; WIPE_END
+G1 E-.04 F1800
+G1 X113.148 Y128.096 Z2 F30000
+G1 X139.583 Y123.602 Z2
+G1 Z1.6
+G1 E.8 F1800
+; FEATURE: Inner wall
+; LINE_WIDTH: 0.45
 G1 F15476.087
 G1 X139.636 Y123.602 E.00176
 G1 X147.009 Y120.882 E.26067
-G3 X148.74 Y120.604 I1.769 J5.469 E.05838
+G3 X148.74 Y120.603 I1.769 J5.469 E.05838
 G3 X146.776 Y131.034 I-.015 J5.397 E.62807
 G1 X139.636 Y128.398 E.25244
 G1 X116.364 Y128.398 E.77201
@@ -6535,7 +5389,7 @@ G1 X139.523 Y123.602 E.76825
 G1 X139.566 Y123.21 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
 G1 X146.883 Y120.511 E.23962
 G3 X148.741 Y120.211 I1.899 J5.867 E.05806
@@ -6552,541 +5406,285 @@ M204 S10000
 G1 X141.385 Y122.523 E-.76
 ; WIPE_END
 G1 E-.04 F1800
-G1 X139.456 Y126.421 Z2 F30000
+G1 X135.716 Y127.634 Z2 F30000
+G1 X135.255 Y128.05 Z2
 G1 Z1.6
 G1 E.8 F1800
 ; FEATURE: Sparse infill
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X139.99 Y126.421 E.01771
-G1 X141.016 Y126.8 E.0363
-G1 X142.66 Y125.157 E.0771
-G2 X142.666 Y126.849 I8.124 J.816 E.05624
-G1 X141.016 Y125.2 E.07739
-G1 X139.989 Y125.579 E.03631
-G1 X137.633 Y125.579 E.07818
-G1 X136.79 Y126.421 E.03954
-G1 X137.633 Y126.421 E.02796
-G1 X136.79 Y125.579 E.03954
-G1 X133.027 Y125.579 E.12482
-G1 X132.184 Y126.421 E.03954
-G1 X133.027 Y126.421 E.02796
-G1 X132.184 Y125.579 E.03954
-G1 X128.421 Y125.579 E.12482
-G1 X127.579 Y126.421 E.03954
-G1 X128.421 Y126.421 E.02796
-G1 X127.579 Y125.579 E.03954
-G1 X125.95 Y125.579 E.05401
-G1 X116.544 Y125.579 F30000
+G1 X133.626 Y128.05 E.05401
+G1 X137.726 Y123.95 E.19231
+G1 X139.699 Y123.95 E.06545
+G1 X140.87 Y123.518 E.04142
+G1 X144.333 Y126.981 E.16245
+G3 X144.343 Y125.009 I4.994 J-.96 E.06584
+G1 X140.87 Y128.482 E.16293
+G1 X139.699 Y128.05 E.04141
+G1 X137.726 Y128.05 E.06545
+G1 X133.626 Y123.95 E.19231
+G1 X130.05 Y123.95 E.11864
+G1 X125.95 Y128.05 E.19231
+G1 X122.374 Y128.05 E.11864
+G1 X118.274 Y123.95 E.19231
+G1 X116.301 Y123.95 E.06545
+G1 X115.13 Y123.518 E.04141
+G1 X111.657 Y126.991 E.16293
+G2 X111.657 Y125.009 I-4.775 J-.991 E.06622
+G1 X115.13 Y128.482 E.16294
+G1 X116.301 Y128.05 E.04141
+G1 X118.274 Y128.05 E.06545
+G1 X122.374 Y123.95 E.19231
+G1 X125.95 Y123.95 E.11864
+G1 X130.05 Y128.05 E.19231
+G1 X128.421 Y128.05 E.05401
+; WIPE_START
+G1 X130.05 Y128.05 E-.61876
+G1 X129.787 Y127.787 E-.14124
+; WIPE_END
+G1 E-.04 F1800
+G1 X137.34 Y128.883 Z2 F30000
+G1 X144.948 Y129.988 Z2
+G1 Z1.6
+G1 E.8 F1800
 G1 F15476.087
-G1 X116.01 Y125.579 E.01771
-G1 X114.984 Y125.2 E.0363
-G1 X113.34 Y126.843 E.0771
-G2 X113.34 Y125.157 I-8.69 J-.844 E.05601
-G1 X114.984 Y126.8 E.07709
-G1 X116.01 Y126.421 E.0363
-G1 X118.367 Y126.421 E.07819
-G1 X119.21 Y125.579 E.03954
-G1 X118.367 Y125.579 E.02796
-G1 X119.21 Y126.421 E.03954
-G1 X122.973 Y126.421 E.12482
-G1 X123.816 Y125.579 E.03954
-G1 X122.973 Y125.579 E.02796
-G1 X123.816 Y126.421 E.03954
-G1 X125.444 Y126.421 E.05401
-G1 X111.568 Y128.924 F30000
-; FEATURE: Gap infill
-; LINE_WIDTH: 0.109717
-G1 F15000
-G1 X111.478 Y129.075 E.00096
-G1 X111.423 Y129.117 E.00038
-G1 X110.844 Y129.52 F30000
-; LINE_WIDTH: 0.446366
-G1 F15000
-G1 X110.622 Y129.659 E.00862
-; LINE_WIDTH: 0.413402
-G1 X110.525 Y129.716 E.0034
-; LINE_WIDTH: 0.370595
-G1 X110.42 Y129.779 E.00328
-; LINE_WIDTH: 0.328906
-G1 X110.305 Y129.842 E.00306
-; LINE_WIDTH: 0.2896
-G1 X110.19 Y129.905 E.00264
-; LINE_WIDTH: 0.249375
-G1 X110.07 Y129.972 E.00231
-; LINE_WIDTH: 0.215931
-G1 X109.97 Y130.022 E.00157
-; LINE_WIDTH: 0.189472
-G1 X109.869 Y130.074 E.00136
-; LINE_WIDTH: 0.155964
-G1 X109.679 Y130.165 E.00194
-; LINE_WIDTH: 0.113925
-G1 X109.394 Y130.293 E.00181
+G1 X146.476 Y130.552 E.05401
+G1 X146.912 Y130.116 E.02045
+G2 X147.734 Y130.382 I1.743 J-3.982 E.02871
+G1 X148.389 Y131.037 E.03074
+G2 X153.252 Y128.225 I.283 J-5.121 E.19722
+G1 X152.84 Y127.812 E.01937
+G2 X152.841 Y124.187 I-4.273 J-1.814 E.12353
+G1 X153.255 Y123.77 E.01949
+G2 X148.389 Y120.963 I-4.621 J2.388 E.19686
+G1 X147.733 Y121.619 E.03076
+G2 X146.912 Y121.884 I.91 J4.219 E.02868
+G1 X146.477 Y121.45 E.02038
+G1 X144.95 Y122.013 E.05401
 ; WIPE_START
-G1 X109.679 Y130.165 E-.76
+G1 X146.477 Y121.45 E-.61876
+G1 X146.74 Y121.712 E-.14124
 ; WIPE_END
 G1 E-.04 F1800
-G1 X111.568 Y123.075 Z2 F30000
+G1 X139.108 Y121.776 Z2 F30000
+G1 X111.052 Y122.012 Z2
 G1 Z1.6
 G1 E.8 F1800
-; LINE_WIDTH: 0.109689
-G1 F15000
-G1 X111.478 Y122.925 E.00095
-G1 X111.423 Y122.883 E.00037
-G1 X110.844 Y122.48 F30000
-; LINE_WIDTH: 0.446399
-G1 F15000
-G1 X110.622 Y122.342 E.00861
-; LINE_WIDTH: 0.414019
-G1 X110.528 Y122.286 E.00331
-; LINE_WIDTH: 0.372523
-G1 X110.426 Y122.225 E.00318
-; LINE_WIDTH: 0.330079
-G1 X110.307 Y122.158 E.0032
-; LINE_WIDTH: 0.287286
-G1 X110.184 Y122.09 E.00279
-; LINE_WIDTH: 0.245749
-G1 X110.058 Y122.022 E.00237
-; LINE_WIDTH: 0.200964
-G1 X109.869 Y121.926 E.00273
-; LINE_WIDTH: 0.155914
-G1 X109.679 Y121.834 E.00194
-; LINE_WIDTH: 0.113917
-G1 X109.394 Y121.707 E.00181
+G1 F15476.087
+G1 X109.524 Y121.448 E.05401
+G1 X109.088 Y121.884 E.02045
+G2 X108.266 Y121.618 I-1.737 J3.969 E.02869
+G1 X107.612 Y120.964 E.03071
+G2 X102.748 Y123.775 I-.287 J5.118 E.19725
+G1 X103.16 Y124.188 E.01936
+G2 X103.159 Y127.813 I4.275 J1.814 E.12353
+G1 X102.745 Y128.23 E.01949
+G2 X107.611 Y131.037 I4.587 J-2.329 E.19713
+G1 X108.266 Y130.382 E.03075
+G2 X109.088 Y130.116 I-.916 J-4.233 E.0287
+G1 X109.524 Y130.552 E.02045
+G1 X111.052 Y129.988 E.05401
+; OBJECT_ID: 194
 ; WIPE_START
-G1 X109.679 Y121.834 E-.76
+G1 X109.524 Y130.552 E-.61877
+G1 X109.261 Y130.289 E-.14123
 ; WIPE_END
 G1 E-.04 F1800
-G1 X117.306 Y122.107 Z2 F30000
-G1 X144.432 Y123.076 Z2
-G1 Z1.6
-G1 E.8 F1800
-; LINE_WIDTH: 0.109563
-G1 F15000
-G3 X144.576 Y122.885 I.311 J.085 E.00133
-G1 X145.154 Y122.482 F30000
-; LINE_WIDTH: 0.445765
-G1 F15000
-G1 X145.372 Y122.346 E.00842
-; LINE_WIDTH: 0.414616
-G1 X145.47 Y122.288 E.00346
-; LINE_WIDTH: 0.374578
-G1 X145.56 Y122.234 E.00285
-; LINE_WIDTH: 0.337134
-G1 X145.658 Y122.179 E.00269
-; LINE_WIDTH: 0.302103
-G1 X145.75 Y122.127 E.00223
-; LINE_WIDTH: 0.269698
-G1 X145.847 Y122.074 E.00204
-; LINE_WIDTH: 0.239773
-G1 X145.939 Y122.025 E.00168
-; LINE_WIDTH: 0.224665
-G1 X145.943 Y122.023 E.00006
-; LINE_WIDTH: 0.19957
-G1 X146.129 Y121.928 E.00267
-; LINE_WIDTH: 0.15464
-M73 P78 R3
-G1 X146.32 Y121.836 E.00193
-; LINE_WIDTH: 0.113285
-G1 X146.59 Y121.715 E.0017
-; WIPE_START
-G1 X146.32 Y121.836 E-.76
-; WIPE_END
-G1 E-.04 F1800
-G1 X144.432 Y128.924 Z2 F30000
-G1 Z1.6
-G1 E.8 F1800
-; LINE_WIDTH: 0.107564
-G1 F15000
-G2 X144.577 Y129.117 I.494 J-.222 E.00128
-G1 X145.156 Y129.52 F30000
-; LINE_WIDTH: 0.446759
-G1 F15000
-G1 X145.371 Y129.654 E.00834
-; LINE_WIDTH: 0.416286
-G1 X145.469 Y129.713 E.00348
-; LINE_WIDTH: 0.376186
-G1 X145.56 Y129.767 E.00287
-; LINE_WIDTH: 0.338741
-G1 X145.658 Y129.822 E.00271
-; LINE_WIDTH: 0.303792
-G1 X145.749 Y129.874 E.00224
-; LINE_WIDTH: 0.271435
-G1 X145.846 Y129.926 E.00205
-; LINE_WIDTH: 0.241511
-G1 X145.939 Y129.976 E.0017
-; LINE_WIDTH: 0.226383
-G1 X145.942 Y129.978 E.00006
-; LINE_WIDTH: 0.201313
-G1 X146.129 Y130.073 E.0027
-; LINE_WIDTH: 0.156418
-G1 X146.319 Y130.165 E.00196
-; LINE_WIDTH: 0.114054
-G1 X146.606 Y130.293 E.00182
-; OBJECT_ID: 104
-; WIPE_START
-G1 X146.319 Y130.165 E-.76
-; WIPE_END
-G1 E-.04 F1800
-; stop printing object, unique label id: 72
+; stop printing object, unique label id: 123
 M625
-; start printing object, unique label id: 104
+; start printing object, unique label id: 194
 M624 AgAAAAAAAAA=
-G1 X142.2 Y136.59 Z2 F30000
-G1 X139.547 Y140.73 Z2
+G1 X116.84 Y131.194 Z2 F30000
+G1 X147.98 Y134.914 Z2
+G1 Z1.6
+G1 E.8 F1800
+; FEATURE: Inner wall
+G1 F15476.087
+G1 X148.004 Y134.909 E.0008
+G3 X148.363 Y134.861 I.725 J4.088 E.01202
+G1 X148.551 Y134.849 E.00623
+G3 X147.477 Y135.039 I.178 J4.148 E.82905
+G1 X147.922 Y134.929 E.01522
+G1 X148.045 Y135.301 F30000
+; FEATURE: Outer wall
+; LINE_WIDTH: 0.42
+G1 F12000
+M204 S5000
+G1 X148.072 Y135.295 E.00085
+G3 X148.397 Y135.252 I.655 J3.702 E.01008
+G1 X148.563 Y135.241 E.00512
+G3 X147.595 Y135.412 I.163 J3.756 E.69553
+G1 X147.987 Y135.316 E.01242
+; WIPE_START
+M204 S10000
+G1 X148.072 Y135.295 E-.03327
+G1 X148.397 Y135.252 E-.1246
+G1 X148.563 Y135.241 E-.06327
+G1 X149.053 Y135.252 E-.18604
+G1 X149.378 Y135.295 E-.12461
+G1 X149.637 Y135.351 E-.10062
+G1 X149.958 Y135.448 E-.1276
+; WIPE_END
+G1 E-.04 F1800
+G1 X142.448 Y136.808 Z2 F30000
+G1 X107.456 Y143.142 Z2
 G1 Z1.6
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X139.819 Y140.73 E.00901
-G1 X143.197 Y139.483 E.11946
-G2 X143.198 Y143.517 I5.526 J2.016 E.13656
-G1 X139.819 Y142.269 E.11947
-G1 X115.964 Y142.269 E.79131
-G1 X112.585 Y143.517 E.11948
-G2 X112.585 Y139.482 I-5.458 J-2.017 E.13666
-G1 X115.964 Y140.73 E.11948
-G1 X139.487 Y140.73 E.7803
-G1 X139.529 Y140.323 F30000
-G1 F15476.087
-G1 X139.746 Y140.323 E.0072
-G1 X143.976 Y138.762 E.14956
-G2 X143.977 Y144.238 I4.781 J2.737 E.1901
-G1 X139.746 Y142.676 E.1496
-G1 X116.037 Y142.676 E.78649
-G1 X111.806 Y144.238 E.1496
-G2 X111.806 Y138.761 I-4.752 J-2.739 E.19025
-G1 X116.037 Y140.323 E.1496
-G1 X139.469 Y140.323 E.77729
-G1 X139.511 Y139.916 F30000
-G1 F15476.087
-G1 X139.673 Y139.916 E.00539
-G1 X144.822 Y138.016 E.18204
-G1 X144.93 Y138.173 E.0063
-G2 X144.931 Y144.828 I3.703 J3.327 E.24181
-G1 X144.824 Y144.985 E.0063
-G1 X139.673 Y143.083 E.18212
-G1 X116.109 Y143.083 E.78166
-G1 X110.959 Y144.985 E.18212
-G1 X110.851 Y144.828 E.0063
-G2 X110.851 Y138.171 I-3.687 J-3.329 E.24202
-G1 X110.959 Y138.014 E.0063
-G1 X116.109 Y139.916 E.18212
-G1 X139.451 Y139.916 E.77428
-; WIPE_START
-G1 X139.673 Y139.916 E-.08453
-G1 X141.341 Y139.3 E-.67547
-; WIPE_END
-G1 E-.04 F1800
-G1 X133.855 Y140.788 Z2 F30000
-G1 X107.365 Y146.05 Z2
-G1 Z1.6
-G1 E.8 F1800
-G1 F15476.087
-G1 X107.166 Y146.057 E.00657
-G3 X106.769 Y136.958 I.006 J-4.559 E.46149
-G1 X106.979 Y136.944 E.00697
-G3 X107.564 Y146.041 I.194 J4.555 E.46853
-G1 X107.424 Y146.047 E.00463
-G1 X107.347 Y145.644 F30000
-G1 F15476.087
-G1 X107.166 Y145.65 E.006
-G3 X106.805 Y137.363 I.004 J-4.152 E.42038
-G1 X106.992 Y137.351 E.00623
-G3 X107.528 Y145.635 I.178 J4.148 E.42669
-G1 X107.407 Y145.641 E.00403
-G1 X107.396 Y145.25 F30000
+G1 X107.275 Y143.149 E.006
+G3 X106.913 Y134.861 I.004 J-4.152 E.42038
+G1 X107.101 Y134.849 E.00623
+G3 X107.637 Y143.133 I.178 J4.148 E.42669
+G1 X107.516 Y143.139 E.00403
+G1 X107.505 Y142.749 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
-G1 X107.33 Y145.255 E.00203
-G3 X106.839 Y137.754 I-.162 J-3.756 E.35777
-G1 X107.005 Y137.743 E.00512
-G3 X107.657 Y145.227 I.163 J3.756 E.35288
-G1 X107.456 Y145.245 E.00621
+G1 X107.439 Y142.753 E.00203
+G3 X106.947 Y135.252 I-.162 J-3.756 E.35777
+G1 X107.113 Y135.241 E.00512
+G3 X107.766 Y142.725 I.163 J3.756 E.35288
+M73 P78 R2
+G1 X107.564 Y142.743 E.00621
 ; WIPE_START
 M204 S10000
-G1 X107.33 Y145.255 E-.04786
-G1 X106.839 Y145.245 E-.18688
-G1 X106.514 Y145.202 E-.1246
-G1 X106.193 Y145.131 E-.12471
-G1 X105.88 Y145.033 E-.12459
-G1 X105.578 Y144.907 E-.12462
-G1 X105.515 Y144.875 E-.02674
+G1 X107.439 Y142.753 E-.04786
+G1 X106.947 Y142.744 E-.18688
+G1 X106.622 Y142.701 E-.1246
+G1 X106.302 Y142.63 E-.12471
+G1 X105.989 Y142.531 E-.12459
+G1 X105.686 Y142.406 E-.12462
+G1 X105.624 Y142.373 E-.02674
 ; WIPE_END
 G1 E-.04 F1800
-G1 X113.019 Y143.48 Z2 F30000
-G1 X147.777 Y137.021 Z2
+G1 X113.148 Y141.094 Z2 F30000
+G1 X139.583 Y136.6 Z2
 G1 Z1.6
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X147.825 Y137.01 E.00163
-G3 X148.219 Y136.958 I.798 J4.489 E.0132
-G1 X148.429 Y136.944 E.00697
-G3 X147.246 Y137.152 I.194 J4.555 E.91023
-G1 X147.719 Y137.035 E.01615
-G1 X147.872 Y137.416 F30000
-G1 F15476.087
-G1 X147.895 Y137.411 E.0008
-G3 X148.255 Y137.363 I.725 J4.088 E.01202
-G1 X148.442 Y137.351 E.00623
-G3 X147.368 Y137.54 I.178 J4.148 E.82905
-G1 X147.814 Y137.431 E.01522
-G1 X147.937 Y137.803 F30000
+G1 X139.636 Y136.6 E.00176
+G1 X147.009 Y133.88 E.26067
+G3 X148.74 Y133.601 I1.769 J5.469 E.05838
+G3 X146.776 Y144.032 I-.015 J5.397 E.62807
+G1 X139.636 Y141.396 E.25244
+G1 X116.364 Y141.396 E.77201
+G1 X109.225 Y144.031 E.25243
+G3 X109.225 Y133.964 I-1.946 J-5.034 E.69448
+G1 X116.364 Y136.6 E.25242
+G1 X139.523 Y136.6 E.76825
+G1 X139.566 Y136.208 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
-G1 X147.964 Y137.797 E.00085
-G3 X148.289 Y137.754 I.655 J3.702 E.01008
-G1 X148.455 Y137.743 E.00512
-G3 X147.486 Y137.914 I.163 J3.756 E.69553
-G1 X147.879 Y137.817 E.01242
+G1 X146.883 Y133.509 E.23962
+G3 X148.741 Y133.209 I1.899 J5.867 E.05806
+G3 X154.377 Y140.249 I-.024 J5.795 E.3175
+G3 X146.641 Y144.4 I-5.659 J-1.263 E.30601
+G1 X139.566 Y141.788 E.23173
+G1 X116.434 Y141.788 E.71081
+G1 X109.358 Y144.4 E.23174
+G3 X109.359 Y133.596 I-2.082 J-5.402 E.68981
+G1 X116.434 Y136.208 E.23173
+G1 X139.506 Y136.208 E.70896
 ; WIPE_START
 M204 S10000
-G1 X147.964 Y137.797 E-.03327
-G1 X148.289 Y137.754 E-.1246
-G1 X148.455 Y137.743 E-.06327
-G1 X148.944 Y137.754 E-.18604
-G1 X149.269 Y137.797 E-.12461
-G1 X149.528 Y137.853 E-.10062
-G1 X149.849 Y137.95 E-.1276
+G1 X141.385 Y135.521 E-.76
 ; WIPE_END
 G1 E-.04 F1800
-G1 X142.302 Y139.086 Z2 F30000
-G1 X139.493 Y139.509 Z2
-G1 Z1.6
-G1 E.8 F1800
-; FEATURE: Inner wall
-; LINE_WIDTH: 0.45
-G1 F15476.087
-G1 X139.601 Y139.509 E.00358
-G1 X147.031 Y136.767 E.26273
-G3 X148.63 Y136.51 I1.634 J5.057 E.05393
-G3 X146.807 Y146.151 I-.014 J4.99 E.58095
-G1 X139.601 Y143.49 E.25482
-G1 X116.182 Y143.49 E.77683
-G1 X108.976 Y146.151 E.2548
-G3 X108.977 Y136.848 I-1.806 J-4.651 E.64261
-G1 X116.182 Y139.509 E.25479
-G1 X139.433 Y139.509 E.77126
-G1 X139.475 Y139.102 F30000
-G1 F15476.087
-G1 X139.528 Y139.102 E.00176
-G1 X146.9 Y136.382 E.26067
-G3 X148.631 Y136.103 I1.769 J5.469 E.05838
-G3 X146.667 Y146.533 I-.015 J5.397 E.62807
-G1 X139.528 Y143.897 E.25244
-G1 X116.255 Y143.897 E.77201
-G1 X109.116 Y146.533 E.25243
-G3 X109.117 Y136.466 I-1.946 J-5.034 E.69448
-G1 X116.255 Y139.102 E.25242
-G1 X139.415 Y139.102 E.76825
-G1 X139.458 Y138.71 F30000
-; FEATURE: Outer wall
-; LINE_WIDTH: 0.42
-G1 F3600
-M204 S5000
-G1 X146.774 Y136.01 E.23962
-G3 X148.632 Y135.711 I1.899 J5.867 E.05806
-G3 X154.268 Y142.75 I-.024 J5.795 E.3175
-G3 X146.533 Y146.902 I-5.659 J-1.263 E.30601
-G1 X139.458 Y144.29 E.23173
-G1 X116.325 Y144.29 E.71081
-G1 X109.25 Y146.902 E.23174
-G3 X109.25 Y136.097 I-2.082 J-5.402 E.68981
-G1 X116.325 Y138.71 E.23173
-G1 X139.398 Y138.71 E.70896
-; WIPE_START
-M204 S10000
-G1 X141.276 Y138.022 E-.76
-; WIPE_END
-G1 E-.04 F1800
-G1 X139.347 Y141.921 Z2 F30000
+G1 X135.716 Y140.631 Z2 F30000
+G1 X135.255 Y141.047 Z2
 G1 Z1.6
 G1 E.8 F1800
 ; FEATURE: Sparse infill
 ; LINE_WIDTH: 0.45
-M73 P78 R2
 G1 F15476.087
-G1 X139.881 Y141.921 E.01771
-G1 X140.908 Y142.3 E.0363
-G1 X142.551 Y140.656 E.0771
-G2 X142.558 Y142.349 I8.124 J.816 E.05624
-G1 X140.908 Y140.699 E.07739
-G1 X139.881 Y141.078 E.03631
-G1 X137.524 Y141.078 E.07818
-G1 X136.681 Y141.921 E.03954
-G1 X137.524 Y141.921 E.02796
-G1 X136.681 Y141.078 E.03954
-G1 X132.918 Y141.078 E.12482
-G1 X132.076 Y141.921 E.03954
-G1 X132.918 Y141.921 E.02796
-G1 X132.076 Y141.078 E.03954
-G1 X128.313 Y141.078 E.12482
-G1 X127.47 Y141.921 E.03954
-G1 X128.313 Y141.921 E.02796
-G1 X127.47 Y141.078 E.03954
-G1 X125.842 Y141.078 E.05401
-G1 X116.436 Y141.078 F30000
+G1 X133.626 Y141.047 E.05401
+G1 X137.726 Y136.948 E.19231
+G1 X139.699 Y136.948 E.06545
+G1 X140.87 Y136.516 E.04142
+G1 X144.333 Y139.979 E.16245
+G3 X144.343 Y138.007 I4.994 J-.96 E.06584
+G1 X140.87 Y141.48 E.16293
+G1 X139.699 Y141.047 E.04141
+G1 X137.726 Y141.047 E.06545
+G1 X133.626 Y136.948 E.19231
+G1 X130.05 Y136.948 E.11864
+G1 X125.95 Y141.047 E.19231
+G1 X122.374 Y141.047 E.11864
+G1 X118.274 Y136.948 E.19231
+G1 X116.301 Y136.948 E.06545
+G1 X115.13 Y136.516 E.04141
+G1 X111.657 Y139.989 E.16293
+G2 X111.657 Y138.006 I-4.775 J-.991 E.06622
+G1 X115.13 Y141.48 E.16294
+G1 X116.301 Y141.047 E.04141
+G1 X118.274 Y141.047 E.06545
+G1 X122.374 Y136.948 E.19231
+G1 X125.95 Y136.948 E.11864
+G1 X130.05 Y141.047 E.19231
+G1 X128.421 Y141.047 E.05401
+; WIPE_START
+G1 X130.05 Y141.047 E-.61876
+G1 X129.787 Y140.785 E-.14124
+; WIPE_END
+G1 E-.04 F1800
+G1 X137.34 Y141.881 Z2 F30000
+G1 X144.948 Y142.986 Z2
+G1 Z1.6
+G1 E.8 F1800
 G1 F15476.087
-G1 X115.902 Y141.078 E.01771
-G1 X114.875 Y140.699 E.0363
-G1 X113.232 Y142.343 E.0771
-G2 X113.232 Y140.657 I-8.69 J-.844 E.05601
-G1 X114.875 Y142.3 E.07709
-G1 X115.902 Y141.921 E.0363
-G1 X118.259 Y141.921 E.07819
-G1 X119.102 Y141.078 E.03954
-G1 X118.259 Y141.078 E.02796
-G1 X119.102 Y141.921 E.03954
-G1 X122.865 Y141.921 E.12482
-G1 X123.707 Y141.078 E.03954
-G1 X122.865 Y141.078 E.02796
-G1 X123.707 Y141.921 E.03954
-G1 X125.336 Y141.921 E.05401
-G1 X111.46 Y144.424 F30000
-; FEATURE: Gap infill
-; LINE_WIDTH: 0.109717
-G1 F15000
-G1 X111.369 Y144.574 E.00096
-G1 X111.315 Y144.616 E.00038
-G1 X110.736 Y145.019 F30000
-; LINE_WIDTH: 0.446366
-G1 F15000
-G1 X110.513 Y145.158 E.00862
-; LINE_WIDTH: 0.413402
-G1 X110.417 Y145.216 E.0034
-; LINE_WIDTH: 0.370595
-G1 X110.311 Y145.278 E.00328
-; LINE_WIDTH: 0.328906
-G1 X110.196 Y145.342 E.00306
-; LINE_WIDTH: 0.2896
-G1 X110.081 Y145.405 E.00264
-; LINE_WIDTH: 0.249375
-G1 X109.961 Y145.471 E.00231
-; LINE_WIDTH: 0.215931
-G1 X109.862 Y145.522 E.00157
-; LINE_WIDTH: 0.189472
-G1 X109.76 Y145.573 E.00136
-; LINE_WIDTH: 0.155964
-G1 X109.57 Y145.665 E.00194
-; LINE_WIDTH: 0.113925
-G1 X109.285 Y145.793 E.00181
+G1 X146.476 Y143.55 E.05401
+G1 X146.912 Y143.114 E.02045
+G2 X147.734 Y143.38 I1.743 J-3.982 E.02871
+G1 X148.389 Y144.035 E.03074
+G2 X153.252 Y141.222 I.283 J-5.121 E.19722
+G1 X152.84 Y140.81 E.01937
+G2 X152.841 Y137.185 I-4.273 J-1.814 E.12353
+G1 X153.255 Y136.768 E.01949
+G2 X148.389 Y133.961 I-4.621 J2.388 E.19686
+G1 X147.733 Y134.616 E.03076
+G2 X146.912 Y134.882 I.91 J4.219 E.02868
+G1 X146.477 Y134.447 E.02038
+G1 X144.95 Y135.011 E.05401
 ; WIPE_START
-G1 X109.57 Y145.665 E-.76
+G1 X146.477 Y134.447 E-.61876
+G1 X146.74 Y134.71 E-.14124
 ; WIPE_END
 G1 E-.04 F1800
-G1 X111.459 Y138.575 Z2 F30000
+G1 X139.108 Y134.774 Z2 F30000
+G1 X111.052 Y135.01 Z2
 G1 Z1.6
 G1 E.8 F1800
-; LINE_WIDTH: 0.109689
-G1 F15000
-G1 X111.369 Y138.425 E.00095
-G1 X111.315 Y138.383 E.00037
-G1 X110.736 Y137.98 F30000
-; LINE_WIDTH: 0.446399
-G1 F15000
-G1 X110.513 Y137.841 E.00861
-; LINE_WIDTH: 0.414019
-G1 X110.419 Y137.785 E.00331
-; LINE_WIDTH: 0.372523
-G1 X110.317 Y137.725 E.00318
-; LINE_WIDTH: 0.330079
-G1 X110.198 Y137.658 E.0032
-; LINE_WIDTH: 0.287286
-G1 X110.076 Y137.59 E.00279
-; LINE_WIDTH: 0.245749
-G1 X109.949 Y137.522 E.00237
-; LINE_WIDTH: 0.200964
-G1 X109.76 Y137.425 E.00273
-; LINE_WIDTH: 0.155914
-G1 X109.57 Y137.334 E.00194
-; LINE_WIDTH: 0.113917
-G1 X109.285 Y137.206 E.00181
-; WIPE_START
-G1 X109.57 Y137.334 E-.76
-; WIPE_END
-G1 E-.04 F1800
-G1 X117.198 Y137.606 Z2 F30000
-G1 X144.323 Y138.575 Z2
-G1 Z1.6
-G1 E.8 F1800
-; LINE_WIDTH: 0.109563
-G1 F15000
-G3 X144.467 Y138.385 I.311 J.085 E.00133
-G1 X145.045 Y137.982 F30000
-; LINE_WIDTH: 0.445765
-G1 F15000
-G1 X145.263 Y137.846 E.00842
-; LINE_WIDTH: 0.414616
-G1 X145.361 Y137.787 E.00346
-; LINE_WIDTH: 0.374578
-G1 X145.452 Y137.734 E.00285
-; LINE_WIDTH: 0.337134
-G1 X145.55 Y137.678 E.00269
-; LINE_WIDTH: 0.302103
-G1 X145.641 Y137.626 E.00223
-; LINE_WIDTH: 0.269698
-G1 X145.738 Y137.574 E.00204
-; LINE_WIDTH: 0.239773
-G1 X145.831 Y137.524 E.00168
-; LINE_WIDTH: 0.224665
-M73 P79 R2
-G1 X145.834 Y137.523 E.00006
-; LINE_WIDTH: 0.19957
-G1 X146.021 Y137.428 E.00267
-; LINE_WIDTH: 0.15464
-G1 X146.211 Y137.336 E.00193
-; LINE_WIDTH: 0.113285
-G1 X146.482 Y137.214 E.0017
-; WIPE_START
-G1 X146.211 Y137.336 E-.76
-; WIPE_END
-G1 E-.04 F1800
-G1 X144.324 Y144.424 Z2 F30000
-G1 Z1.6
-G1 E.8 F1800
-; LINE_WIDTH: 0.107564
-G1 F15000
-G2 X144.468 Y144.616 I.494 J-.222 E.00128
-G1 X145.047 Y145.019 F30000
-; LINE_WIDTH: 0.446759
-G1 F15000
-G1 X145.262 Y145.153 E.00834
-; LINE_WIDTH: 0.416286
-G1 X145.36 Y145.212 E.00348
-; LINE_WIDTH: 0.376186
-G1 X145.451 Y145.266 E.00287
-; LINE_WIDTH: 0.338741
-G1 X145.549 Y145.322 E.00271
-; LINE_WIDTH: 0.303792
-G1 X145.641 Y145.373 E.00224
-; LINE_WIDTH: 0.271435
-G1 X145.738 Y145.426 E.00205
-; LINE_WIDTH: 0.241511
-G1 X145.83 Y145.475 E.0017
-; LINE_WIDTH: 0.226383
-G1 X145.834 Y145.477 E.00006
-; LINE_WIDTH: 0.201313
-G1 X146.02 Y145.572 E.0027
-; LINE_WIDTH: 0.156418
-G1 X146.211 Y145.664 E.00196
-; LINE_WIDTH: 0.114054
-G1 X146.498 Y145.793 E.00182
+G1 F15476.087
+G1 X109.524 Y134.446 E.05401
+G1 X109.088 Y134.882 E.02045
+G2 X108.266 Y134.616 I-1.737 J3.969 E.02869
+G1 X107.612 Y133.962 E.03071
+G2 X102.748 Y136.773 I-.287 J5.118 E.19725
+G1 X103.16 Y137.186 E.01936
+G2 X103.159 Y140.811 I4.275 J1.814 E.12353
+G1 X102.745 Y141.228 E.01949
+G2 X107.611 Y144.035 I4.587 J-2.329 E.19713
+G1 X108.266 Y143.38 E.03075
+G2 X109.088 Y143.114 I-.916 J-4.233 E.0287
+G1 X109.524 Y143.55 E.02045
+G1 X111.052 Y142.986 E.05401
 ; CHANGE_LAYER
 ; Z_HEIGHT: 1.8
 ; LAYER_HEIGHT: 0.2
 ; WIPE_START
-G1 F15000
-G1 X146.211 Y145.664 E-.76
+G1 F15476.087
+G1 X109.524 Y143.55 E-.61876
+G1 X109.261 Y143.287 E-.14124
 ; WIPE_END
 G1 E-.04 F1800
-; stop printing object, unique label id: 104
+; stop printing object, unique label id: 194
 M625
 ; layer num/total_layer_count: 9/15
 ; update layer progress
@@ -7094,7 +5692,7 @@ M73 L9
 M991 S0 P8 ;notify layer change
 G17
 G3 Z2 I1.217 J0 P1  F30000
-; object ids of layer 9 start: 72,104
+; object ids of layer 9 start: 123,194
 M624 AwAAAAAAAAA=
 ;========Date 20250206========
 ; SKIPPABLE_START
@@ -7109,68 +5707,45 @@ M1004 S5 P1  ; external shutter
 M623
 ; SKIPPABLE_END
 
-; object ids of this layer9 end: 72,104
+; object ids of this layer9 end: 123,194
 M625
-; OBJECT_ID: 72
-; start printing object, unique label id: 72
+; OBJECT_ID: 123
+; start printing object, unique label id: 123
 M624 AQAAAAAAAAA=
-G1 X139.656 Y125.23
+G1 X148.02 Y121.909
+G1 Z1.8
+G1 E.8 F1800
+; FEATURE: Inner wall
+G1 F15476.087
+G1 X148.368 Y121.863 E.01163
+G3 X148.902 Y121.851 I.367 J4.579 E.01774
+G3 X147.961 Y121.919 I-.177 J4.147 E.83366
+G1 X148.019 Y122.309 F30000
+; FEATURE: Outer wall
+; LINE_WIDTH: 0.42
+G1 F12000
+M204 S5000
+G1 X148.072 Y122.297 E.00167
+G3 X148.399 Y122.254 I.653 J3.701 E.01013
+G3 X148.888 Y122.243 I.335 J4.186 E.01503
+G3 X147.752 Y122.368 I-.163 J3.755 E.69034
+G1 X147.961 Y122.322 E.00657
+; WIPE_START
+M204 S10000
+G1 X148.072 Y122.297 E-.04342
+G1 X148.399 Y122.254 E-.12528
+G1 X148.888 Y122.243 E-.18574
+G1 X149.216 Y122.272 E-.12518
+G1 X149.622 Y122.349 E-.15695
+G1 X149.93 Y122.45 E-.12343
+; WIPE_END
+G1 E-.04 F1800
+G1 X142.421 Y123.815 Z2.2 F30000
+G1 X107.653 Y130.134 Z2.2
 G1 Z1.8
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
-G1 F15476.087
-G1 X139.927 Y125.23 E.00901
-G1 X143.306 Y123.984 E.11946
-G2 X143.306 Y128.017 I5.529 J2.016 E.13656
-G1 X139.927 Y126.77 E.11947
-G1 X116.072 Y126.77 E.79131
-G1 X112.694 Y128.017 E.11947
-G2 X112.694 Y123.983 I-5.459 J-2.017 E.13666
-G1 X116.072 Y125.23 E.11947
-G1 X139.596 Y125.23 E.78031
-G1 X139.638 Y124.823 F30000
-G1 F15476.087
-G1 X139.855 Y124.823 E.00719
-G1 X144.085 Y123.263 E.14957
-G2 X144.085 Y128.739 I4.782 J2.737 E.1901
-G1 X139.855 Y127.177 E.1496
-G1 X116.145 Y127.177 E.78649
-G1 X111.915 Y128.739 E.1496
-G2 X111.915 Y123.261 I-4.752 J-2.739 E.19025
-G1 X116.145 Y124.823 E.1496
-G1 X139.578 Y124.823 E.77729
-G1 X139.62 Y124.416 F30000
-G1 F15476.087
-G1 X139.782 Y124.416 E.00538
-G1 X144.931 Y122.517 E.18204
-G1 X145.038 Y122.673 E.0063
-G2 X145.04 Y129.329 I3.689 J3.327 E.24192
-G1 X144.932 Y129.485 E.0063
-G1 X139.782 Y127.584 E.18212
-G1 X116.218 Y127.584 E.78166
-G1 X111.068 Y129.485 E.18212
-G1 X110.96 Y129.329 E.0063
-G2 X110.96 Y122.671 I-3.687 J-3.329 E.24202
-G1 X111.068 Y122.515 E.0063
-G1 X116.218 Y124.416 E.18212
-G1 X139.56 Y124.416 E.77428
-; WIPE_START
-G1 X139.782 Y124.416 E-.08445
-G1 X141.45 Y123.801 E-.67555
-; WIPE_END
-G1 E-.04 F1800
-G1 X133.965 Y125.295 Z2.2 F30000
-G1 X107.705 Y130.538 Z2.2
-G1 Z1.8
-G1 E.8 F1800
-G1 F15476.087
-G1 X107.672 Y130.538 E.00109
-G3 X106.885 Y121.457 I-.397 J-4.54 E.47518
-G3 X107.467 Y121.445 I.399 J4.99 E.01931
-G3 X108.066 Y130.486 I-.192 J4.553 E.44217
-G1 X107.764 Y130.529 E.01011
-G1 X107.653 Y130.134 F30000
 G1 F15476.087
 G1 X107.636 Y130.132 E.00055
 G3 X106.918 Y121.863 I-.362 J-4.134 E.43266
@@ -7180,7 +5755,7 @@ G1 X107.712 Y130.126 E.00949
 G1 X107.514 Y129.75 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
 G1 X107.275 Y129.756 E.00735
 G3 X106.949 Y122.254 I0 J-3.758 E.35278
@@ -7198,59 +5773,12 @@ G1 X105.686 Y129.408 E-.12462
 G1 X105.632 Y129.38 E-.02319
 ; WIPE_END
 G1 E-.04 F1800
-G1 X113.136 Y127.984 Z2.2 F30000
-G1 X147.966 Y121.506 Z2.2
+G1 X113.156 Y128.099 Z2.2 F30000
+G1 X139.583 Y123.602 Z2.2
 G1 Z1.8
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
-G1 F15476.087
-G1 X148.335 Y121.457 E.01235
-G3 X148.917 Y121.445 I.399 J4.99 E.01931
-G3 X147.907 Y121.514 I-.192 J4.553 E.91619
-G1 X148.02 Y121.909 F30000
-G1 F15476.087
-G1 X148.368 Y121.863 E.01163
-G3 X148.902 Y121.851 I.367 J4.579 E.01774
-G3 X147.961 Y121.919 I-.177 J4.147 E.83366
-G1 X148.019 Y122.309 F30000
-; FEATURE: Outer wall
-; LINE_WIDTH: 0.42
-G1 F3600
-M204 S5000
-G1 X148.072 Y122.297 E.00167
-G3 X148.399 Y122.254 I.653 J3.701 E.01013
-G3 X148.888 Y122.243 I.335 J4.186 E.01503
-G3 X147.752 Y122.368 I-.163 J3.755 E.69034
-G1 X147.961 Y122.322 E.00657
-; WIPE_START
-M204 S10000
-G1 X148.072 Y122.297 E-.04342
-G1 X148.399 Y122.254 E-.12528
-G1 X148.888 Y122.243 E-.18574
-G1 X149.216 Y122.272 E-.12518
-G1 X149.622 Y122.349 E-.15695
-G1 X149.93 Y122.45 E-.12343
-; WIPE_END
-G1 E-.04 F1800
-G1 X142.383 Y123.589 Z2.2 F30000
-G1 X139.601 Y124.009 Z2.2
-G1 Z1.8
-G1 E.8 F1800
-; FEATURE: Inner wall
-; LINE_WIDTH: 0.45
-G1 F15476.087
-G1 X139.709 Y124.009 E.00357
-G1 X147.14 Y121.268 E.26274
-G3 X148.721 Y121.011 I1.636 J5.066 E.05334
-G3 X146.915 Y130.651 I0 J4.99 E.58129
-G1 X139.709 Y127.991 E.25479
-G1 X116.291 Y127.991 E.77683
-G1 X109.084 Y130.652 E.25484
-G3 X109.085 Y121.349 I-1.805 J-4.652 E.64254
-G1 X116.291 Y124.009 E.25481
-G1 X139.541 Y124.009 E.77127
-G1 X139.583 Y123.602 F30000
 G1 F15476.087
 G1 X139.636 Y123.602 E.00176
 G1 X147.009 Y120.882 E.26067
@@ -7265,7 +5793,7 @@ G1 X139.523 Y123.602 E.76826
 G1 X139.566 Y123.21 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
 G1 X146.883 Y120.511 E.23962
 G3 X148.723 Y120.211 I1.901 J5.876 E.05752
@@ -7283,520 +5811,281 @@ M204 S10000
 G1 X141.385 Y122.523 E-.76
 ; WIPE_END
 G1 E-.04 F1800
-G1 X144.433 Y123.075 Z2.2 F30000
+G1 X135.255 Y123.95 Z2.2 F30000
 G1 Z1.8
 G1 E.8 F1800
-; FEATURE: Gap infill
-; LINE_WIDTH: 0.109705
-G1 F15000
-G3 X144.576 Y122.885 I.309 J.084 E.00132
-G1 X145.151 Y122.477 F30000
-; LINE_WIDTH: 0.388015
-G1 F15000
-G3 X145.565 Y122.233 I8.562 J14.023 E.01353
-; LINE_WIDTH: 0.339168
-G1 X145.653 Y122.182 E.00244
-; LINE_WIDTH: 0.30521
-G1 X145.74 Y122.132 E.00216
-; LINE_WIDTH: 0.271835
-G1 X145.843 Y122.077 E.00217
-; LINE_WIDTH: 0.24043
-G1 X145.939 Y122.025 E.00176
-; LINE_WIDTH: 0.224709
-G1 X145.943 Y122.023 E.00006
-; LINE_WIDTH: 0.19957
-G1 X146.129 Y121.928 E.00267
-; LINE_WIDTH: 0.154598
-G1 X146.32 Y121.836 E.00193
-; LINE_WIDTH: 0.113269
-G1 X146.59 Y121.715 E.0017
-; WIPE_START
-G1 X146.32 Y121.836 E-.76
-; WIPE_END
-G1 E-.04 F1800
-G1 X144.432 Y128.924 Z2.2 F30000
-G1 Z1.8
-G1 E.8 F1800
-; LINE_WIDTH: 0.107559
-G1 F15000
-G2 X144.577 Y129.117 I.495 J-.222 E.00128
-G1 X145.156 Y129.52 F30000
-; LINE_WIDTH: 0.446761
-G1 F15000
-G1 X145.371 Y129.654 E.00834
-; LINE_WIDTH: 0.416287
-G1 X145.469 Y129.713 E.00348
-; LINE_WIDTH: 0.376209
-G1 X145.56 Y129.767 E.00287
-; LINE_WIDTH: 0.338773
-G1 X145.658 Y129.822 E.00271
-; LINE_WIDTH: 0.303783
-G1 X145.749 Y129.874 E.00224
-; LINE_WIDTH: 0.271406
-G1 X145.846 Y129.926 E.00205
-; LINE_WIDTH: 0.241481
-G1 X145.939 Y129.976 E.0017
-; LINE_WIDTH: 0.226357
-G1 X145.942 Y129.978 E.00006
-; LINE_WIDTH: 0.201297
-G1 X146.129 Y130.073 E.0027
-; LINE_WIDTH: 0.156444
-G1 X146.319 Y130.165 E.00196
-; LINE_WIDTH: 0.114077
-G1 X146.606 Y130.293 E.00182
-G1 X121.345 Y125.579 F30000
 ; FEATURE: Sparse infill
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X122.973 Y125.579 E.05401
-G1 X123.816 Y126.421 E.03954
-G1 X122.973 Y126.421 E.02796
-G1 X123.816 Y125.579 E.03954
-G1 X127.579 Y125.579 E.12482
-G1 X128.421 Y126.421 E.03954
-G1 X127.579 Y126.421 E.02796
-G1 X128.421 Y125.579 E.03954
-G1 X132.184 Y125.579 E.12482
-G1 X133.027 Y126.421 E.03954
-G1 X132.184 Y126.421 E.02796
-G1 X133.027 Y125.579 E.03954
-G1 X136.79 Y125.579 E.12482
-G1 X137.633 Y126.421 E.03954
-G1 X136.79 Y126.421 E.02796
-G1 X137.633 Y125.579 E.03954
-G1 X139.989 Y125.579 E.07818
-G1 X141.016 Y125.2 E.03631
-G1 X142.657 Y126.84 E.07694
-G3 X142.656 Y125.161 I11.45 J-.844 E.05575
-G1 X141.016 Y126.8 E.07692
-G1 X139.99 Y126.421 E.0363
-G1 X139.456 Y126.421 E.01771
-G1 X120.839 Y126.421 F30000
-G1 F15476.087
-G1 X119.21 Y126.421 E.05401
-G1 X118.367 Y125.579 E.03954
-G1 X119.21 Y125.579 E.02796
-G1 X118.367 Y126.421 E.03954
-G1 X116.01 Y126.421 E.07819
-G1 X114.984 Y126.8 E.0363
-G1 X113.341 Y125.157 E.07709
-G3 X113.336 Y126.847 I-8.352 J.825 E.05614
-G1 X114.984 Y125.2 E.07728
-G1 X116.01 Y125.579 E.0363
-G1 X116.544 Y125.579 E.01771
-G1 X111.568 Y123.076 F30000
-; FEATURE: Gap infill
-; LINE_WIDTH: 0.109723
-G1 F15000
-G1 X111.478 Y122.925 E.00096
-G1 X111.423 Y122.883 E.00038
-G1 X110.846 Y122.477 F30000
-; LINE_WIDTH: 0.431528
-G1 F15000
-G1 X110.612 Y122.335 E.00867
-; LINE_WIDTH: 0.411605
-G1 X110.524 Y122.284 E.00305
-; LINE_WIDTH: 0.376067
-G1 X110.437 Y122.233 E.00275
-; LINE_WIDTH: 0.339097
-G1 X110.342 Y122.178 E.00265
-; LINE_WIDTH: 0.297453
-M73 P80 R2
-G1 X110.206 Y122.103 E.00321
-; LINE_WIDTH: 0.251322
-G1 X110.066 Y122.026 E.00272
-; LINE_WIDTH: 0.215192
-G1 X109.969 Y121.977 E.00153
-; LINE_WIDTH: 0.189219
-G1 X109.869 Y121.926 E.00134
-; LINE_WIDTH: 0.155957
-G1 X109.679 Y121.834 E.00194
-; LINE_WIDTH: 0.113923
-G1 X109.394 Y121.707 E.00181
+G1 X133.626 Y123.95 E.05401
+G1 X137.726 Y128.05 E.19231
+G1 X139.699 Y128.05 E.06545
+G1 X140.87 Y128.482 E.04141
+G1 X144.333 Y125.019 E.16245
+G2 X144.333 Y126.981 I5.522 J.981 E.06541
+G1 X140.87 Y123.518 E.16244
+G1 X139.699 Y123.95 E.04142
+G1 X137.726 Y123.95 E.06545
+G1 X133.626 Y128.05 E.19231
+G1 X130.05 Y128.05 E.11864
+G1 X125.95 Y123.95 E.19231
+G1 X122.374 Y123.95 E.11864
+G1 X118.274 Y128.05 E.19231
+G1 X116.301 Y128.05 E.06545
+G1 X115.13 Y128.482 E.04141
+G1 X111.662 Y125.014 E.16269
+G3 X111.661 Y126.987 I-4.967 J.984 E.06587
+G1 X115.13 Y123.518 E.16274
+G1 X116.301 Y123.95 E.04141
+G1 X118.274 Y123.95 E.06545
+G1 X122.374 Y128.05 E.19231
+G1 X125.95 Y128.05 E.11864
+G1 X130.05 Y123.95 E.19231
+G1 X128.421 Y123.95 E.05401
 ; WIPE_START
-G1 X109.679 Y121.834 E-.76
+G1 X130.05 Y123.95 E-.61876
+G1 X129.787 Y124.213 E-.14124
 ; WIPE_END
 G1 E-.04 F1800
-G1 X111.568 Y128.924 Z2.2 F30000
+G1 X137.34 Y123.117 Z2.2 F30000
+G1 X144.95 Y122.013 Z2.2
 G1 Z1.8
 G1 E.8 F1800
-; LINE_WIDTH: 0.109713
-G1 F15000
-G1 X111.478 Y129.075 E.00096
-G1 X111.423 Y129.117 E.00038
-G1 X110.844 Y129.52 F30000
-; LINE_WIDTH: 0.44639
-G1 F15000
-G1 X110.622 Y129.658 E.00861
-; LINE_WIDTH: 0.414681
-G1 X110.531 Y129.713 E.0032
-; LINE_WIDTH: 0.374904
-G1 X110.434 Y129.77 E.00305
-; LINE_WIDTH: 0.337584
-G1 X110.342 Y129.822 E.00253
-; LINE_WIDTH: 0.30288
-G1 X110.246 Y129.877 E.00235
-; LINE_WIDTH: 0.270639
-G1 X110.154 Y129.926 E.00194
-; LINE_WIDTH: 0.240931
-G1 X110.058 Y129.978 E.00176
-; LINE_WIDTH: 0.200973
-G1 X109.869 Y130.074 E.00273
-; LINE_WIDTH: 0.155937
-G1 X109.679 Y130.166 E.00194
-; LINE_WIDTH: 0.113902
-G1 X109.394 Y130.293 E.00181
-; OBJECT_ID: 104
+G1 F15476.087
+G1 X146.477 Y121.45 E.05401
+G1 X146.916 Y121.889 E.0206
+M73 P79 R2
+G3 X147.739 Y121.613 I1.698 J3.701 E.02883
+G1 X148.389 Y120.963 E.0305
+G3 X153.256 Y123.772 I.324 J5.06 E.19757
+G1 X152.836 Y124.191 E.01968
+G3 X152.841 Y127.813 I-4.244 J1.816 E.12345
+G1 X153.252 Y128.225 E.0193
+G3 X148.389 Y131.037 I-4.579 J-2.307 E.19724
+G1 X147.734 Y130.382 E.03071
+G3 X146.912 Y130.116 I.924 J-4.256 E.02871
+G1 X146.476 Y130.552 E.02045
+G1 X144.948 Y129.988 E.05401
 ; WIPE_START
-G1 X109.679 Y130.166 E-.76
+G1 X146.476 Y130.552 E-.61876
+G1 X146.739 Y130.289 E-.14124
 ; WIPE_END
 G1 E-.04 F1800
-; stop printing object, unique label id: 72
+G1 X139.107 Y130.225 Z2.2 F30000
+G1 X111.052 Y129.988 Z2.2
+G1 Z1.8
+G1 E.8 F1800
+G1 F15476.087
+G1 X109.524 Y130.552 E.05401
+G1 X109.084 Y130.111 E.02066
+G3 X108.261 Y130.387 I-1.697 J-3.699 E.02883
+G1 X107.611 Y131.037 E.0305
+G3 X102.744 Y128.228 I-.324 J-5.06 E.19757
+G1 X103.16 Y127.812 E.01952
+G3 X103.16 Y124.188 I4.332 J-1.812 E.12343
+G1 X102.745 Y123.77 E.01953
+G3 X107.611 Y120.963 I4.542 J2.251 E.19753
+G1 X108.266 Y121.618 E.03071
+G3 X109.088 Y121.884 I-.924 J4.258 E.02871
+G1 X109.524 Y121.448 E.02045
+G1 X111.052 Y122.012 E.05401
+; OBJECT_ID: 194
+; WIPE_START
+G1 X109.524 Y121.448 E-.61876
+G1 X109.261 Y121.711 E-.14124
+; WIPE_END
+G1 E-.04 F1800
+; stop printing object, unique label id: 123
 M625
-; start printing object, unique label id: 104
+; start printing object, unique label id: 194
 M624 AgAAAAAAAAA=
-G1 X116.874 Y132.711 Z2.2 F30000
-G1 X139.547 Y140.73 Z2.2
+G1 X116.486 Y124.171 Z2.2 F30000
+G1 X148.02 Y134.907 Z2.2
+G1 Z1.8
+G1 E.8 F1800
+; FEATURE: Inner wall
+G1 F15476.087
+G1 X148.368 Y134.861 E.01163
+G3 X148.902 Y134.849 I.367 J4.579 E.01774
+G3 X147.961 Y134.916 I-.177 J4.147 E.83366
+G1 X148.019 Y135.307 F30000
+; FEATURE: Outer wall
+; LINE_WIDTH: 0.42
+G1 F12000
+M204 S5000
+G1 X148.072 Y135.295 E.00167
+G3 X148.399 Y135.252 I.653 J3.701 E.01013
+G3 X148.888 Y135.241 I.335 J4.186 E.01503
+G3 X147.752 Y135.366 I-.163 J3.755 E.69034
+G1 X147.961 Y135.32 E.00657
+; WIPE_START
+M204 S10000
+G1 X148.072 Y135.295 E-.04342
+G1 X148.399 Y135.252 E-.12528
+G1 X148.888 Y135.241 E-.18574
+G1 X149.216 Y135.27 E-.12518
+G1 X149.622 Y135.347 E-.15695
+G1 X149.93 Y135.448 E-.12343
+; WIPE_END
+G1 E-.04 F1800
+G1 X142.421 Y136.813 Z2.2 F30000
+G1 X107.653 Y143.132 Z2.2
 G1 Z1.8
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X139.819 Y140.73 E.00901
-G1 X143.197 Y139.483 E.11946
-G2 X143.198 Y143.517 I5.529 J2.016 E.13656
-G1 X139.819 Y142.269 E.11947
-G1 X115.964 Y142.269 E.79131
-G1 X112.585 Y143.517 E.11947
-G2 X112.585 Y139.482 I-5.459 J-2.017 E.13666
-G1 X115.964 Y140.73 E.11947
-G1 X139.487 Y140.73 E.78031
-G1 X139.529 Y140.323 F30000
-G1 F15476.087
-G1 X139.746 Y140.323 E.00719
-G1 X143.976 Y138.762 E.14957
-G2 X143.977 Y144.238 I4.782 J2.737 E.1901
-G1 X139.746 Y142.676 E.1496
-G1 X116.037 Y142.676 E.78649
-G1 X111.806 Y144.238 E.1496
-G2 X111.806 Y138.761 I-4.752 J-2.739 E.19025
-G1 X116.037 Y140.323 E.1496
-G1 X139.469 Y140.323 E.77729
-G1 X139.511 Y139.916 F30000
-G1 F15476.087
-G1 X139.673 Y139.916 E.00538
-G1 X144.822 Y138.016 E.18204
-G1 X144.93 Y138.173 E.0063
-G2 X144.931 Y144.828 I3.689 J3.327 E.24192
-G1 X144.824 Y144.985 E.0063
-G1 X139.673 Y143.083 E.18212
-G1 X116.109 Y143.083 E.78166
-G1 X110.959 Y144.985 E.18212
-G1 X110.851 Y144.828 E.0063
-G2 X110.851 Y138.171 I-3.687 J-3.329 E.24202
-G1 X110.959 Y138.014 E.0063
-G1 X116.109 Y139.916 E.18212
-G1 X139.451 Y139.916 E.77428
-; WIPE_START
-G1 X139.673 Y139.916 E-.08445
-G1 X141.341 Y139.3 E-.67555
-; WIPE_END
-G1 E-.04 F1800
-G1 X133.856 Y140.795 Z2.2 F30000
-G1 X107.596 Y146.037 Z2.2
-G1 Z1.8
-G1 E.8 F1800
-G1 F15476.087
-G1 X107.563 Y146.037 E.00109
-G3 X106.777 Y136.957 I-.397 J-4.54 E.47518
-G3 X107.358 Y136.944 I.399 J4.99 E.01931
-G3 X107.958 Y145.985 I-.192 J4.553 E.44217
-G1 X107.656 Y146.029 E.01011
-G1 X107.544 Y145.634 F30000
-G1 F15476.087
-G1 X107.528 Y145.632 E.00055
-G3 X106.809 Y137.363 I-.362 J-4.134 E.43266
-G3 X107.344 Y137.351 I.367 J4.579 E.01774
-G3 X107.887 Y145.585 I-.177 J4.147 E.4026
-G1 X107.604 Y145.625 E.00949
-G1 X107.406 Y145.249 F30000
+G1 X107.636 Y143.13 E.00055
+G3 X106.918 Y134.861 I-.362 J-4.134 E.43266
+G3 X107.452 Y134.849 I.367 J4.579 E.01774
+G3 X107.995 Y143.083 I-.177 J4.147 E.4026
+G1 X107.712 Y143.124 E.00949
+G1 X107.514 Y142.747 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
-G1 X107.166 Y145.256 E.00735
-G3 X106.84 Y137.754 I0 J-3.758 E.35278
-G3 X107.329 Y137.743 I.335 J4.186 E.01503
-G3 X107.494 Y145.242 I-.163 J3.755 E.34772
-G1 X107.465 Y145.244 E.00087
+G1 X107.275 Y142.754 E.00735
+G3 X106.949 Y135.252 I0 J-3.758 E.35278
+G3 X107.438 Y135.241 I.335 J4.186 E.01503
+G3 X107.602 Y142.74 I-.163 J3.755 E.34772
+G1 X107.574 Y142.742 E.00087
 ; WIPE_START
 M204 S10000
-G1 X107.166 Y145.256 E-.1137
-G1 X106.839 Y145.245 E-.12453
-G1 X106.512 Y145.202 E-.12528
-G1 X106.27 Y145.15 E-.09412
-G1 X105.881 Y145.033 E-.15455
-G1 X105.578 Y144.907 E-.12462
-G1 X105.523 Y144.879 E-.02319
+G1 X107.275 Y142.754 E-.1137
+G1 X106.947 Y142.744 E-.12453
+G1 X106.621 Y142.701 E-.12528
+G1 X106.378 Y142.649 E-.09412
+G1 X105.989 Y142.531 E-.15455
+G1 X105.686 Y142.406 E-.12462
+G1 X105.632 Y142.377 E-.02319
 ; WIPE_END
 G1 E-.04 F1800
-G1 X113.027 Y143.483 Z2.2 F30000
-G1 X147.858 Y137.005 Z2.2
+G1 X113.156 Y141.097 Z2.2 F30000
+G1 X139.583 Y136.6 Z2.2
 G1 Z1.8
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X148.227 Y136.957 E.01235
-G3 X148.808 Y136.944 I.399 J4.99 E.01931
-G3 X147.798 Y137.014 I-.192 J4.553 E.91619
-G1 X147.912 Y137.408 F30000
-G1 F15476.087
-G1 X148.259 Y137.363 E.01163
-G3 X148.794 Y137.351 I.367 J4.579 E.01774
-G3 X147.852 Y137.418 I-.177 J4.147 E.83366
-G1 X147.911 Y137.808 F30000
+G1 X139.636 Y136.6 E.00176
+G1 X147.009 Y133.88 E.26067
+G3 X148.722 Y133.601 I1.771 J5.478 E.0578
+G3 X146.776 Y144.032 I-.001 J5.397 E.62836
+G1 X139.636 Y141.396 E.25244
+G1 X116.364 Y141.396 E.77201
+G1 X109.224 Y144.032 E.25245
+G3 X109.225 Y133.964 I-1.945 J-5.034 E.69444
+G1 X116.364 Y136.6 E.25243
+G1 X139.523 Y136.6 E.76826
+G1 X139.566 Y136.208 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
-G1 X147.964 Y137.797 E.00167
-G3 X148.29 Y137.754 I.653 J3.701 E.01013
-G3 X148.779 Y137.743 I.335 J4.186 E.01503
-G3 X147.643 Y137.868 I-.163 J3.755 E.69034
-G1 X147.852 Y137.821 E.00657
+G1 X146.883 Y133.509 E.23962
+G3 X148.723 Y133.209 I1.901 J5.876 E.05752
+G3 X147.754 Y144.704 I.002 J5.789 E.58881
+G3 X146.642 Y144.4 I1.001 J-5.842 E.0355
+G1 X139.566 Y141.788 E.23174
+G1 X116.434 Y141.788 E.71081
+G1 X109.358 Y144.4 E.23174
+G3 X108.246 Y133.291 I-2.083 J-5.402 E.65426
+G3 X109.359 Y133.596 I-1.001 J5.842 E.03551
+G1 X116.434 Y136.208 E.23173
+G1 X139.506 Y136.208 E.70896
 ; WIPE_START
 M204 S10000
-G1 X147.964 Y137.797 E-.04342
-G1 X148.29 Y137.754 E-.12528
-G1 X148.779 Y137.743 E-.18574
-G1 X149.107 Y137.772 E-.12518
-G1 X149.513 Y137.849 E-.15695
-G1 X149.822 Y137.95 E-.12343
+G1 X141.385 Y135.521 E-.76
 ; WIPE_END
 G1 E-.04 F1800
-G1 X142.275 Y139.089 Z2.2 F30000
-G1 X139.493 Y139.509 Z2.2
+G1 X135.255 Y136.948 Z2.2 F30000
 G1 Z1.8
 G1 E.8 F1800
-; FEATURE: Inner wall
-; LINE_WIDTH: 0.45
-G1 F15476.087
-G1 X139.601 Y139.509 E.00357
-G1 X147.032 Y136.767 E.26274
-G3 X148.613 Y136.51 I1.636 J5.066 E.05334
-G3 X146.806 Y146.151 I0 J4.99 E.58129
-G1 X139.601 Y143.49 E.25479
-G1 X116.182 Y143.49 E.77683
-G1 X108.975 Y146.151 E.25484
-G3 X108.976 Y136.848 I-1.805 J-4.652 E.64254
-G1 X116.182 Y139.509 E.25481
-G1 X139.433 Y139.509 E.77127
-G1 X139.475 Y139.102 F30000
-G1 F15476.087
-G1 X139.528 Y139.102 E.00176
-G1 X146.9 Y136.382 E.26067
-G3 X148.614 Y136.103 I1.771 J5.478 E.0578
-G3 X146.667 Y146.533 I-.001 J5.397 E.62836
-G1 X139.528 Y143.897 E.25244
-G1 X116.255 Y143.897 E.77201
-G1 X109.116 Y146.533 E.25245
-G3 X109.116 Y136.466 I-1.945 J-5.034 E.69444
-G1 X116.255 Y139.102 E.25243
-G1 X139.415 Y139.102 E.76826
-G1 X139.458 Y138.71 F30000
-; FEATURE: Outer wall
-; LINE_WIDTH: 0.42
-G1 F3600
-M204 S5000
-G1 X146.774 Y136.01 E.23962
-G3 X148.615 Y135.711 I1.901 J5.876 E.05752
-G3 X147.646 Y147.206 I.002 J5.789 E.58881
-G3 X146.533 Y146.902 I1.001 J-5.842 E.0355
-G1 X139.458 Y144.29 E.23174
-G1 X116.325 Y144.29 E.71081
-G1 X109.25 Y146.902 E.23174
-G3 X108.137 Y135.793 I-2.083 J-5.402 E.65426
-G3 X109.25 Y136.097 I-1.001 J5.842 E.03551
-G1 X116.325 Y138.71 E.23173
-G1 X139.398 Y138.71 E.70896
-; WIPE_START
-M204 S10000
-G1 X141.276 Y138.022 E-.76
-; WIPE_END
-G1 E-.04 F1800
-G1 X144.324 Y138.574 Z2.2 F30000
-G1 Z1.8
-G1 E.8 F1800
-; FEATURE: Gap infill
-; LINE_WIDTH: 0.109705
-G1 F15000
-G3 X144.467 Y138.385 I.309 J.084 E.00132
-G1 X145.042 Y137.977 F30000
-; LINE_WIDTH: 0.388015
-G1 F15000
-G3 X145.456 Y137.732 I8.562 J14.023 E.01353
-; LINE_WIDTH: 0.339168
-G1 X145.544 Y137.682 E.00244
-; LINE_WIDTH: 0.30521
-G1 X145.632 Y137.631 E.00216
-; LINE_WIDTH: 0.271835
-G1 X145.734 Y137.576 E.00217
-; LINE_WIDTH: 0.24043
-G1 X145.831 Y137.524 E.00176
-; LINE_WIDTH: 0.224709
-G1 X145.834 Y137.523 E.00006
-; LINE_WIDTH: 0.19957
-G1 X146.021 Y137.428 E.00267
-; LINE_WIDTH: 0.154598
-G1 X146.211 Y137.336 E.00193
-; LINE_WIDTH: 0.113269
-G1 X146.481 Y137.214 E.0017
-; WIPE_START
-G1 X146.211 Y137.336 E-.76
-; WIPE_END
-G1 E-.04 F1800
-G1 X144.324 Y144.424 Z2.2 F30000
-G1 Z1.8
-G1 E.8 F1800
-; LINE_WIDTH: 0.107559
-G1 F15000
-G2 X144.468 Y144.616 I.495 J-.222 E.00128
-G1 X145.047 Y145.019 F30000
-; LINE_WIDTH: 0.446761
-G1 F15000
-G1 X145.262 Y145.153 E.00834
-; LINE_WIDTH: 0.416287
-G1 X145.36 Y145.212 E.00348
-; LINE_WIDTH: 0.376209
-G1 X145.451 Y145.266 E.00287
-; LINE_WIDTH: 0.338773
-G1 X145.549 Y145.321 E.00271
-; LINE_WIDTH: 0.303783
-G1 X145.641 Y145.373 E.00224
-; LINE_WIDTH: 0.271406
-G1 X145.738 Y145.426 E.00205
-; LINE_WIDTH: 0.241481
-G1 X145.83 Y145.475 E.0017
-; LINE_WIDTH: 0.226357
-G1 X145.834 Y145.477 E.00006
-; LINE_WIDTH: 0.201297
-G1 X146.02 Y145.572 E.0027
-; LINE_WIDTH: 0.156444
-G1 X146.211 Y145.664 E.00196
-; LINE_WIDTH: 0.114077
-G1 X146.498 Y145.793 E.00182
-G1 X121.236 Y141.078 F30000
 ; FEATURE: Sparse infill
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X122.865 Y141.078 E.05401
-G1 X123.707 Y141.921 E.03954
-G1 X122.865 Y141.921 E.02796
-G1 X123.707 Y141.078 E.03954
-G1 X127.47 Y141.078 E.12482
-G1 X128.313 Y141.921 E.03954
-G1 X127.47 Y141.921 E.02796
-G1 X128.313 Y141.078 E.03954
-G1 X132.076 Y141.078 E.12482
-G1 X132.918 Y141.921 E.03954
-G1 X132.076 Y141.921 E.02796
-G1 X132.918 Y141.078 E.03954
-G1 X136.681 Y141.078 E.12482
-G1 X137.524 Y141.921 E.03954
-G1 X136.681 Y141.921 E.02796
-G1 X137.524 Y141.078 E.03954
-G1 X139.881 Y141.078 E.07818
-G1 X140.908 Y140.699 E.03631
-G1 X142.548 Y142.339 E.07694
-G3 X142.547 Y140.66 I11.45 J-.844 E.05575
-G1 X140.908 Y142.3 E.07692
-G1 X139.881 Y141.921 E.0363
-G1 X139.347 Y141.921 E.01771
-G1 X120.73 Y141.921 F30000
-G1 F15476.087
-G1 X119.102 Y141.921 E.05401
-G1 X118.259 Y141.078 E.03954
-G1 X119.102 Y141.078 E.02796
-G1 X118.259 Y141.921 E.03954
-G1 X115.902 Y141.921 E.07819
-G1 X114.875 Y142.3 E.0363
-G1 X113.232 Y140.657 E.07709
-G3 X113.228 Y142.346 I-8.352 J.825 E.05614
-G1 X114.875 Y140.699 E.07728
-G1 X115.902 Y141.078 E.0363
-G1 X116.436 Y141.078 E.01771
-G1 X111.46 Y138.575 F30000
-; FEATURE: Gap infill
-; LINE_WIDTH: 0.109723
-G1 F15000
-G1 X111.369 Y138.425 E.00096
-G1 X111.315 Y138.383 E.00038
-G1 X110.738 Y137.977 F30000
-; LINE_WIDTH: 0.431528
-G1 F15000
-M73 P81 R2
-G1 X110.503 Y137.835 E.00867
-; LINE_WIDTH: 0.411605
-G1 X110.416 Y137.784 E.00305
-; LINE_WIDTH: 0.376067
-G1 X110.328 Y137.732 E.00275
-; LINE_WIDTH: 0.339097
-G1 X110.234 Y137.677 E.00265
-; LINE_WIDTH: 0.297453
-G1 X110.098 Y137.603 E.00321
-; LINE_WIDTH: 0.251322
-G1 X109.957 Y137.526 E.00272
-; LINE_WIDTH: 0.215192
-G1 X109.86 Y137.476 E.00153
-; LINE_WIDTH: 0.189219
-G1 X109.76 Y137.426 E.00134
-; LINE_WIDTH: 0.155957
-G1 X109.57 Y137.334 E.00194
-; LINE_WIDTH: 0.113923
-G1 X109.285 Y137.206 E.00181
+G1 X133.626 Y136.948 E.05401
+G1 X137.726 Y141.047 E.19231
+G1 X139.699 Y141.047 E.06545
+G1 X140.87 Y141.48 E.04141
+G1 X144.333 Y138.017 E.16245
+G2 X144.333 Y139.979 I5.522 J.981 E.06541
+G1 X140.87 Y136.516 E.16244
+G1 X139.699 Y136.948 E.04142
+G1 X137.726 Y136.948 E.06545
+G1 X133.626 Y141.047 E.19231
+G1 X130.05 Y141.047 E.11864
+G1 X125.95 Y136.948 E.19231
+G1 X122.374 Y136.948 E.11864
+G1 X118.274 Y141.047 E.19231
+G1 X116.301 Y141.047 E.06545
+G1 X115.13 Y141.48 E.04141
+G1 X111.662 Y138.012 E.16269
+G3 X111.661 Y139.985 I-4.967 J.984 E.06587
+G1 X115.13 Y136.516 E.16274
+G1 X116.301 Y136.948 E.04141
+G1 X118.274 Y136.948 E.06545
+G1 X122.374 Y141.047 E.19231
+G1 X125.95 Y141.047 E.11864
+G1 X130.05 Y136.948 E.19231
+G1 X128.421 Y136.948 E.05401
 ; WIPE_START
-G1 X109.57 Y137.334 E-.76
+G1 X130.05 Y136.948 E-.61876
+G1 X129.787 Y137.211 E-.14124
 ; WIPE_END
 G1 E-.04 F1800
-G1 X111.459 Y144.424 Z2.2 F30000
+G1 X137.34 Y136.115 Z2.2 F30000
+G1 X144.95 Y135.011 Z2.2
 G1 Z1.8
 G1 E.8 F1800
-; LINE_WIDTH: 0.109713
-G1 F15000
-G1 X111.369 Y144.574 E.00096
-G1 X111.315 Y144.616 E.00038
-G1 X110.736 Y145.019 F30000
-; LINE_WIDTH: 0.44639
-G1 F15000
-G1 X110.513 Y145.158 E.00861
-; LINE_WIDTH: 0.414681
-G1 X110.423 Y145.212 E.0032
-; LINE_WIDTH: 0.374904
-G1 X110.326 Y145.27 E.00305
-; LINE_WIDTH: 0.337584
-G1 X110.234 Y145.322 E.00253
-; LINE_WIDTH: 0.30288
-G1 X110.137 Y145.376 E.00235
-; LINE_WIDTH: 0.270639
-G1 X110.045 Y145.426 E.00194
-; LINE_WIDTH: 0.240931
-G1 X109.949 Y145.477 E.00176
-; LINE_WIDTH: 0.200973
-G1 X109.76 Y145.573 E.00273
-; LINE_WIDTH: 0.155937
-G1 X109.57 Y145.665 E.00194
-; LINE_WIDTH: 0.113902
-G1 X109.285 Y145.792 E.00181
+G1 F15476.087
+G1 X146.477 Y134.447 E.05401
+G1 X146.916 Y134.886 E.0206
+G3 X147.739 Y134.611 I1.698 J3.701 E.02883
+G1 X148.389 Y133.961 E.0305
+G3 X153.256 Y136.77 I.324 J5.06 E.19757
+G1 X152.836 Y137.189 E.01968
+G3 X152.841 Y140.811 I-4.244 J1.816 E.12345
+G1 X153.252 Y141.222 E.0193
+G3 X148.389 Y144.034 I-4.579 J-2.307 E.19724
+G1 X147.734 Y143.38 E.03071
+G3 X146.912 Y143.114 I.924 J-4.256 E.02871
+G1 X146.476 Y143.55 E.02045
+G1 X144.948 Y142.986 E.05401
+; WIPE_START
+G1 X146.476 Y143.55 E-.61876
+G1 X146.739 Y143.287 E-.14124
+; WIPE_END
+G1 E-.04 F1800
+G1 X139.107 Y143.222 Z2.2 F30000
+G1 X111.052 Y142.986 Z2.2
+G1 Z1.8
+G1 E.8 F1800
+G1 F15476.087
+G1 X109.524 Y143.55 E.05401
+G1 X109.084 Y143.109 E.02066
+G3 X108.261 Y143.385 I-1.697 J-3.699 E.02883
+G1 X107.611 Y144.035 E.0305
+G3 X102.744 Y141.226 I-.324 J-5.06 E.19757
+G1 X103.16 Y140.81 E.01952
+G3 X103.16 Y137.186 I4.332 J-1.812 E.12343
+G1 X102.745 Y136.768 E.01953
+G3 X107.611 Y133.961 I4.542 J2.251 E.19753
+G1 X108.266 Y134.616 E.03071
+G3 X109.088 Y134.882 I-.924 J4.258 E.02871
+G1 X109.524 Y134.446 E.02045
+G1 X111.052 Y135.01 E.05401
 ; CHANGE_LAYER
 ; Z_HEIGHT: 2
 ; LAYER_HEIGHT: 0.2
 ; WIPE_START
-G1 F15000
-G1 X109.57 Y145.665 E-.76
+G1 F15476.087
+G1 X109.524 Y134.446 E-.61876
+G1 X109.261 Y134.709 E-.14124
 ; WIPE_END
 G1 E-.04 F1800
-; stop printing object, unique label id: 104
+; stop printing object, unique label id: 194
 M625
 ; layer num/total_layer_count: 10/15
 ; update layer progress
@@ -7804,7 +6093,7 @@ M73 L10
 M991 S0 P9 ;notify layer change
 G17
 G3 Z2.2 I1.217 J0 P1  F30000
-; object ids of layer 10 start: 72,104
+; object ids of layer 10 start: 123,194
 M624 AwAAAAAAAAA=
 ;========Date 20250206========
 ; SKIPPABLE_START
@@ -7819,104 +6108,15 @@ M1004 S5 P1  ; external shutter
 M623
 ; SKIPPABLE_END
 
-; object ids of this layer10 end: 72,104
+; object ids of this layer10 end: 123,194
 M625
-; OBJECT_ID: 72
-; start printing object, unique label id: 72
+; OBJECT_ID: 123
+; start printing object, unique label id: 123
 M624 AQAAAAAAAAA=
-G1 X139.656 Y125.23
+G1 X148.02 Y121.909
 G1 Z2
 G1 E.8 F1800
 ; FEATURE: Inner wall
-; LINE_WIDTH: 0.45
-G1 F15476.087
-G1 X139.927 Y125.23 E.009
-G1 X143.306 Y123.984 E.11946
-G2 X143.306 Y128.017 I5.526 J2.016 E.13656
-G1 X139.927 Y126.77 E.11948
-G1 X116.072 Y126.77 E.79131
-G1 X112.694 Y128.017 E.11948
-G2 X112.694 Y123.983 I-5.526 J-2.017 E.1366
-G1 X116.072 Y125.23 E.11947
-G1 X139.596 Y125.23 E.78031
-G1 X139.638 Y124.823 F30000
-G1 F15476.087
-G1 X139.855 Y124.823 E.00719
-G1 X144.085 Y123.263 E.14957
-G2 X144.085 Y128.739 I4.781 J2.737 E.1901
-G1 X139.855 Y127.177 E.1496
-G1 X116.145 Y127.177 E.78649
-G1 X111.915 Y128.739 E.1496
-G2 X111.915 Y123.261 I-4.78 J-2.739 E.19016
-G1 X116.145 Y124.823 E.1496
-G1 X139.578 Y124.823 E.7773
-G1 X139.62 Y124.416 F30000
-G1 F15476.087
-G1 X139.782 Y124.416 E.00537
-G1 X144.931 Y122.517 E.18204
-G1 X145.038 Y122.673 E.0063
-G2 X145.04 Y129.329 I3.703 J3.327 E.24181
-G1 X144.932 Y129.485 E.0063
-G1 X139.782 Y127.584 E.18212
-G1 X116.218 Y127.584 E.78166
-G1 X111.068 Y129.485 E.18212
-G1 X110.96 Y129.329 E.0063
-G2 X110.96 Y122.671 I-3.701 J-3.329 E.24191
-G1 X111.068 Y122.515 E.0063
-G1 X116.218 Y124.416 E.18212
-G1 X139.56 Y124.416 E.77429
-; WIPE_START
-G1 X139.782 Y124.416 E-.08437
-G1 X141.45 Y123.801 E-.67563
-; WIPE_END
-G1 E-.04 F1800
-G1 X133.965 Y125.295 Z2.4 F30000
-G1 X107.721 Y130.535 Z2.4
-G1 Z2
-G1 E.8 F1800
-G1 F15476.087
-G1 X107.672 Y130.541 E.00162
-G3 X106.884 Y121.457 I-.397 J-4.542 E.47532
-G3 X107.466 Y121.444 I.4 J4.974 E.01931
-G3 X108.261 Y130.45 I-.191 J4.555 E.43577
-G1 X107.78 Y130.525 E.01616
-G1 X107.621 Y130.137 F30000
-G1 F15476.087
-G1 X107.275 Y130.151 E.01148
-G3 X106.917 Y121.863 I0 J-4.152 E.42079
-G3 X107.452 Y121.851 I.367 J4.573 E.01774
-G3 X107.68 Y130.131 I-.177 J4.148 E.41334
-G1 X107.521 Y129.749 F30000
-; FEATURE: Outer wall
-; LINE_WIDTH: 0.42
-G1 F3600
-M204 S5000
-G1 X107.275 Y129.759 E.00756
-G3 X106.949 Y122.254 I0 J-3.76 E.35289
-G3 X107.438 Y122.243 I.336 J4.181 E.01503
-G3 X107.602 Y129.745 I-.163 J3.756 E.34785
-G1 X107.581 Y129.746 E.00067
-; WIPE_START
-M204 S10000
-G1 X107.275 Y129.759 E-.11633
-G1 X106.875 Y129.738 E-.15212
-G1 X106.461 Y129.671 E-.15936
-G1 X106.144 Y129.586 E-.12465
-G1 X105.836 Y129.474 E-.12471
-G1 X105.641 Y129.377 E-.08283
-; WIPE_END
-G1 E-.04 F1800
-G1 X113.144 Y127.982 Z2.4 F30000
-G1 X147.966 Y121.506 Z2.4
-G1 Z2
-G1 E.8 F1800
-; FEATURE: Inner wall
-; LINE_WIDTH: 0.45
-G1 F15476.087
-G1 X148.334 Y121.457 E.01233
-G3 X148.916 Y121.444 I.4 J4.974 E.01931
-G3 X147.907 Y121.514 I-.191 J4.555 E.91656
-G1 X148.02 Y121.909 F30000
 G1 F15476.087
 G1 X148.367 Y121.863 E.01162
 G3 X148.902 Y121.851 I.367 J4.574 E.01774
@@ -7924,7 +6124,7 @@ G3 X147.961 Y121.919 I-.177 J4.148 E.83398
 G1 X147.995 Y122.314 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
 G1 X148.072 Y122.297 E.00244
 G3 X148.399 Y122.254 I.653 J3.703 E.01013
@@ -7942,24 +6142,44 @@ G1 X149.856 Y122.414 E-.12465
 G1 X149.909 Y122.433 E-.02155
 ; WIPE_END
 G1 E-.04 F1800
-G1 X142.364 Y123.587 Z2.4 F30000
-G1 X139.602 Y124.009 Z2.4
+G1 X142.4 Y123.801 Z2.4 F30000
+G1 X107.621 Y130.137 Z2.4
+M73 P80 R2
 G1 Z2
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X139.709 Y124.009 E.00356
-G1 X147.14 Y121.268 E.26274
-G3 X148.704 Y121.01 I1.639 J5.078 E.05276
-G3 X146.915 Y130.651 I.017 J4.99 E.58188
-G1 X139.709 Y127.991 E.25479
-G1 X116.291 Y127.991 E.77683
-G1 X109.085 Y130.651 E.2548
-G3 X109.085 Y121.349 I-1.806 J-4.651 E.64261
-G1 X116.291 Y124.009 E.25479
-G1 X139.542 Y124.009 E.77128
-G1 X139.584 Y123.602 F30000
+G1 X107.275 Y130.151 E.01148
+G3 X106.917 Y121.863 I0 J-4.152 E.42079
+G3 X107.452 Y121.851 I.367 J4.573 E.01774
+G3 X107.68 Y130.131 I-.177 J4.148 E.41334
+G1 X107.521 Y129.749 F30000
+; FEATURE: Outer wall
+; LINE_WIDTH: 0.42
+G1 F12000
+M204 S5000
+G1 X107.275 Y129.759 E.00756
+G3 X106.949 Y122.254 I0 J-3.76 E.35289
+G3 X107.438 Y122.243 I.336 J4.181 E.01503
+G3 X107.602 Y129.745 I-.163 J3.756 E.34785
+G1 X107.581 Y129.746 E.00067
+; WIPE_START
+M204 S10000
+G1 X107.275 Y129.759 E-.11633
+G1 X106.875 Y129.738 E-.15212
+G1 X106.461 Y129.671 E-.15936
+G1 X106.144 Y129.586 E-.12465
+G1 X105.836 Y129.474 E-.12471
+G1 X105.641 Y129.377 E-.08283
+; WIPE_END
+G1 E-.04 F1800
+G1 X113.165 Y128.097 Z2.4 F30000
+G1 X139.584 Y123.602 Z2.4
+G1 Z2
+G1 E.8 F1800
+; FEATURE: Inner wall
+; LINE_WIDTH: 0.45
 G1 F15476.087
 G1 X139.636 Y123.602 E.00175
 G1 X147.009 Y120.882 E.26068
@@ -7974,7 +6194,7 @@ G1 X139.524 Y123.602 E.76826
 G1 X139.566 Y123.21 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
 G1 X146.883 Y120.511 E.23962
 G3 X148.706 Y120.211 I1.904 J5.887 E.05698
@@ -7990,525 +6210,401 @@ M204 S10000
 G1 X141.385 Y122.523 E-.76
 ; WIPE_END
 G1 E-.04 F1800
-G1 X139.456 Y126.421 Z2.4 F30000
+G1 X133.871 Y123.867 Z2.4 F30000
+G1 X131.301 Y124.327 Z2.4
 G1 Z2
 G1 E.8 F1800
 ; FEATURE: Sparse infill
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X139.99 Y126.421 E.01771
-G1 X141.016 Y126.8 E.0363
-G1 X142.66 Y125.157 E.07709
-G2 X142.66 Y126.843 I8.679 J.843 E.05602
-G1 X141.016 Y125.2 E.07709
-G1 X139.989 Y125.579 E.03631
-G1 X137.633 Y125.579 E.07818
-G1 X136.79 Y126.421 E.03954
-G1 X137.633 Y126.421 E.02796
-G1 X136.79 Y125.579 E.03954
-G1 X133.027 Y125.579 E.12482
-G1 X132.184 Y126.421 E.03954
-G1 X133.027 Y126.421 E.02796
-G1 X132.184 Y125.579 E.03954
-G1 X128.421 Y125.579 E.12482
-G1 X127.579 Y126.421 E.03954
-G1 X128.421 Y126.421 E.02796
-G1 X127.579 Y125.579 E.03954
-G1 X125.95 Y125.579 E.05401
-G1 X116.544 Y125.579 F30000
+G1 X129.672 Y124.327 E.05401
+G1 X126.327 Y127.672 E.15692
+G1 X129.672 Y127.672 E.11096
+G1 X126.327 Y124.327 E.15692
+G1 X121.997 Y124.327 E.14366
+G1 X118.652 Y127.672 E.15692
+G1 X121.997 Y127.672 E.11096
+G1 X118.652 Y124.327 E.15692
+G1 X116.234 Y124.327 E.0802
+G1 X114.836 Y123.812 E.04941
+G1 X112.118 Y126.53 E.12751
+G2 X112.114 Y125.466 I-4.362 J-.516 E.03536
+G1 X114.837 Y128.188 E.1277
+G1 X113.309 Y128.752 E.05401
+G1 X108.528 Y130.86 F30000
+; FEATURE: Floating vertical shell
+; LINE_WIDTH: 0.38292
+G1 F12000
+G1 X109.107 Y130.689 E.01674
+G1 X116.327 Y128.035 E.21311
+G1 X139.673 Y128.035 E.64681
+G1 X144.867 Y129.942 E.15329
+G1 X145.541 Y129.858 F30000
+; FEATURE: Sparse infill
+; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X116.01 Y125.579 E.01771
-G1 X114.984 Y125.2 E.0363
-G1 X113.34 Y126.843 E.07709
-G2 X113.34 Y125.157 I-8.688 J-.843 E.05601
-G1 X114.984 Y126.8 E.0771
-G1 X116.01 Y126.421 E.0363
-G1 X118.367 Y126.421 E.07819
-G1 X119.21 Y125.579 E.03954
-G1 X118.367 Y125.579 E.02796
-G1 X119.21 Y126.421 E.03954
-G1 X122.973 Y126.421 E.12482
-G1 X123.816 Y125.579 E.03954
-G1 X122.973 Y125.579 E.02796
-G1 X123.816 Y126.421 E.03954
-G1 X125.444 Y126.421 E.05401
-G1 X111.568 Y128.924 F30000
-; FEATURE: Gap infill
-; LINE_WIDTH: 0.109707
-G1 F15000
-G1 X111.478 Y129.075 E.00095
-G1 X111.423 Y129.117 E.00037
-G1 X110.844 Y129.52 F30000
-; LINE_WIDTH: 0.446404
-G1 F15000
-G1 X110.622 Y129.658 E.00861
-; LINE_WIDTH: 0.414707
-G1 X110.531 Y129.713 E.0032
-; LINE_WIDTH: 0.374922
-G1 X110.434 Y129.77 E.00305
-; LINE_WIDTH: 0.337633
-G1 X110.343 Y129.822 E.00253
-; LINE_WIDTH: 0.302975
-G1 X110.246 Y129.876 E.00234
-; LINE_WIDTH: 0.270724
-G1 X110.154 Y129.926 E.00195
-; LINE_WIDTH: 0.240928
-G1 X110.057 Y129.978 E.00176
-; LINE_WIDTH: 0.20096
-G1 X109.869 Y130.074 E.00273
-; LINE_WIDTH: 0.155969
-G1 X109.679 Y130.166 E.00194
-; LINE_WIDTH: 0.113906
-G1 X109.394 Y130.293 E.00181
+G1 X145.286 Y130.113 E.01194
+G1 X146.476 Y130.552 E.04207
+G1 X146.912 Y130.116 E.02045
+G2 X147.734 Y130.382 I1.746 J-3.991 E.02871
+G1 X148.389 Y131.037 E.03074
+G2 X153.252 Y128.225 I.283 J-5.121 E.19722
+G1 X152.841 Y127.813 E.0193
+G2 X152.841 Y124.187 I-4.286 J-1.813 E.12356
+G1 X153.249 Y123.779 E.01913
+G2 X148.389 Y120.963 I-4.608 J2.35 E.19695
+G1 X147.739 Y121.613 E.0305
+G3 X149.357 Y121.545 I1.01 J4.788 E.05395
 ; WIPE_START
-G1 X109.679 Y130.166 E-.76
+G1 X148.341 Y121.515 E-.3862
+G1 X147.739 Y121.613 E-.23164
+G1 X148.004 Y121.348 E-.14215
 ; WIPE_END
 G1 E-.04 F1800
-G1 X111.568 Y123.076 Z2.4 F30000
+G1 X145.807 Y128.658 Z2.4 F30000
+G1 X145.623 Y129.269 Z2.4
 G1 Z2
 G1 E.8 F1800
-; LINE_WIDTH: 0.109721
-G1 F15000
-G1 X111.478 Y122.925 E.00096
-G1 X111.423 Y122.883 E.00038
-G1 X110.844 Y122.48 F30000
-; LINE_WIDTH: 0.446375
-G1 F15000
-G1 X110.622 Y122.341 E.00862
-; LINE_WIDTH: 0.414645
-G1 X110.531 Y122.287 E.0032
-; LINE_WIDTH: 0.374884
-G1 X110.434 Y122.23 E.00305
-; LINE_WIDTH: 0.337583
-G1 X110.342 Y122.178 E.00253
-; LINE_WIDTH: 0.302886
-G1 X110.246 Y122.123 E.00235
-; LINE_WIDTH: 0.270645
-G1 X110.154 Y122.074 E.00194
-; LINE_WIDTH: 0.240937
-G1 X110.058 Y122.022 E.00176
-; LINE_WIDTH: 0.200963
-G1 X109.869 Y121.926 E.00273
-; LINE_WIDTH: 0.155982
-M73 P82 R2
-G1 X109.679 Y121.835 E.00194
-; LINE_WIDTH: 0.113535
-G1 X109.387 Y121.705 E.00184
+; FEATURE: Floating vertical shell
+; LINE_WIDTH: 0.383128
+G1 F12000
+G1 X145.034 Y128.598 E.02475
+G3 X144.526 Y127.635 I3.51 J-2.465 E.03028
+G1 X144.286 Y126.8 E.02407
+G1 X144.216 Y126.097 E.0196
+G1 X144.254 Y125.443 E.01817
+G1 X144.399 Y124.718 E.0205
+G1 X144.599 Y124.189 E.01566
+G1 X145.025 Y123.435 E.02402
+G3 X146.258 Y122.234 I3.744 J2.61 E.04801
+G1 X146.339 Y122.184 E.00262
+G1 X132.375 Y127.672 F30000
+; FEATURE: Sparse infill
+; LINE_WIDTH: 0.45
+G1 F15476.087
+G1 X134.003 Y127.672 E.05401
+G1 X137.348 Y124.327 E.15692
+G1 X134.003 Y124.327 E.11096
+G1 X137.348 Y127.672 E.15692
+G1 X139.766 Y127.672 E.0802
+G1 X141.163 Y128.188 E.04941
+G1 X143.882 Y125.47 E.12751
+G2 X143.879 Y126.527 I4.812 J.541 E.03511
+G1 X141.164 Y123.812 E.12736
+G1 X142.691 Y123.248 E.05401
 ; WIPE_START
-G1 X109.679 Y121.835 E-.76
+G1 X141.164 Y123.812 E-.61876
+G1 X141.427 Y124.075 E-.14124
 ; WIPE_END
 G1 E-.04 F1800
-G1 X117.307 Y122.107 Z2.4 F30000
-G1 X144.432 Y123.076 Z2.4
+G1 X133.812 Y123.558 Z2.4 F30000
+G1 X111.005 Y122.01 Z2.4
 G1 Z2
 G1 E.8 F1800
-; LINE_WIDTH: 0.109577
-G1 F15000
-G3 X144.576 Y122.885 I.311 J.085 E.00133
-G1 X145.153 Y122.481 F30000
-; LINE_WIDTH: 0.432543
-G1 F15000
-G1 X145.351 Y122.36 E.00737
-; LINE_WIDTH: 0.383709
-G1 X145.55 Y122.24 E.00645
-; LINE_WIDTH: 0.339802
-G1 X145.654 Y122.181 E.00289
-; LINE_WIDTH: 0.30288
-G1 X145.75 Y122.127 E.00233
-; LINE_WIDTH: 0.269756
-G1 X145.847 Y122.075 E.00204
-; LINE_WIDTH: 0.239841
-G1 X145.939 Y122.025 E.00168
-; LINE_WIDTH: 0.22473
-G1 X145.943 Y122.023 E.00006
-; LINE_WIDTH: 0.199599
-G1 X146.129 Y121.928 E.00267
-; LINE_WIDTH: 0.154658
-G1 X146.32 Y121.836 E.00192
-; LINE_WIDTH: 0.113295
-G1 X146.59 Y121.715 E.0017
+; FEATURE: Floating vertical shell
+; LINE_WIDTH: 0.38292
+G1 F12000
+G1 X116.327 Y123.965 E.1571
+G1 X139.673 Y123.965 E.6468
+G1 X146.805 Y121.344 E.21053
 ; WIPE_START
-G1 X146.32 Y121.836 E-.76
+G1 X144.928 Y122.034 E-.76
 ; WIPE_END
 G1 E-.04 F1800
-G1 X144.432 Y128.924 Z2.4 F30000
+G1 X137.295 Y122.062 Z2.4 F30000
+G1 X110.368 Y122.162 Z2.4
 G1 Z2
 G1 E.8 F1800
-; LINE_WIDTH: 0.107599
-G1 F15000
-G2 X144.577 Y129.117 I.495 J-.222 E.00128
-G1 X145.154 Y129.523 F30000
-; LINE_WIDTH: 0.425329
-G1 F15000
-G2 X145.481 Y129.719 I6.718 J-10.842 E.01187
-; LINE_WIDTH: 0.373434
-G1 X145.572 Y129.772 E.00285
-; LINE_WIDTH: 0.336478
-G1 X145.664 Y129.826 E.00253
-; LINE_WIDTH: 0.295037
-G1 X145.8 Y129.901 E.00321
-; LINE_WIDTH: 0.250745
-G1 X145.93 Y129.971 E.00251
-; LINE_WIDTH: 0.215658
-G1 X146.032 Y130.023 E.00161
-; LINE_WIDTH: 0.189502
-G1 X146.129 Y130.073 E.0013
-; LINE_WIDTH: 0.156423
-G1 X146.319 Y130.165 E.00196
-; LINE_WIDTH: 0.114053
-G1 X146.606 Y130.293 E.00182
-; OBJECT_ID: 104
+; FEATURE: Sparse infill
+; LINE_WIDTH: 0.45
+G1 F15476.087
+G1 X110.641 Y121.861 E.01349
+G1 X109.524 Y121.448 E.03951
+G1 X109.09 Y121.883 E.02038
+G2 X108.256 Y121.608 I-2.475 J6.104 E.02915
+G1 X107.611 Y120.963 E.03025
+G2 X102.748 Y123.775 I-.283 J5.121 E.19722
+G1 X103.159 Y124.187 E.0193
+G2 X103.159 Y127.813 I4.285 J1.813 E.12356
+G1 X102.745 Y128.23 E.01949
+G2 X107.612 Y131.036 I4.584 J-2.326 E.19716
+G1 X108.267 Y130.381 E.03073
+G3 X106.651 Y130.451 I-.991 J-4.202 E.05397
 ; WIPE_START
-G1 X146.319 Y130.165 E-.76
+G1 X107.273 Y130.501 E-.23721
+G1 X108.267 Y130.381 E-.38028
+G1 X108.001 Y130.647 E-.1425
 ; WIPE_END
 G1 E-.04 F1800
-; stop printing object, unique label id: 72
+G1 X110.141 Y123.32 Z2.4 F30000
+G1 X110.328 Y122.683 Z2.4
+G1 Z2
+G1 E.8 F1800
+; FEATURE: Floating vertical shell
+; LINE_WIDTH: 0.38292
+G1 F12000
+G3 X111.54 Y127.443 I-3.054 J3.313 E.14395
+G3 X110.255 Y129.379 I-4.345 J-1.49 E.06508
+G3 X108.968 Y130.172 I-3.151 J-3.676 E.04204
+; OBJECT_ID: 194
+; WIPE_START
+G1 X109.369 Y129.995 E-.16626
+G1 X109.862 Y129.691 E-.22027
+G1 X110.255 Y129.379 E-.19058
+G1 X110.593 Y129.037 E-.18289
+; WIPE_END
+G1 E-.04 F1800
+; stop printing object, unique label id: 123
 M625
-; start printing object, unique label id: 104
+; start printing object, unique label id: 194
 M624 AgAAAAAAAAA=
-G1 X142.201 Y136.59 Z2.4 F30000
-G1 X139.547 Y140.73 Z2.4
+G1 X118.133 Y130.219 Z2.4 F30000
+G1 X148.02 Y134.907 Z2.4
 G1 Z2
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X139.819 Y140.73 E.009
-G1 X143.197 Y139.483 E.11946
-G2 X143.198 Y143.517 I5.526 J2.016 E.13656
-G1 X139.819 Y142.269 E.11948
-G1 X115.964 Y142.269 E.79131
-G1 X112.585 Y143.517 E.11948
-G2 X112.585 Y139.482 I-5.526 J-2.017 E.1366
-G1 X115.964 Y140.73 E.11947
-G1 X139.487 Y140.73 E.78031
-G1 X139.529 Y140.323 F30000
-G1 F15476.087
-G1 X139.746 Y140.323 E.00719
-G1 X143.976 Y138.762 E.14957
-G2 X143.977 Y144.238 I4.781 J2.737 E.1901
-G1 X139.746 Y142.676 E.1496
-G1 X116.037 Y142.676 E.78649
-G1 X111.806 Y144.238 E.1496
-G2 X111.806 Y138.761 I-4.78 J-2.739 E.19016
-G1 X116.037 Y140.323 E.1496
-G1 X139.469 Y140.323 E.7773
-G1 X139.511 Y139.916 F30000
-G1 F15476.087
-G1 X139.673 Y139.916 E.00537
-G1 X144.822 Y138.016 E.18204
-G1 X144.93 Y138.173 E.0063
-G2 X144.931 Y144.828 I3.703 J3.327 E.24181
-G1 X144.824 Y144.985 E.0063
-G1 X139.673 Y143.083 E.18212
-G1 X116.109 Y143.083 E.78166
-G1 X110.959 Y144.985 E.18212
-G1 X110.851 Y144.828 E.0063
-G2 X110.851 Y138.171 I-3.701 J-3.329 E.24191
-G1 X110.959 Y138.014 E.0063
-G1 X116.109 Y139.916 E.18212
-G1 X139.451 Y139.916 E.77429
-; WIPE_START
-G1 X139.673 Y139.916 E-.08437
-G1 X141.341 Y139.3 E-.67563
-; WIPE_END
-G1 E-.04 F1800
-G1 X133.857 Y140.795 Z2.4 F30000
-G1 X107.612 Y146.034 Z2.4
-G1 Z2
-G1 E.8 F1800
-G1 F15476.087
-G1 X107.564 Y146.04 E.00162
-G3 X106.776 Y136.957 I-.397 J-4.542 E.47532
-G3 X107.358 Y136.944 I.4 J4.974 E.01931
-G3 X108.153 Y145.95 I-.191 J4.555 E.43577
-G1 X107.672 Y146.025 E.01616
-G1 X107.512 Y145.637 F30000
-G1 F15476.087
-G1 X107.166 Y145.651 E.01148
-G3 X106.809 Y137.363 I0 J-4.152 E.42079
-G3 X107.343 Y137.351 I.367 J4.573 E.01774
-G3 X107.572 Y145.631 I-.177 J4.148 E.41334
-G1 X107.412 Y145.249 F30000
+G1 X148.367 Y134.861 E.01162
+G3 X148.902 Y134.849 I.367 J4.574 E.01774
+G3 X147.961 Y134.916 I-.177 J4.148 E.83398
+G1 X147.995 Y135.312 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
-G1 X107.166 Y145.259 E.00756
-G3 X106.84 Y137.754 I0 J-3.76 E.35289
-G3 X107.329 Y137.743 I.336 J4.181 E.01503
-G3 X107.494 Y145.244 I-.163 J3.756 E.34785
-G1 X107.472 Y145.246 E.00067
+G1 X148.072 Y135.295 E.00244
+G3 X148.399 Y135.252 I.653 J3.703 E.01013
+G3 X148.888 Y135.241 I.336 J4.182 E.01503
+G3 X147.752 Y135.366 I-.163 J3.756 E.6906
+G1 X147.936 Y135.325 E.0058
 ; WIPE_START
 M204 S10000
-G1 X107.166 Y145.259 E-.11633
-G1 X106.767 Y145.237 E-.15212
-G1 X106.353 Y145.17 E-.15936
-G1 X106.036 Y145.086 E-.12465
-G1 X105.727 Y144.973 E-.12471
-G1 X105.532 Y144.877 E-.08283
+G1 X148.072 Y135.295 E-.053
+G1 X148.399 Y135.252 E-.12521
+G1 X148.888 Y135.241 E-.18575
+G1 X149.216 Y135.27 E-.12523
+G1 X149.539 Y135.327 E-.12461
+G1 X149.856 Y135.412 E-.12465
+G1 X149.909 Y135.431 E-.02155
 ; WIPE_END
 G1 E-.04 F1800
-G1 X113.036 Y143.481 Z2.4 F30000
-G1 X147.857 Y137.005 Z2.4
+G1 X142.4 Y136.799 Z2.4 F30000
+G1 X107.621 Y143.135 Z2.4
 G1 Z2
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X148.226 Y136.957 E.01233
-G3 X148.808 Y136.944 I.4 J4.974 E.01931
-G3 X147.798 Y137.014 I-.191 J4.555 E.91656
-G1 X147.912 Y137.408 F30000
-G1 F15476.087
-G1 X148.259 Y137.363 E.01162
-G3 X148.793 Y137.351 I.367 J4.574 E.01774
-G3 X147.852 Y137.418 I-.177 J4.148 E.83398
-G1 X147.886 Y137.814 F30000
+G1 X107.275 Y143.149 E.01148
+G3 X106.917 Y134.861 I0 J-4.152 E.42079
+G3 X107.452 Y134.849 I.367 J4.573 E.01774
+G3 X107.68 Y143.129 I-.177 J4.148 E.41334
+G1 X107.521 Y142.747 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
-G1 X147.964 Y137.797 E.00244
-G3 X148.29 Y137.754 I.653 J3.703 E.01013
-G3 X148.779 Y137.743 I.336 J4.182 E.01503
-G3 X147.643 Y137.868 I-.163 J3.756 E.6906
-G1 X147.827 Y137.827 E.0058
+G1 X107.275 Y142.757 E.00756
+G3 X106.949 Y135.252 I0 J-3.76 E.35289
+G3 X107.438 Y135.241 I.336 J4.181 E.01503
+G3 X107.602 Y142.743 I-.163 J3.756 E.34785
+G1 X107.581 Y142.744 E.00067
 ; WIPE_START
 M204 S10000
-G1 X147.964 Y137.797 E-.053
-G1 X148.29 Y137.754 E-.12521
-G1 X148.779 Y137.743 E-.18575
-G1 X149.107 Y137.772 E-.12523
-G1 X149.43 Y137.829 E-.12461
-G1 X149.747 Y137.913 E-.12465
-G1 X149.8 Y137.933 E-.02155
+G1 X107.275 Y142.757 E-.11633
+G1 X106.875 Y142.736 E-.15212
+G1 X106.461 Y142.669 E-.15936
+G1 X106.144 Y142.584 E-.12465
+G1 X105.836 Y142.472 E-.12471
+G1 X105.641 Y142.375 E-.08283
 ; WIPE_END
 G1 E-.04 F1800
-G1 X142.256 Y139.086 Z2.4 F30000
-G1 X139.493 Y139.509 Z2.4
+G1 X113.165 Y141.095 Z2.4 F30000
+G1 X139.584 Y136.6 Z2.4
 G1 Z2
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X139.601 Y139.509 E.00356
-G1 X147.032 Y136.767 E.26274
-G3 X148.595 Y136.51 I1.639 J5.078 E.05276
-G3 X146.806 Y146.151 I.017 J4.99 E.58188
-G1 X139.601 Y143.49 E.25479
-G1 X116.182 Y143.49 E.77683
-G1 X108.976 Y146.151 E.2548
-G3 X108.977 Y136.848 I-1.806 J-4.651 E.64261
-G1 X116.182 Y139.509 E.25479
-G1 X139.433 Y139.509 E.77128
-G1 X139.475 Y139.102 F30000
-G1 F15476.087
-G1 X139.528 Y139.102 E.00175
-G1 X146.901 Y136.382 E.26068
-G3 X148.596 Y136.103 I1.774 J5.49 E.05722
-G3 X146.666 Y146.533 I.016 J5.397 E.62898
-G1 X139.528 Y143.897 E.25242
-G1 X116.255 Y143.897 E.77201
-G1 X109.116 Y146.533 E.25243
-G3 X109.116 Y136.466 I-1.946 J-5.034 E.69447
-G1 X116.255 Y139.102 E.25243
-G1 X139.415 Y139.102 E.76826
-G1 X139.458 Y138.71 F30000
+G1 X139.636 Y136.6 E.00175
+G1 X147.009 Y133.88 E.26068
+G3 X148.705 Y133.601 I1.774 J5.49 E.05722
+G3 X146.775 Y144.031 I.016 J5.397 E.62898
+G1 X139.636 Y141.396 E.25242
+G1 X116.364 Y141.396 E.77201
+G1 X109.225 Y144.031 E.25243
+G3 X109.225 Y133.964 I-1.946 J-5.034 E.69447
+G1 X116.364 Y136.6 E.25243
+G1 X139.524 Y136.6 E.76826
+G1 X139.566 Y136.208 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
-G1 X146.774 Y136.01 E.23962
-G3 X148.597 Y135.711 I1.904 J5.887 E.05698
-G3 X146.533 Y146.902 I.015 J5.789 E.62459
-G1 X139.458 Y144.29 E.23174
-G1 X116.325 Y144.29 E.71081
-G1 X109.25 Y146.902 E.23174
-G3 X109.25 Y136.097 I-2.079 J-5.402 E.6895
-G1 X116.325 Y138.71 E.23173
-G1 X139.398 Y138.71 E.70896
+G1 X146.883 Y133.509 E.23962
+G3 X148.706 Y133.209 I1.904 J5.887 E.05698
+M73 P81 R2
+G3 X146.642 Y144.4 I.015 J5.789 E.62459
+G1 X139.566 Y141.788 E.23174
+G1 X116.434 Y141.788 E.71081
+G1 X109.358 Y144.4 E.23174
+G3 X109.359 Y133.596 I-2.079 J-5.402 E.6895
+G1 X116.434 Y136.208 E.23173
+G1 X139.506 Y136.208 E.70896
 ; WIPE_START
 M204 S10000
-G1 X141.276 Y138.022 E-.76
+G1 X141.385 Y135.521 E-.76
 ; WIPE_END
 G1 E-.04 F1800
-G1 X139.347 Y141.921 Z2.4 F30000
+G1 X133.871 Y136.865 Z2.4 F30000
+G1 X131.301 Y137.325 Z2.4
 G1 Z2
 G1 E.8 F1800
 ; FEATURE: Sparse infill
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X139.881 Y141.921 E.01771
-G1 X140.908 Y142.3 E.0363
-G1 X142.551 Y140.657 E.07709
-G2 X142.551 Y142.343 I8.679 J.843 E.05602
-G1 X140.908 Y140.699 E.07709
-G1 X139.881 Y141.078 E.03631
-G1 X137.524 Y141.078 E.07818
-G1 X136.681 Y141.921 E.03954
-G1 X137.524 Y141.921 E.02796
-G1 X136.681 Y141.078 E.03954
-G1 X132.918 Y141.078 E.12482
-G1 X132.076 Y141.921 E.03954
-G1 X132.918 Y141.921 E.02796
-G1 X132.076 Y141.078 E.03954
-G1 X128.313 Y141.078 E.12482
-G1 X127.47 Y141.921 E.03954
-G1 X128.313 Y141.921 E.02796
-G1 X127.47 Y141.078 E.03954
-G1 X125.842 Y141.078 E.05401
-G1 X116.436 Y141.078 F30000
+G1 X129.673 Y137.325 E.05401
+G1 X126.327 Y140.67 E.15692
+G1 X129.673 Y140.67 E.11096
+G1 X126.327 Y137.325 E.15692
+G1 X121.997 Y137.325 E.14366
+G1 X118.652 Y140.67 E.15692
+G1 X121.997 Y140.67 E.11096
+G1 X118.652 Y137.325 E.15692
+G1 X116.234 Y137.325 E.0802
+G1 X114.837 Y136.809 E.04941
+G1 X112.118 Y139.527 E.12751
+G2 X112.115 Y138.464 I-4.362 J-.516 E.03536
+G1 X114.837 Y141.186 E.1277
+G1 X113.309 Y141.75 E.05401
+G1 X108.528 Y143.857 F30000
+; FEATURE: Floating vertical shell
+; LINE_WIDTH: 0.38292
+G1 F12000
+G1 X109.107 Y143.686 E.01674
+G1 X116.327 Y141.033 E.21311
+G1 X139.673 Y141.033 E.64681
+G1 X144.867 Y142.94 E.15329
+G1 X145.541 Y142.856 F30000
+; FEATURE: Sparse infill
+; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X115.902 Y141.078 E.01771
-G1 X114.875 Y140.699 E.0363
-G1 X113.232 Y142.342 E.07709
-G2 X113.232 Y140.657 I-8.688 J-.843 E.05601
-G1 X114.875 Y142.3 E.0771
-G1 X115.902 Y141.921 E.0363
-G1 X118.259 Y141.921 E.07819
-G1 X119.102 Y141.078 E.03954
-G1 X118.259 Y141.078 E.02796
-G1 X119.102 Y141.921 E.03954
-G1 X122.865 Y141.921 E.12482
-G1 X123.707 Y141.078 E.03954
-G1 X122.865 Y141.078 E.02796
-G1 X123.707 Y141.921 E.03954
-G1 X125.336 Y141.921 E.05401
-G1 X111.459 Y144.424 F30000
-; FEATURE: Gap infill
-; LINE_WIDTH: 0.109707
-G1 F15000
-G1 X111.369 Y144.574 E.00095
-G1 X111.315 Y144.616 E.00037
-G1 X110.736 Y145.019 F30000
-; LINE_WIDTH: 0.446404
-G1 F15000
-G1 X110.513 Y145.158 E.00861
-; LINE_WIDTH: 0.414707
-G1 X110.423 Y145.212 E.0032
-; LINE_WIDTH: 0.374922
-G1 X110.326 Y145.27 E.00305
-; LINE_WIDTH: 0.337633
-G1 X110.234 Y145.321 E.00253
-; LINE_WIDTH: 0.302975
-G1 X110.138 Y145.376 E.00234
-; LINE_WIDTH: 0.270724
-G1 X110.045 Y145.426 E.00195
-; LINE_WIDTH: 0.240928
-G1 X109.949 Y145.477 E.00176
-; LINE_WIDTH: 0.20096
-G1 X109.76 Y145.573 E.00273
-; LINE_WIDTH: 0.155969
-G1 X109.57 Y145.665 E.00194
-; LINE_WIDTH: 0.113906
-G1 X109.285 Y145.793 E.00181
+G1 X145.286 Y143.11 E.01194
+G1 X146.476 Y143.55 E.04207
+G1 X146.912 Y143.114 E.02045
+G2 X147.734 Y143.38 I1.746 J-3.991 E.02871
+G1 X148.389 Y144.035 E.03074
+G2 X153.252 Y141.222 I.283 J-5.121 E.19722
+G1 X152.841 Y140.811 E.0193
+G2 X152.841 Y137.185 I-4.286 J-1.813 E.12356
+G1 X153.249 Y136.777 E.01913
+G2 X148.389 Y133.961 I-4.608 J2.35 E.19695
+G1 X147.739 Y134.611 E.0305
+G3 X149.357 Y134.543 I1.01 J4.788 E.05395
 ; WIPE_START
-G1 X109.57 Y145.665 E-.76
+G1 X148.341 Y134.513 E-.3862
+G1 X147.739 Y134.611 E-.23164
+G1 X148.004 Y134.346 E-.14215
 ; WIPE_END
 G1 E-.04 F1800
-G1 X111.46 Y138.575 Z2.4 F30000
+G1 X145.807 Y141.656 Z2.4 F30000
+G1 X145.623 Y142.266 Z2.4
 G1 Z2
 G1 E.8 F1800
-; LINE_WIDTH: 0.109721
-G1 F15000
-G1 X111.369 Y138.425 E.00096
-G1 X111.315 Y138.383 E.00038
-G1 X110.736 Y137.98 F30000
-; LINE_WIDTH: 0.446375
-G1 F15000
-G1 X110.513 Y137.841 E.00862
-; LINE_WIDTH: 0.414645
-G1 X110.422 Y137.787 E.0032
-; LINE_WIDTH: 0.374884
-M73 P83 R2
-G1 X110.326 Y137.729 E.00305
-; LINE_WIDTH: 0.337583
-G1 X110.234 Y137.677 E.00253
-; LINE_WIDTH: 0.302886
-G1 X110.137 Y137.623 E.00235
-; LINE_WIDTH: 0.270645
-G1 X110.045 Y137.573 E.00194
-; LINE_WIDTH: 0.240937
-G1 X109.949 Y137.522 E.00176
-; LINE_WIDTH: 0.200963
-G1 X109.76 Y137.426 E.00273
-; LINE_WIDTH: 0.155982
-G1 X109.571 Y137.334 E.00194
-; LINE_WIDTH: 0.113535
-G1 X109.279 Y137.204 E.00184
+; FEATURE: Floating vertical shell
+; LINE_WIDTH: 0.383128
+G1 F12000
+G1 X145.034 Y141.596 E.02475
+G3 X144.526 Y140.632 I3.51 J-2.465 E.03028
+G1 X144.286 Y139.798 E.02407
+G1 X144.216 Y139.095 E.0196
+G1 X144.254 Y138.44 E.01817
+G1 X144.399 Y137.715 E.0205
+G1 X144.599 Y137.187 E.01566
+G1 X145.025 Y136.433 E.02402
+G3 X146.258 Y135.231 I3.744 J2.61 E.04801
+G1 X146.339 Y135.182 E.00262
+G1 X132.375 Y140.67 F30000
+; FEATURE: Sparse infill
+; LINE_WIDTH: 0.45
+G1 F15476.087
+G1 X134.003 Y140.67 E.05401
+G1 X137.348 Y137.325 E.15692
+G1 X134.003 Y137.325 E.11096
+G1 X137.348 Y140.67 E.15692
+G1 X139.766 Y140.67 E.0802
+G1 X141.163 Y141.186 E.04941
+G1 X143.882 Y138.468 E.12751
+G2 X143.879 Y139.525 I4.812 J.541 E.03511
+G1 X141.164 Y136.81 E.12736
+G1 X142.691 Y136.246 E.05401
 ; WIPE_START
-G1 X109.571 Y137.334 E-.76
+G1 X141.164 Y136.81 E-.61876
+G1 X141.427 Y137.072 E-.14124
 ; WIPE_END
 G1 E-.04 F1800
-G1 X117.198 Y137.607 Z2.4 F30000
-G1 X144.323 Y138.575 Z2.4
+G1 X133.812 Y136.556 Z2.4 F30000
+G1 X111.005 Y135.008 Z2.4
 G1 Z2
 G1 E.8 F1800
-; LINE_WIDTH: 0.109577
-G1 F15000
-G3 X144.467 Y138.385 I.311 J.085 E.00133
-G1 X145.044 Y137.98 F30000
-; LINE_WIDTH: 0.432543
-G1 F15000
-G1 X145.243 Y137.86 E.00737
-; LINE_WIDTH: 0.383709
-G1 X145.441 Y137.739 E.00645
-; LINE_WIDTH: 0.339802
-G1 X145.545 Y137.68 E.00289
-; LINE_WIDTH: 0.30288
-G1 X145.641 Y137.626 E.00233
-; LINE_WIDTH: 0.269756
-G1 X145.738 Y137.574 E.00204
-; LINE_WIDTH: 0.239841
-G1 X145.831 Y137.524 E.00168
-; LINE_WIDTH: 0.22473
-G1 X145.834 Y137.523 E.00006
-; LINE_WIDTH: 0.199599
-G1 X146.021 Y137.428 E.00267
-; LINE_WIDTH: 0.154658
-G1 X146.211 Y137.336 E.00192
-; LINE_WIDTH: 0.113295
-G1 X146.482 Y137.214 E.0017
+; FEATURE: Floating vertical shell
+; LINE_WIDTH: 0.38292
+G1 F12000
+G1 X116.327 Y136.963 E.1571
+G1 X139.673 Y136.963 E.6468
+G1 X146.805 Y134.342 E.21053
 ; WIPE_START
-G1 X146.211 Y137.336 E-.76
+G1 X144.928 Y135.032 E-.76
 ; WIPE_END
 G1 E-.04 F1800
-G1 X144.323 Y144.424 Z2.4 F30000
+G1 X137.295 Y135.06 Z2.4 F30000
+G1 X110.368 Y135.16 Z2.4
 G1 Z2
 G1 E.8 F1800
-; LINE_WIDTH: 0.107599
-G1 F15000
-G2 X144.468 Y144.616 I.495 J-.222 E.00128
-G1 X145.045 Y145.022 F30000
-; LINE_WIDTH: 0.425329
-G1 F15000
-G2 X145.372 Y145.218 I6.718 J-10.842 E.01187
-; LINE_WIDTH: 0.373434
-G1 X145.464 Y145.272 E.00285
-; LINE_WIDTH: 0.336478
-G1 X145.555 Y145.325 E.00253
-; LINE_WIDTH: 0.295037
-G1 X145.692 Y145.4 E.00321
-; LINE_WIDTH: 0.250745
-G1 X145.822 Y145.471 E.00251
-; LINE_WIDTH: 0.215658
-G1 X145.923 Y145.523 E.00161
-; LINE_WIDTH: 0.189502
-G1 X146.02 Y145.572 E.0013
-; LINE_WIDTH: 0.156423
-G1 X146.211 Y145.664 E.00196
-; LINE_WIDTH: 0.114053
-G1 X146.498 Y145.793 E.00182
+; FEATURE: Sparse infill
+; LINE_WIDTH: 0.45
+G1 F15476.087
+G1 X110.641 Y134.858 E.01349
+G1 X109.524 Y134.446 E.03951
+G1 X109.09 Y134.88 E.02038
+G2 X108.256 Y134.605 I-2.475 J6.104 E.02915
+G1 X107.611 Y133.961 E.03025
+G2 X102.748 Y136.773 I-.283 J5.121 E.19722
+G1 X103.159 Y137.185 E.0193
+G2 X103.159 Y140.811 I4.285 J1.813 E.12356
+G1 X102.745 Y141.228 E.01949
+G2 X107.612 Y144.034 I4.584 J-2.326 E.19716
+G1 X108.267 Y143.379 E.03073
+G3 X106.651 Y143.449 I-.991 J-4.202 E.05397
+; WIPE_START
+G1 X107.273 Y143.499 E-.23721
+G1 X108.267 Y143.379 E-.38028
+G1 X108.001 Y143.644 E-.1425
+; WIPE_END
+G1 E-.04 F1800
+G1 X110.141 Y136.318 Z2.4 F30000
+G1 X110.328 Y135.681 Z2.4
+G1 Z2
+G1 E.8 F1800
+; FEATURE: Floating vertical shell
+; LINE_WIDTH: 0.38292
+G1 F12000
+G3 X111.54 Y140.441 I-3.054 J3.313 E.14395
+G3 X110.255 Y142.377 I-4.345 J-1.49 E.06508
+G3 X108.968 Y143.17 I-3.151 J-3.676 E.04204
 ; CHANGE_LAYER
 ; Z_HEIGHT: 2.2
 ; LAYER_HEIGHT: 0.2
 ; WIPE_START
-G1 F15000
-G1 X146.211 Y145.664 E-.76
+G1 F12000
+G1 X109.369 Y142.993 E-.16626
+G1 X109.862 Y142.688 E-.22027
+G1 X110.255 Y142.377 E-.19058
+G1 X110.593 Y142.035 E-.18289
 ; WIPE_END
 G1 E-.04 F1800
-; stop printing object, unique label id: 104
+; stop printing object, unique label id: 194
 M625
 ; layer num/total_layer_count: 11/15
 ; update layer progress
@@ -8516,7 +6612,7 @@ M73 L11
 M991 S0 P10 ;notify layer change
 G17
 G3 Z2.4 I1.217 J0 P1  F30000
-; object ids of layer 11 start: 72,104
+; object ids of layer 11 start: 123,194
 M624 AwAAAAAAAAA=
 ;========Date 20250206========
 ; SKIPPABLE_START
@@ -8531,68 +6627,47 @@ M1004 S5 P1  ; external shutter
 M623
 ; SKIPPABLE_END
 
-; object ids of this layer11 end: 72,104
+; object ids of this layer11 end: 123,194
 M625
-; OBJECT_ID: 72
-; start printing object, unique label id: 72
+; OBJECT_ID: 123
+; start printing object, unique label id: 123
 M624 AQAAAAAAAAA=
-G1 X139.656 Y125.23
+G1 X147.811 Y121.95
 G1 Z2.2
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X139.927 Y125.23 E.00899
-G1 X143.306 Y123.984 E.11946
-G2 X143.305 Y128.017 I5.535 J2.018 E.13653
-G1 X139.927 Y126.77 E.11942
-G1 X116.072 Y126.77 E.79131
-G1 X112.694 Y128.017 E.11948
-G2 X112.694 Y123.983 I-5.525 J-2.017 E.1366
-G1 X116.072 Y125.23 E.11948
-G1 X139.596 Y125.23 E.78032
-G1 X139.638 Y124.823 F30000
-G1 F15476.087
-G1 X139.855 Y124.823 E.00718
-G1 X144.085 Y123.263 E.14956
-G2 X144.085 Y128.739 I4.781 J2.737 E.1901
-G1 X139.855 Y127.177 E.1496
-G1 X116.145 Y127.177 E.78649
-G1 X111.915 Y128.739 E.1496
-G2 X111.915 Y123.261 I-4.78 J-2.739 E.19016
-G1 X116.145 Y124.823 E.1496
-G1 X139.578 Y124.823 E.77731
-G1 X139.62 Y124.416 F30000
-G1 F15476.087
-G1 X139.782 Y124.416 E.00537
-G1 X144.931 Y122.517 E.18204
-G1 X145.038 Y122.673 E.0063
-G2 X145.04 Y129.329 I3.703 J3.327 E.24181
-G1 X144.932 Y129.485 E.0063
-G1 X139.782 Y127.584 E.18212
-G1 X116.218 Y127.584 E.78166
-G1 X111.068 Y129.485 E.18212
-G1 X110.96 Y129.329 E.0063
-G2 X110.96 Y122.671 I-3.701 J-3.329 E.24191
-G1 X111.068 Y122.515 E.0063
-G1 X116.218 Y124.416 E.18212
-G1 X139.56 Y124.416 E.7743
+G1 X147.827 Y121.948 E.00054
+G3 X148.603 Y121.85 I.906 J4.051 E.02599
+G3 X149.087 Y121.864 I.12 J4.483 E.01606
+G3 X147.477 Y122.043 I-.354 J4.136 E.8112
+G1 X147.753 Y121.966 E.00949
+G1 X147.97 Y122.319 F30000
+; FEATURE: Outer wall
+; LINE_WIDTH: 0.42
+G1 F12000
+M204 S5000
+G1 X148.234 Y122.274 E.00825
+G3 X148.618 Y122.242 I.498 J3.726 E.01183
+G3 X149.053 Y122.254 I.106 J4.047 E.01337
+G3 X147.911 Y122.331 I-.321 J3.746 E.69051
 ; WIPE_START
-G1 X139.782 Y124.416 E-.0843
-G1 X141.45 Y123.801 E-.6757
+M204 S10000
+G1 X148.234 Y122.274 E-.12476
+G1 X148.618 Y122.242 E-.14624
+G1 X149.053 Y122.254 E-.16522
+G1 X149.378 Y122.297 E-.12467
+G1 X149.856 Y122.414 E-.18687
+G1 X149.886 Y122.425 E-.01223
 ; WIPE_END
 G1 E-.04 F1800
-G1 X133.964 Y125.29 Z2.6 F30000
-G1 X107.507 Y130.552 Z2.6
+G1 X142.377 Y123.792 Z2.6 F30000
+G1 X107.472 Y130.147 Z2.6
 G1 Z2.2
 G1 E.8 F1800
-G1 F15476.087
-G1 X107.474 Y130.554 E.00109
-G3 X107.138 Y121.444 I-.191 J-4.555 E.47657
-G3 X107.672 Y121.458 I.135 J4.924 E.01776
-G3 X107.87 Y130.52 I-.389 J4.542 E.4426
-G1 X107.566 Y130.547 E.01011
-G1 X107.472 Y130.147 F30000
+; FEATURE: Inner wall
+; LINE_WIDTH: 0.45
 G1 F15476.087
 G1 X107.456 Y130.148 E.00053
 G3 X107.153 Y121.85 I-.174 J-4.148 E.4341
@@ -8602,7 +6677,7 @@ G1 X107.532 Y130.142 E.00949
 G1 X107.526 Y129.749 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
 G1 X107.439 Y129.756 E.00268
 G3 X107.168 Y122.242 I-.157 J-3.756 E.36422
@@ -8620,62 +6695,12 @@ G1 X105.686 Y129.408 E-.12463
 G1 X105.643 Y129.385 E-.0185
 ; WIPE_END
 G1 E-.04 F1800
-G1 X113.146 Y127.989 Z2.6 F30000
-G1 X147.707 Y121.557 Z2.6
+G1 X113.167 Y128.103 Z2.6 F30000
+G1 X139.584 Y123.602 Z2.6
 G1 Z2.2
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
-G1 F15476.087
-G1 X147.739 Y121.551 E.00109
-G3 X148.588 Y121.444 I.994 J4.449 E.02842
-G3 X149.122 Y121.458 I.135 J4.925 E.01776
-G3 X147.355 Y121.655 I-.389 J4.542 E.89075
-G1 X147.649 Y121.573 E.01011
-G1 X147.811 Y121.95 F30000
-G1 F15476.087
-G1 X147.827 Y121.948 E.00054
-G3 X148.603 Y121.85 I.906 J4.051 E.02599
-G3 X149.087 Y121.864 I.12 J4.483 E.01606
-G3 X147.477 Y122.043 I-.354 J4.136 E.8112
-G1 X147.753 Y121.966 E.00949
-G1 X147.97 Y122.319 F30000
-; FEATURE: Outer wall
-; LINE_WIDTH: 0.42
-G1 F3600
-M204 S5000
-G1 X148.234 Y122.274 E.00825
-G3 X148.618 Y122.242 I.498 J3.726 E.01183
-G3 X149.053 Y122.254 I.106 J4.047 E.01337
-G3 X147.911 Y122.331 I-.321 J3.746 E.69051
-; WIPE_START
-M204 S10000
-G1 X148.234 Y122.274 E-.12476
-G1 X148.618 Y122.242 E-.14624
-G1 X149.053 Y122.254 E-.16522
-G1 X149.378 Y122.297 E-.12467
-G1 X149.856 Y122.414 E-.18687
-G1 X149.886 Y122.425 E-.01223
-; WIPE_END
-G1 E-.04 F1800
-G1 X142.342 Y123.587 Z2.6 F30000
-G1 X139.602 Y124.009 Z2.6
-G1 Z2.2
-G1 E.8 F1800
-; FEATURE: Inner wall
-; LINE_WIDTH: 0.45
-G1 F15476.087
-G1 X139.709 Y124.009 E.00356
-G1 X147.14 Y121.268 E.26274
-G3 X148.686 Y121.01 I1.643 J5.095 E.05218
-G3 X146.915 Y130.651 I.037 J4.99 E.58263
-G1 X139.709 Y127.991 E.25479
-G1 X116.291 Y127.991 E.77683
-G1 X109.084 Y130.652 E.25484
-G3 X109.085 Y121.349 I-1.805 J-4.652 E.64256
-G1 X116.291 Y124.009 E.25479
-G1 X139.542 Y124.009 E.77128
-G1 X139.584 Y123.602 F30000
 G1 F15476.087
 G1 X139.636 Y123.602 E.00174
 G1 X147.009 Y120.882 E.26068
@@ -8690,7 +6715,7 @@ G1 X139.524 Y123.602 E.76827
 G1 X139.566 Y123.21 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
 G1 X139.566 Y123.21 E.00001
 G1 X146.883 Y120.511 E.23962
@@ -8708,557 +6733,635 @@ G1 X139.566 Y123.21 E-.02292
 G1 X141.386 Y122.539 E-.73708
 ; WIPE_END
 G1 E-.04 F1800
-G1 X144.432 Y123.076 Z2.6 F30000
+G1 X144.454 Y129.527 Z2.6 F30000
+G1 X144.701 Y130.089 Z2.6
 G1 Z2.2
 G1 E.8 F1800
-; FEATURE: Gap infill
-; LINE_WIDTH: 0.109561
-G1 F15000
-G3 X144.576 Y122.885 I.311 J.085 E.00133
-G1 X145.154 Y122.482 F30000
-; LINE_WIDTH: 0.445774
-G1 F15000
-G1 X145.371 Y122.347 E.00842
-; LINE_WIDTH: 0.41397
-G1 X145.473 Y122.286 E.00357
-; LINE_WIDTH: 0.372558
-G1 X145.567 Y122.23 E.00294
-; LINE_WIDTH: 0.330397
-G1 X145.691 Y122.161 E.00333
-; LINE_WIDTH: 0.287679
-G1 X145.807 Y122.096 E.00266
-; LINE_WIDTH: 0.245511
-G1 X145.943 Y122.023 E.00254
-; LINE_WIDTH: 0.199571
-G1 X146.129 Y121.928 E.00267
-; LINE_WIDTH: 0.15464
-G1 X146.32 Y121.836 E.00192
-; LINE_WIDTH: 0.113296
-G1 X146.59 Y121.715 E.0017
-; WIPE_START
-G1 X146.32 Y121.836 E-.76
-; WIPE_END
-G1 E-.04 F1800
-G1 X144.432 Y128.924 Z2.6 F30000
-G1 Z2.2
-G1 E.8 F1800
-; LINE_WIDTH: 0.107565
-G1 F15000
-G2 X144.577 Y129.117 I.494 J-.222 E.00128
-G1 X145.156 Y129.52 F30000
-; LINE_WIDTH: 0.446763
-G1 F15000
-G1 X145.371 Y129.654 E.00834
-; LINE_WIDTH: 0.416296
-G1 X145.469 Y129.713 E.00348
-; LINE_WIDTH: 0.376206
-G1 X145.56 Y129.767 E.00287
-; LINE_WIDTH: 0.338759
-G1 X145.658 Y129.822 E.00271
-; LINE_WIDTH: 0.303766
-G1 X145.749 Y129.874 E.00224
-; LINE_WIDTH: 0.265637
-G1 X145.883 Y129.946 E.00275
-; LINE_WIDTH: 0.227764
-G1 X146.004 Y130.008 E.00205
-; LINE_WIDTH: 0.194658
-G1 X146.122 Y130.069 E.00164
-; LINE_WIDTH: 0.157195
-G1 X146.319 Y130.165 E.00204
-; LINE_WIDTH: 0.114065
-G1 X146.606 Y130.293 E.00182
-; WIPE_START
-G1 X146.319 Y130.165 E-.76
-; WIPE_END
-G1 E-.04 F1800
-G1 X138.745 Y129.222 Z2.6 F30000
-G1 X115.971 Y126.389 Z2.6
-G1 Z2.2
-G1 E.8 F1800
+; FEATURE: Bridge
+; LINE_WIDTH: 0.40341
+; LAYER_HEIGHT: 0.4
+G1 F3000
+G1 X145.565 Y129.225 E.06365
+G3 X145.252 Y128.896 I1.348 J-1.593 E.02367
+G1 X144.39 Y129.759 E.06353
+G1 X143.922 Y129.586 E.026
+G1 X144.979 Y128.529 E.07787
+G3 X144.739 Y128.127 I2.173 J-1.572 E.02438
+G1 X143.453 Y129.413 E.09469
+G1 X142.985 Y129.24 E.026
+G1 X144.535 Y127.69 E.11415
+G3 X144.376 Y127.208 I2.116 J-.964 E.0265
+G1 X142.517 Y129.067 E.13694
+G1 X142.048 Y128.894 E.026
+G1 X144.258 Y126.685 E.16274
+G3 X144.207 Y126.094 I5.019 J-.731 E.03087
+G1 X141.58 Y128.721 E.19347
+G1 X141.112 Y128.548 E.026
+G1 X144.244 Y125.416 E.23071
+G1 X144.251 Y125.345 E.00372
+G3 X144.434 Y124.585 I3.737 J.497 E.04076
+G1 X140.643 Y128.376 E.27916
+G1 X140.175 Y128.203 E.026
+G1 X146.427 Y121.951 E.46045
+G1 X146.76 Y121.368 E.03492
+G1 X146.139 Y121.597 E.03444
+G1 X139.707 Y128.03 E.47374
+G1 X139.067 Y128.028 E.03331
+G1 X145.123 Y121.972 E.44602
+G1 X144.107 Y122.347 E.0564
+G1 X138.426 Y128.028 E.41842
+M73 P82 R2
+G1 X137.785 Y128.028 E.03339
+G1 X143.091 Y122.722 E.39081
+G1 X142.075 Y123.096 E.0564
+G1 X137.143 Y128.028 E.36321
+G1 X136.502 Y128.028 E.03339
+G1 X141.059 Y123.471 E.33561
+G1 X140.043 Y123.846 E.0564
+G1 X135.861 Y128.028 E.308
+G1 X135.22 Y128.028 E.03339
+G1 X139.276 Y123.972 E.29875
+G1 X138.635 Y123.972 E.03339
+G1 X134.579 Y128.028 E.29875
+G1 X133.937 Y128.028 E.03339
+G1 X137.994 Y123.972 E.29875
+G1 X137.353 Y123.972 E.03339
+G1 X133.296 Y128.028 E.29874
+G1 X132.655 Y128.028 E.03339
+G1 X136.711 Y123.972 E.29874
+G1 X136.07 Y123.972 E.03339
+G1 X132.014 Y128.028 E.29874
+G1 X131.372 Y128.028 E.03339
+G1 X135.429 Y123.972 E.29875
+G1 X134.788 Y123.972 E.03339
+G1 X130.731 Y128.028 E.29875
+G1 X130.09 Y128.028 E.03339
+G1 X134.146 Y123.972 E.29875
+G1 X133.505 Y123.972 E.03339
+G1 X129.449 Y128.028 E.29875
+G1 X128.808 Y128.028 E.03339
+G1 X132.864 Y123.972 E.29874
+G1 X132.223 Y123.972 E.03339
+G1 X128.166 Y128.028 E.29874
+G1 X127.525 Y128.028 E.03339
+G1 X131.582 Y123.972 E.29874
+G1 X130.94 Y123.972 E.03339
+G1 X126.884 Y128.028 E.29875
+G1 X126.243 Y128.028 E.03339
+G1 X130.299 Y123.972 E.29875
+G1 X129.658 Y123.972 E.03339
+G1 X125.602 Y128.028 E.29875
+G1 X124.96 Y128.028 E.03339
+G1 X129.017 Y123.972 E.29875
+G1 X128.375 Y123.972 E.03339
+G1 X124.319 Y128.028 E.29874
+G1 X123.678 Y128.028 E.03339
+G1 X127.734 Y123.972 E.29875
+G1 X127.093 Y123.972 E.03339
+G1 X123.037 Y128.028 E.29875
+G1 X122.395 Y128.028 E.03339
+G1 X126.452 Y123.972 E.29875
+G1 X125.811 Y123.972 E.03339
+G1 X121.754 Y128.028 E.29874
+G1 X121.113 Y128.028 E.03339
+G1 X125.169 Y123.972 E.29874
+G1 X124.528 Y123.972 E.03339
+G1 X120.472 Y128.028 E.29874
+G1 X119.831 Y128.028 E.03339
+G1 X123.887 Y123.972 E.29874
+G1 X123.246 Y123.972 E.03339
+G1 X119.189 Y128.028 E.29874
+G1 X118.548 Y128.028 E.03339
+G1 X122.605 Y123.972 E.29874
+G1 X121.963 Y123.972 E.03339
+G1 X117.907 Y128.028 E.29874
+G1 X117.266 Y128.028 E.03339
+G1 X121.322 Y123.972 E.29874
+G1 X120.681 Y123.972 E.03339
+G1 X116.624 Y128.028 E.29874
+G1 X116.297 Y128.028 E.01703
+G1 X115.799 Y128.212 E.02765
+G1 X120.04 Y123.972 E.31229
+G1 X119.398 Y123.972 E.03339
+G1 X114.783 Y128.587 E.33993
+G1 X113.766 Y128.963 E.05643
+G1 X118.757 Y123.972 E.36757
+G1 X118.116 Y123.972 E.03339
+G1 X112.75 Y129.338 E.39521
+G1 X111.733 Y129.713 E.05643
+G1 X117.475 Y123.972 E.42285
+G1 X116.834 Y123.972 E.03339
+G1 X110.717 Y130.089 E.45049
+G1 X109.7 Y130.464 E.05643
+G1 X116.221 Y123.943 E.48022
+G1 X115.752 Y123.771 E.026
+G1 X108.341 Y131.181 E.5458
+G1 X111.284 Y127.597 F30000
+G1 F3000
+G1 X115.284 Y123.598 E.29456
+G1 X114.816 Y123.425 E.026
+G1 X111.766 Y126.474 E.22458
+G2 X111.793 Y125.806 I-3.44 J-.472 E.03486
+G1 X114.347 Y123.252 E.18813
+G1 X113.879 Y123.079 E.026
+G1 X111.73 Y125.228 E.15825
+G2 X111.606 Y124.711 I-6.81 J1.369 E.02768
+G1 X113.411 Y122.906 E.13293
+G1 X112.942 Y122.733 E.026
+G1 X111.436 Y124.24 E.11095
+G2 X111.227 Y123.807 I-2.576 J.979 E.02503
+G1 X112.474 Y122.56 E.09185
+G1 X112.006 Y122.387 E.026
+G1 X110.978 Y123.415 E.0757
+G2 X110.699 Y123.053 I-1.852 J1.14 E.02385
+G1 X111.538 Y122.214 E.06178
+G1 X111.069 Y122.041 E.026
+G1 X110.244 Y122.866 E.06075
+G1 X108.034 Y121.079 F30000
 ; FEATURE: Floating vertical shell
-; LINE_WIDTH: 0.41999
+; LINE_WIDTH: 0.461045
+; LAYER_HEIGHT: 0.2
 G1 F12000
-G1 X139.964 Y126.378 E.73722
-G1 X142.714 Y127.38 E.08994
-G1 X142.576 Y126.546 E.02598
-G3 X142.72 Y124.618 I5.85 J-.533 E.05968
-G1 X139.964 Y125.622 E.09015
-G1 X116.036 Y125.622 E.7352
-G1 X113.286 Y124.62 E.08994
-G1 X113.424 Y125.453 E.02597
-G3 X113.28 Y127.383 I-5.85 J.533 E.05972
-G1 X115.915 Y126.41 E.0863
-M73 P84 R2
-G1 X142.175 Y126.024 F30000
-; LINE_WIDTH: 0.420147
-G1 F12000
-G3 X142.229 Y125.201 I4.977 J-.091 E.02539
-G1 X140.159 Y125.965 E.0678
-G1 X139.964 Y126 E.00611
-G1 X140.16 Y126.035 E.00612
-G1 X142.229 Y126.8 E.06781
-G1 X142.179 Y126.084 E.02204
-G1 X141.819 Y126.258 F30000
-; Slow Down Start
-; LINE_WIDTH: 0.39742
-G1 F3000;_EXTRUDE_SET_SPEED
-G1 X141.819 Y125.742 E.01492
-G1 X141.12 Y126 E.02154
-G1 X141.763 Y126.238 E.01981
-; Slow Down End
-G1 X139.964 Y126 F30000
-; Slow Down Start
-; LINE_WIDTH: 0.4232
-G1 F3000;_EXTRUDE_SET_SPEED
-G1 X116.047 Y126 E.74115
-; Slow Down End
-G1 X113.825 Y125.975 F30000
-; LINE_WIDTH: 0.420902
-G1 F12000
-G3 X113.771 Y126.799 I-4.974 J.092 E.02547
-G2 X115.84 Y126.034 I-323.405 J-877.174 E.06793
-G1 X115.987 Y126 E.00465
-G1 X115.84 Y125.966 E.00465
-G2 X113.771 Y125.2 I-318.661 J858.005 E.06795
-G1 X113.821 Y125.915 E.02207
-G1 X114.181 Y126.258 F30000
-; Slow Down Start
-; LINE_WIDTH: 0.39751
-G1 F3000;_EXTRUDE_SET_SPEED
-G1 X114.181 Y125.742 E.01493
-G1 X114.88 Y126 E.02155
-G1 X114.237 Y126.238 E.01982
-; Slow Down End
-G1 X111.568 Y128.924 F30000
-; FEATURE: Gap infill
-; LINE_WIDTH: 0.109709
-G1 F15000
-G1 X111.478 Y129.075 E.00095
-G1 X111.423 Y129.117 E.00038
-G1 X110.844 Y129.52 F30000
-; LINE_WIDTH: 0.446348
-G1 F15000
-G1 X110.622 Y129.659 E.00862
-; LINE_WIDTH: 0.413984
-G1 X110.528 Y129.714 E.0033
-; LINE_WIDTH: 0.372643
-G1 X110.427 Y129.775 E.00317
-; LINE_WIDTH: 0.330738
-G1 X110.31 Y129.84 E.00313
-; LINE_WIDTH: 0.288842
-G1 X110.19 Y129.906 E.00275
-; LINE_WIDTH: 0.24672
-G1 X110.058 Y129.978 E.0025
-; LINE_WIDTH: 0.200947
-G1 X109.869 Y130.074 E.00273
-; LINE_WIDTH: 0.155951
-G1 X109.679 Y130.165 E.00194
-; LINE_WIDTH: 0.11393
-G1 X109.394 Y130.293 E.00181
+G1 X107.172 Y121.019 E.02943
+G1 X106.307 Y121.114 E.02964
+G2 X103.627 Y122.611 I1.027 J4.986 E.10626
+G1 X103.141 Y123.222 E.0266
+G1 X102.784 Y123.859 E.02487
+G1 X102.495 Y124.595 E.02695
+G1 X102.351 Y125.236 E.02239
+G2 X102.8 Y128.182 I5.22 J.711 E.10293
+G1 X103.249 Y128.925 E.02959
+G1 X103.567 Y129.321 E.01729
+G1 X104.308 Y130.002 E.0343
+G1 X105.047 Y130.455 E.02953
+G1 X105.853 Y130.773 E.02953
+G1 X106.521 Y130.916 E.02327
+G1 X107.441 Y130.973 E.03141
+G2 X108.084 Y130.908 I-.441 J-7.62 E.02202
+G1 X108.369 Y130.414 E.01943
+G3 X106.108 Y130.411 I-1.123 J-4.463 E.07784
+G1 X105.363 Y130.142 E.02696
+G1 X104.62 Y129.71 E.02929
+G1 X103.963 Y129.135 E.02976
+G3 X103.316 Y128.265 I6.445 J-5.46 E.03697
+G1 X102.994 Y127.571 E.02607
+G3 X102.718 Y126.179 I5.369 J-1.786 E.04846
+G1 X102.757 Y125.358 E.028
+G1 X102.863 Y124.832 E.01829
+G1 X103.104 Y124.156 E.02445
+G1 X103.418 Y123.562 E.02291
+G1 X103.901 Y122.929 E.0271
+G1 X104.64 Y122.275 E.03361
+G1 X105.336 Y121.87 E.02744
+G1 X106.266 Y121.55 E.0335
+G1 X107.122 Y121.44 E.02943
+G1 X107.658 Y121.455 E.01828
+G1 X108.439 Y121.588 E.02696
+G1 X108.942 Y121.762 E.01815
+; LINE_WIDTH: 0.491805
+G1 X109.728 Y122.119 E.03157
+; LINE_WIDTH: 0.537284
+G1 X110.077 Y122.357 E.01703
+G1 X110.509 Y121.926 E.0246
+M73 P83 R2
+G1 X109.984 Y121.718 E.02274
+; LINE_WIDTH: 0.49634
+G1 X109.398 Y121.476 E.02341
+; LINE_WIDTH: 0.467498
+G1 X108.669 Y121.217 E.02678
+G1 X108.092 Y121.092 E.02041
 ; WIPE_START
-G1 X109.679 Y130.165 E-.76
+G1 X108.669 Y121.217 E-.32876
+G1 X109.398 Y121.476 E-.43124
 ; WIPE_END
 G1 E-.04 F1800
-G1 X111.568 Y123.076 Z2.6 F30000
+G1 X117.022 Y121.838 Z2.6 F30000
+G1 X153.058 Y123.549 Z2.6
 G1 Z2.2
 G1 E.8 F1800
-; LINE_WIDTH: 0.109703
-G1 F15000
-G1 X111.478 Y122.925 E.00096
-G1 X111.423 Y122.883 E.00037
-G1 X110.844 Y122.48 F30000
-; LINE_WIDTH: 0.446392
-G1 F15000
-G1 X110.622 Y122.342 E.00861
-; LINE_WIDTH: 0.414715
-G1 X110.531 Y122.288 E.0032
-; LINE_WIDTH: 0.374976
-G1 X110.434 Y122.23 E.00305
-; LINE_WIDTH: 0.330314
-G1 X110.303 Y122.155 E.00354
-; LINE_WIDTH: 0.28677
-G1 X110.185 Y122.092 E.00265
-; LINE_WIDTH: 0.247406
-G1 X110.064 Y122.025 E.00231
-; LINE_WIDTH: 0.214801
-G1 X109.968 Y121.976 E.00151
-; LINE_WIDTH: 0.189063
-G1 X109.869 Y121.926 E.00132
-; LINE_WIDTH: 0.155942
-G1 X109.679 Y121.835 E.00194
-; LINE_WIDTH: 0.113928
-G1 X109.394 Y121.707 E.00181
-; OBJECT_ID: 104
+; LINE_WIDTH: 0.462668
+G1 F12000
+G1 X152.757 Y123.072 E.01927
+G1 X152.188 Y122.42 E.02964
+G1 X151.512 Y121.872 E.02974
+G2 X149.603 Y121.108 I-2.787 J4.196 E.07085
+G1 X148.702 Y121.019 E.03097
+G1 X147.999 Y121.075 E.02411
+G2 X147.345 Y121.221 I6.872 J32.285 E.02291
+G1 X147.025 Y121.782 E.02211
+G3 X149.535 Y121.512 I1.738 J4.353 E.08742
+G1 X150.27 Y121.709 E.02604
+G3 X151.192 Y122.161 I-4.16 J9.656 E.03514
+G1 X151.794 Y122.624 E.02598
+G1 X152.373 Y123.26 E.0294
+G3 X152.895 Y124.171 I-3.011 J2.331 E.03606
+G1 X153.149 Y124.924 E.02717
+G1 X153.221 Y125.236 E.01094
+G1 X153.282 Y126.179 E.03233
+G3 X152.859 Y127.925 I-5.729 J-.46 E.06171
+G3 X151.575 Y129.555 I-4.08 J-1.896 E.0716
+G1 X151.018 Y129.944 E.02324
+G1 X150.302 Y130.281 E.02707
+G1 X149.532 Y130.488 E.02727
+G3 X148.429 Y130.541 I-.736 J-3.835 E.03792
+G1 X148.043 Y130.512 E.01323
+G3 X146.451 Y129.976 I1.165 J-6.092 E.05765
+; LINE_WIDTH: 0.510605
+M73 P83 R1
+G1 X146.162 Y129.79 E.0131
+; LINE_WIDTH: 0.554342
+G1 X145.873 Y129.603 E.01433
+G1 X145.432 Y130.045 E.02604
+; LINE_WIDTH: 0.545625
+G1 X145.814 Y130.202 E.01694
+; LINE_WIDTH: 0.516455
+G1 X146.197 Y130.358 E.01596
+; LINE_WIDTH: 0.463474
+G2 X147.947 Y130.921 I3.326 J-7.353 E.06314
+G2 X151.196 Y130.322 I.731 J-5.149 E.11521
+G1 X151.668 Y130.008 E.01942
+G1 X152.323 Y129.446 E.0296
+G2 X153.606 Y126.977 I-3.872 J-3.58 E.0965
+G2 X153.628 Y125.192 I-5.422 J-.959 E.06145
+G2 X153.4 Y124.313 I-3.463 J.429 E.03119
+G1 X153.082 Y123.604 E.02664
+; OBJECT_ID: 194
 ; WIPE_START
-G1 X109.679 Y121.835 E-.76
+G1 X153.4 Y124.313 E-.29538
+G1 X153.557 Y124.801 E-.1946
+G1 X153.628 Y125.192 E-.151
+G1 X153.667 Y125.502 E-.11902
 ; WIPE_END
 G1 E-.04 F1800
-; stop printing object, unique label id: 72
+; stop printing object, unique label id: 123
 M625
-; start printing object, unique label id: 104
+; start printing object, unique label id: 194
 M624 AgAAAAAAAAA=
-G1 X116.129 Y125.915 Z2.6 F30000
-G1 X139.548 Y140.73 Z2.6
+G1 X149.646 Y131.989 Z2.6 F30000
+G1 X147.811 Y134.948 Z2.6
 G1 Z2.2
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X139.819 Y140.73 E.00899
-G1 X143.197 Y139.483 E.11946
-G2 X143.196 Y143.516 I5.535 J2.018 E.13653
-G1 X139.819 Y142.269 E.11942
-G1 X115.964 Y142.269 E.79131
-G1 X112.585 Y143.517 E.11948
-G2 X112.585 Y139.482 I-5.525 J-2.017 E.1366
-G1 X115.964 Y140.73 E.11948
-G1 X139.488 Y140.73 E.78032
-G1 X139.53 Y140.323 F30000
-G1 F15476.087
-G1 X139.746 Y140.323 E.00718
-G1 X143.976 Y138.762 E.14956
-G2 X143.977 Y144.238 I4.781 J2.737 E.1901
-G1 X139.746 Y142.676 E.1496
-G1 X116.037 Y142.676 E.78649
-G1 X111.806 Y144.238 E.1496
-G2 X111.806 Y138.761 I-4.78 J-2.739 E.19016
-G1 X116.037 Y140.323 E.1496
-G1 X139.47 Y140.323 E.77731
-G1 X139.511 Y139.916 F30000
-G1 F15476.087
-G1 X139.673 Y139.916 E.00537
-G1 X144.822 Y138.016 E.18204
-G1 X144.93 Y138.173 E.0063
-G2 X144.931 Y144.828 I3.703 J3.327 E.24181
-G1 X144.824 Y144.985 E.0063
-G1 X139.673 Y143.083 E.18212
-G1 X116.109 Y143.083 E.78166
-G1 X110.959 Y144.985 E.18212
-G1 X110.851 Y144.828 E.0063
-G2 X110.851 Y138.171 I-3.701 J-3.329 E.24191
-G1 X110.959 Y138.014 E.0063
-G1 X116.109 Y139.916 E.18212
-G1 X139.451 Y139.916 E.7743
-; WIPE_START
-G1 X139.673 Y139.916 E-.0843
-G1 X141.342 Y139.3 E-.6757
-; WIPE_END
-G1 E-.04 F1800
-G1 X133.856 Y140.789 Z2.6 F30000
-G1 X107.398 Y146.052 Z2.6
-G1 Z2.2
-G1 E.8 F1800
-G1 F15476.087
-G1 X107.365 Y146.054 E.00109
-G3 X107.029 Y136.943 I-.191 J-4.555 E.47657
-G3 X107.564 Y136.957 I.135 J4.924 E.01776
-G3 X107.762 Y146.02 I-.389 J4.542 E.4426
-G1 X107.458 Y146.046 E.01011
-G1 X107.364 Y145.646 F30000
-G1 F15476.087
-G1 X107.348 Y145.647 E.00053
-G3 X107.045 Y137.35 I-.174 J-4.148 E.4341
-G3 X107.528 Y137.363 I.12 J4.483 E.01606
-G3 X107.708 Y145.616 I-.354 J4.136 E.40309
-G1 X107.424 Y145.641 E.00949
-G1 X107.418 Y145.248 F30000
+G1 X147.827 Y134.946 E.00054
+G3 X148.603 Y134.848 I.906 J4.051 E.02599
+G3 X149.087 Y134.861 I.12 J4.483 E.01606
+G3 X147.477 Y135.041 I-.354 J4.136 E.8112
+G1 X147.753 Y134.964 E.00949
+G1 X147.97 Y135.317 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
-G1 X107.331 Y145.256 E.00268
-G3 X107.059 Y137.742 I-.157 J-3.756 E.36422
-G3 X107.494 Y137.754 I.106 J4.047 E.01337
-G3 X107.657 Y145.228 I-.321 J3.746 E.33813
-G1 X107.477 Y145.243 E.00555
+G1 X148.234 Y135.271 E.00825
+G3 X148.618 Y135.24 I.498 J3.726 E.01183
+G3 X149.053 Y135.252 I.106 J4.047 E.01337
+G3 X147.911 Y135.329 I-.321 J3.746 E.69051
 ; WIPE_START
 M204 S10000
-G1 X107.331 Y145.256 E-.05596
-G1 X107.002 Y145.256 E-.12476
-G1 X106.514 Y145.202 E-.18682
-G1 X106.193 Y145.131 E-.12469
-G1 X105.88 Y145.033 E-.12464
-G1 X105.577 Y144.907 E-.12463
-G1 X105.534 Y144.885 E-.0185
+G1 X148.234 Y135.271 E-.12476
+G1 X148.618 Y135.24 E-.14624
+G1 X149.053 Y135.252 E-.16522
+G1 X149.378 Y135.295 E-.12467
+G1 X149.856 Y135.412 E-.18687
+G1 X149.886 Y135.423 E-.01223
 ; WIPE_END
 G1 E-.04 F1800
-G1 X113.038 Y143.488 Z2.6 F30000
-G1 X147.598 Y137.057 Z2.6
+G1 X142.377 Y136.79 Z2.6 F30000
+G1 X107.472 Y143.145 Z2.6
 G1 Z2.2
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X147.63 Y137.051 E.00109
-G3 X148.479 Y136.943 I.994 J4.449 E.02842
-G3 X149.014 Y136.957 I.135 J4.925 E.01776
-G3 X147.247 Y137.154 I-.389 J4.542 E.89075
-G1 X147.54 Y137.073 E.01011
-G1 X147.702 Y137.45 F30000
-G1 F15476.087
-G1 X147.718 Y137.448 E.00054
-G3 X148.495 Y137.35 I.906 J4.051 E.02599
-G3 X148.978 Y137.363 I.12 J4.483 E.01606
-G3 X147.369 Y137.542 I-.354 J4.136 E.8112
-G1 X147.644 Y137.466 E.00949
-G1 X147.861 Y137.818 F30000
+G1 X107.456 Y143.146 E.00053
+G3 X107.153 Y134.848 I-.174 J-4.148 E.4341
+G3 X107.637 Y134.861 I.12 J4.483 E.01606
+G3 X107.817 Y143.115 I-.354 J4.136 E.40309
+G1 X107.532 Y143.139 E.00949
+G1 X107.526 Y142.747 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
-G1 X148.126 Y137.773 E.00825
-G3 X148.509 Y137.742 I.498 J3.726 E.01183
-G3 X148.944 Y137.754 I.106 J4.047 E.01337
-G3 X147.803 Y137.831 I-.321 J3.746 E.69051
+G1 X107.439 Y142.754 E.00268
+G3 X107.168 Y135.24 I-.157 J-3.756 E.36422
+G3 X107.603 Y135.252 I.106 J4.047 E.01337
+G3 X107.766 Y142.726 I-.321 J3.746 E.33813
+G1 X107.586 Y142.741 E.00555
 ; WIPE_START
 M204 S10000
-G1 X148.126 Y137.773 E-.12476
-G1 X148.509 Y137.742 E-.14624
-G1 X148.944 Y137.754 E-.16522
-G1 X149.269 Y137.797 E-.12467
-G1 X149.747 Y137.913 E-.18687
-G1 X149.777 Y137.924 E-.01223
+G1 X107.439 Y142.754 E-.05596
+G1 X107.111 Y142.754 E-.12476
+G1 X106.622 Y142.701 E-.18682
+G1 X106.302 Y142.63 E-.12469
+G1 X105.989 Y142.531 E-.12464
+G1 X105.686 Y142.406 E-.12463
+G1 X105.643 Y142.383 E-.0185
 ; WIPE_END
 G1 E-.04 F1800
-G1 X142.234 Y139.087 Z2.6 F30000
-G1 X139.493 Y139.509 Z2.6
+G1 X113.167 Y141.101 Z2.6 F30000
+G1 X139.584 Y136.6 Z2.6
 G1 Z2.2
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X139.601 Y139.509 E.00356
-G1 X147.032 Y136.767 E.26274
-G3 X148.578 Y136.51 I1.643 J5.095 E.05218
-G3 X146.806 Y146.151 I.037 J4.99 E.58263
-G1 X139.601 Y143.49 E.25479
-G1 X116.182 Y143.49 E.77683
-G1 X108.975 Y146.151 E.25484
-G3 X108.977 Y136.848 I-1.805 J-4.652 E.64256
-G1 X116.182 Y139.509 E.25479
-G1 X139.433 Y139.509 E.77128
-G1 X139.475 Y139.102 F30000
-G1 F15476.087
-G1 X139.528 Y139.102 E.00174
-G1 X146.901 Y136.382 E.26068
-G3 X148.579 Y136.103 I1.777 J5.507 E.05664
-G3 X146.666 Y146.533 I.037 J5.397 E.62983
-G1 X139.528 Y143.897 E.25242
-G1 X116.255 Y143.897 E.77201
-G1 X109.116 Y146.533 E.25245
-G3 X109.117 Y136.466 I-1.945 J-5.034 E.69445
-G1 X116.255 Y139.102 E.25242
-G1 X139.415 Y139.102 E.76827
-G1 X139.458 Y138.71 F30000
+G1 X139.636 Y136.6 E.00174
+G1 X147.009 Y133.88 E.26068
+G3 X148.687 Y133.601 I1.777 J5.507 E.05664
+G3 X146.775 Y144.031 I.037 J5.397 E.62983
+G1 X139.636 Y141.396 E.25242
+G1 X116.364 Y141.396 E.77201
+G1 X109.224 Y144.032 E.25245
+G3 X109.225 Y133.964 I-1.945 J-5.034 E.69445
+G1 X116.364 Y136.6 E.25242
+G1 X139.524 Y136.6 E.76827
+G1 X139.566 Y136.208 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
-G1 X139.458 Y138.71 E.00001
-G1 X146.774 Y136.01 E.23962
-G3 X148.58 Y135.711 I1.907 J5.902 E.05645
-G3 X146.533 Y146.902 I.036 J5.789 E.62541
-G1 X139.458 Y144.29 E.23174
-G1 X116.325 Y144.29 E.71081
-G1 X109.25 Y146.902 E.23174
-G3 X109.25 Y136.097 I-2.079 J-5.402 E.6895
-G1 X116.325 Y138.71 E.23173
-G1 X139.398 Y138.71 E.70895
+G1 X139.566 Y136.208 E.00001
+G1 X146.883 Y133.509 E.23962
+G3 X148.688 Y133.209 I1.907 J5.902 E.05645
+G3 X146.642 Y144.4 I.036 J5.789 E.62541
+G1 X139.566 Y141.788 E.23174
+G1 X116.434 Y141.788 E.71081
+G1 X109.358 Y144.4 E.23174
+G3 X109.359 Y133.596 I-2.079 J-5.402 E.6895
+G1 X116.434 Y136.208 E.23173
+G1 X139.506 Y136.208 E.70895
 ; WIPE_START
 M204 S10000
-G1 X139.458 Y138.71 E-.02292
-G1 X141.278 Y138.038 E-.73708
+G1 X139.566 Y136.208 E-.02292
+G1 X141.386 Y135.536 E-.73708
 ; WIPE_END
 G1 E-.04 F1800
-G1 X144.323 Y138.575 Z2.6 F30000
+G1 X144.454 Y142.525 Z2.6 F30000
+G1 X144.701 Y143.087 Z2.6
 G1 Z2.2
 G1 E.8 F1800
-; FEATURE: Gap infill
-; LINE_WIDTH: 0.109561
-G1 F15000
-G3 X144.467 Y138.385 I.311 J.085 E.00133
-G1 X145.045 Y137.982 F30000
-; LINE_WIDTH: 0.445774
-G1 F15000
-G1 X145.263 Y137.846 E.00842
-; LINE_WIDTH: 0.41397
-G1 X145.364 Y137.786 E.00357
-; LINE_WIDTH: 0.372558
-G1 X145.458 Y137.73 E.00294
-; LINE_WIDTH: 0.330397
-G1 X145.582 Y137.66 E.00333
-; LINE_WIDTH: 0.287679
-G1 X145.699 Y137.595 E.00266
-; LINE_WIDTH: 0.245511
-G1 X145.834 Y137.523 E.00254
-; LINE_WIDTH: 0.199571
-G1 X146.021 Y137.428 E.00267
-; LINE_WIDTH: 0.15464
-G1 X146.211 Y137.336 E.00192
-; LINE_WIDTH: 0.113296
-G1 X146.482 Y137.214 E.0017
-; WIPE_START
-G1 X146.211 Y137.336 E-.76
-; WIPE_END
-G1 E-.04 F1800
-M73 P85 R2
-G1 X144.324 Y144.424 Z2.6 F30000
-G1 Z2.2
-G1 E.8 F1800
-; LINE_WIDTH: 0.107565
-G1 F15000
-G2 X144.468 Y144.616 I.494 J-.222 E.00128
-G1 X145.047 Y145.019 F30000
-; LINE_WIDTH: 0.446763
-G1 F15000
-G1 X145.262 Y145.153 E.00834
-; LINE_WIDTH: 0.416296
-G1 X145.36 Y145.212 E.00348
-; LINE_WIDTH: 0.376206
-G1 X145.451 Y145.266 E.00287
-; LINE_WIDTH: 0.338759
-G1 X145.549 Y145.322 E.00271
-; LINE_WIDTH: 0.303766
-G1 X145.641 Y145.373 E.00224
-; LINE_WIDTH: 0.265637
-G1 X145.774 Y145.445 E.00275
-; LINE_WIDTH: 0.227764
-G1 X145.895 Y145.508 E.00205
-; LINE_WIDTH: 0.194658
-G1 X146.013 Y145.569 E.00164
-; LINE_WIDTH: 0.157195
-G1 X146.211 Y145.664 E.00204
-; LINE_WIDTH: 0.114065
-G1 X146.498 Y145.793 E.00182
-; WIPE_START
-G1 X146.211 Y145.664 E-.76
-; WIPE_END
-G1 E-.04 F1800
-G1 X138.637 Y144.722 Z2.6 F30000
-G1 X115.862 Y141.889 Z2.6
-G1 Z2.2
-G1 E.8 F1800
+; FEATURE: Bridge
+; LINE_WIDTH: 0.40341
+; LAYER_HEIGHT: 0.4
+G1 F3000
+G1 X145.565 Y142.223 E.06365
+G3 X145.252 Y141.894 I1.348 J-1.593 E.02367
+G1 X144.39 Y142.757 E.06353
+G1 X143.922 Y142.584 E.026
+G1 X144.979 Y141.526 E.07787
+G3 X144.739 Y141.125 I2.173 J-1.572 E.02438
+G1 X143.453 Y142.411 E.09469
+G1 X142.985 Y142.238 E.026
+G1 X144.535 Y140.688 E.11415
+G3 X144.376 Y140.206 I2.116 J-.964 E.0265
+G1 X142.517 Y142.065 E.13694
+G1 X142.048 Y141.892 E.026
+G1 X144.258 Y139.682 E.16274
+G3 X144.207 Y139.092 I5.019 J-.731 E.03087
+G1 X141.58 Y141.719 E.19347
+G1 X141.112 Y141.546 E.026
+G1 X144.244 Y138.414 E.23071
+G1 X144.251 Y138.343 E.00372
+G3 X144.434 Y137.583 I3.737 J.497 E.04076
+G1 X140.643 Y141.373 E.27916
+G1 X140.175 Y141.2 E.026
+G1 X146.427 Y134.948 E.46045
+G1 X146.76 Y134.366 E.03492
+G1 X146.139 Y134.595 E.03444
+G1 X139.707 Y141.028 E.47374
+G1 X139.067 Y141.026 E.03331
+G1 X145.123 Y134.97 E.44602
+G1 X144.107 Y135.345 E.0564
+G1 X138.426 Y141.026 E.41842
+G1 X137.785 Y141.026 E.03339
+G1 X143.091 Y135.719 E.39081
+G1 X142.075 Y136.094 E.0564
+G1 X137.143 Y141.026 E.36321
+G1 X136.502 Y141.026 E.03339
+G1 X141.059 Y136.469 E.33561
+G1 X140.043 Y136.844 E.0564
+G1 X135.861 Y141.026 E.308
+G1 X135.22 Y141.026 E.03339
+G1 X139.276 Y136.97 E.29875
+G1 X138.635 Y136.97 E.03339
+G1 X134.579 Y141.026 E.29875
+G1 X133.937 Y141.026 E.03339
+G1 X137.994 Y136.97 E.29875
+G1 X137.353 Y136.97 E.03339
+G1 X133.296 Y141.026 E.29874
+G1 X132.655 Y141.026 E.03339
+G1 X136.711 Y136.97 E.29874
+G1 X136.07 Y136.97 E.03339
+G1 X132.014 Y141.026 E.29874
+G1 X131.372 Y141.026 E.03339
+G1 X135.429 Y136.97 E.29875
+G1 X134.788 Y136.97 E.03339
+G1 X130.731 Y141.026 E.29875
+G1 X130.09 Y141.026 E.03339
+G1 X134.146 Y136.97 E.29875
+G1 X133.505 Y136.97 E.03339
+G1 X129.449 Y141.026 E.29875
+G1 X128.808 Y141.026 E.03339
+G1 X132.864 Y136.97 E.29874
+G1 X132.223 Y136.97 E.03339
+G1 X128.166 Y141.026 E.29874
+G1 X127.525 Y141.026 E.03339
+G1 X131.582 Y136.97 E.29874
+G1 X130.94 Y136.97 E.03339
+G1 X126.884 Y141.026 E.29875
+G1 X126.243 Y141.026 E.03339
+G1 X130.299 Y136.97 E.29875
+G1 X129.658 Y136.97 E.03339
+G1 X125.602 Y141.026 E.29875
+G1 X124.96 Y141.026 E.03339
+G1 X129.017 Y136.97 E.29875
+G1 X128.375 Y136.97 E.03339
+G1 X124.319 Y141.026 E.29874
+G1 X123.678 Y141.026 E.03339
+G1 X127.734 Y136.97 E.29875
+G1 X127.093 Y136.97 E.03339
+G1 X123.037 Y141.026 E.29875
+G1 X122.395 Y141.026 E.03339
+G1 X126.452 Y136.97 E.29875
+G1 X125.811 Y136.97 E.03339
+G1 X121.754 Y141.026 E.29874
+G1 X121.113 Y141.026 E.03339
+G1 X125.169 Y136.97 E.29874
+G1 X124.528 Y136.97 E.03339
+G1 X120.472 Y141.026 E.29874
+G1 X119.831 Y141.026 E.03339
+G1 X123.887 Y136.97 E.29874
+G1 X123.246 Y136.97 E.03339
+G1 X119.189 Y141.026 E.29874
+M73 P84 R1
+G1 X118.548 Y141.026 E.03339
+G1 X122.605 Y136.97 E.29874
+G1 X121.963 Y136.97 E.03339
+G1 X117.907 Y141.026 E.29874
+G1 X117.266 Y141.026 E.03339
+G1 X121.322 Y136.97 E.29874
+G1 X120.681 Y136.97 E.03339
+G1 X116.624 Y141.026 E.29874
+G1 X116.297 Y141.026 E.01703
+G1 X115.799 Y141.21 E.02765
+G1 X120.04 Y136.97 E.31229
+G1 X119.398 Y136.97 E.03339
+G1 X114.783 Y141.585 E.33993
+G1 X113.766 Y141.961 E.05643
+G1 X118.757 Y136.97 E.36757
+G1 X118.116 Y136.97 E.03339
+G1 X112.75 Y142.336 E.39521
+G1 X111.733 Y142.711 E.05643
+G1 X117.475 Y136.97 E.42285
+G1 X116.834 Y136.97 E.03339
+G1 X110.717 Y143.086 E.45049
+G1 X109.7 Y143.462 E.05643
+G1 X116.221 Y136.941 E.48022
+G1 X115.752 Y136.768 E.026
+G1 X108.341 Y144.179 E.5458
+G1 X111.284 Y140.595 F30000
+G1 F3000
+G1 X115.284 Y136.595 E.29456
+G1 X114.816 Y136.423 E.026
+G1 X111.766 Y139.472 E.22458
+G2 X111.793 Y138.804 I-3.44 J-.472 E.03486
+G1 X114.347 Y136.25 E.18813
+G1 X113.879 Y136.077 E.026
+G1 X111.73 Y138.225 E.15825
+G2 X111.606 Y137.709 I-6.81 J1.369 E.02768
+G1 X113.411 Y135.904 E.13293
+G1 X112.942 Y135.731 E.026
+G1 X111.436 Y137.237 E.11095
+G2 X111.227 Y136.805 I-2.576 J.979 E.02503
+G1 X112.474 Y135.558 E.09185
+G1 X112.006 Y135.385 E.026
+G1 X110.978 Y136.413 E.0757
+G2 X110.699 Y136.051 I-1.852 J1.14 E.02385
+G1 X111.538 Y135.212 E.06178
+G1 X111.069 Y135.039 E.026
+G1 X110.244 Y135.864 E.06075
+G1 X108.034 Y134.077 F30000
 ; FEATURE: Floating vertical shell
-; LINE_WIDTH: 0.41999
+; LINE_WIDTH: 0.461045
+; LAYER_HEIGHT: 0.2
 G1 F12000
-G1 X139.855 Y141.877 E.73722
-G1 X142.605 Y142.88 E.08994
-G1 X142.468 Y142.046 E.02598
-G3 X142.612 Y140.117 I5.85 J-.533 E.05968
-G1 X139.855 Y141.122 E.09015
-G1 X115.928 Y141.122 E.7352
-G1 X113.178 Y140.119 E.08994
-G1 X113.315 Y140.953 E.02597
-G3 X113.171 Y142.882 I-5.85 J.533 E.05972
-G1 X115.806 Y141.91 E.0863
-G1 X142.067 Y141.524 F30000
-; LINE_WIDTH: 0.420147
-G1 F12000
-G3 X142.12 Y140.701 I4.977 J-.091 E.02539
-G1 X140.051 Y141.464 E.0678
-G1 X139.855 Y141.5 E.00611
-G1 X140.051 Y141.535 E.00612
-G1 X142.121 Y142.299 E.06781
-G1 X142.071 Y141.584 E.02204
-G1 X141.711 Y141.758 F30000
-; Slow Down Start
-; LINE_WIDTH: 0.39742
-G1 F3000;_EXTRUDE_SET_SPEED
-G1 X141.711 Y141.241 E.01492
-G1 X141.011 Y141.5 E.02154
-G1 X141.655 Y141.737 E.01981
-; Slow Down End
-G1 X139.855 Y141.5 F30000
-; Slow Down Start
-; LINE_WIDTH: 0.4232
-G1 F3000;_EXTRUDE_SET_SPEED
-G1 X115.938 Y141.5 E.74115
-; Slow Down End
-G1 X113.716 Y141.475 F30000
-; LINE_WIDTH: 0.420902
-G1 F12000
-G3 X113.663 Y142.299 I-4.974 J.092 E.02547
-G2 X115.731 Y141.534 I-323.405 J-877.174 E.06793
-G1 X115.878 Y141.5 E.00465
-G1 X115.731 Y141.465 E.00465
-G2 X113.662 Y140.7 I-318.661 J858.005 E.06795
-G1 X113.712 Y141.415 E.02207
-G1 X114.072 Y141.758 F30000
-; Slow Down Start
-; LINE_WIDTH: 0.39751
-G1 F3000;_EXTRUDE_SET_SPEED
-G1 X114.072 Y141.241 E.01493
-G1 X114.772 Y141.5 E.02155
-G1 X114.128 Y141.737 E.01982
-; Slow Down End
-G1 X111.459 Y144.424 F30000
-; FEATURE: Gap infill
-; LINE_WIDTH: 0.109709
-G1 F15000
-G1 X111.369 Y144.574 E.00095
-G1 X111.315 Y144.616 E.00038
-G1 X110.736 Y145.019 F30000
-; LINE_WIDTH: 0.446348
-G1 F15000
-G1 X110.513 Y145.158 E.00862
-; LINE_WIDTH: 0.413984
-G1 X110.419 Y145.214 E.0033
-; LINE_WIDTH: 0.372643
-G1 X110.318 Y145.274 E.00317
-; LINE_WIDTH: 0.330738
-G1 X110.202 Y145.339 E.00313
-; LINE_WIDTH: 0.288842
-G1 X110.082 Y145.406 E.00275
-; LINE_WIDTH: 0.24672
-G1 X109.949 Y145.477 E.0025
-; LINE_WIDTH: 0.200947
-G1 X109.76 Y145.574 E.00273
-; LINE_WIDTH: 0.155951
-G1 X109.571 Y145.665 E.00194
-; LINE_WIDTH: 0.11393
-G1 X109.285 Y145.793 E.00181
+G1 X107.172 Y134.017 E.02943
+G1 X106.307 Y134.111 E.02964
+G2 X103.627 Y135.609 I1.027 J4.986 E.10626
+G1 X103.141 Y136.22 E.0266
+G1 X102.784 Y136.856 E.02487
+G1 X102.496 Y137.593 E.02695
+G1 X102.351 Y138.234 E.02239
+G2 X102.8 Y141.18 I5.22 J.711 E.10293
+G1 X103.249 Y141.923 E.02959
+G1 X103.567 Y142.318 E.01729
+G1 X104.308 Y143 E.0343
+G1 X105.047 Y143.452 E.02953
+G1 X105.853 Y143.771 E.02953
+G1 X106.521 Y143.914 E.02327
+G1 X107.441 Y143.971 E.03141
+G2 X108.084 Y143.906 I-.441 J-7.62 E.02202
+G1 X108.369 Y143.412 E.01943
+G3 X106.108 Y143.408 I-1.123 J-4.463 E.07784
+G1 X105.363 Y143.14 E.02696
+G1 X104.62 Y142.708 E.02929
+G1 X103.963 Y142.133 E.02976
+G3 X103.316 Y141.263 I6.445 J-5.46 E.03697
+G1 X102.994 Y140.569 E.02607
+G3 X102.718 Y139.177 I5.369 J-1.786 E.04846
+G1 X102.757 Y138.356 E.028
+G1 X102.863 Y137.83 E.01829
+G1 X103.104 Y137.154 E.02445
+G1 X103.419 Y136.56 E.02291
+G1 X103.901 Y135.927 E.0271
+G1 X104.64 Y135.273 E.03361
+G1 X105.336 Y134.868 E.02744
+G1 X106.266 Y134.548 E.0335
+G1 X107.122 Y134.438 E.02943
+G1 X107.658 Y134.453 E.01828
+G1 X108.439 Y134.585 E.02696
+G1 X108.942 Y134.76 E.01815
+; LINE_WIDTH: 0.491805
+G1 X109.728 Y135.117 E.03157
+; LINE_WIDTH: 0.537284
+G1 X110.077 Y135.355 E.01703
+G1 X110.509 Y134.923 E.0246
+G1 X109.984 Y134.716 E.02274
+; LINE_WIDTH: 0.49634
+G1 X109.398 Y134.474 E.02341
+; LINE_WIDTH: 0.467498
+G1 X108.669 Y134.214 E.02678
+G1 X108.092 Y134.089 E.02041
 ; WIPE_START
-G1 X109.571 Y145.665 E-.76
+G1 X108.669 Y134.214 E-.32876
+G1 X109.398 Y134.474 E-.43124
 ; WIPE_END
 G1 E-.04 F1800
-G1 X111.46 Y138.575 Z2.6 F30000
+G1 X117.022 Y134.836 Z2.6 F30000
+G1 X153.058 Y136.547 Z2.6
 G1 Z2.2
 G1 E.8 F1800
-; LINE_WIDTH: 0.109703
-G1 F15000
-G1 X111.369 Y138.425 E.00096
-G1 X111.315 Y138.383 E.00037
-G1 X110.736 Y137.98 F30000
-; LINE_WIDTH: 0.446392
-G1 F15000
-G1 X110.513 Y137.841 E.00861
-; LINE_WIDTH: 0.414715
-G1 X110.423 Y137.787 E.0032
-; LINE_WIDTH: 0.374976
-G1 X110.326 Y137.73 E.00305
-; LINE_WIDTH: 0.330314
-G1 X110.194 Y137.655 E.00354
-; LINE_WIDTH: 0.28677
-G1 X110.077 Y137.591 E.00265
-; LINE_WIDTH: 0.247406
-G1 X109.955 Y137.525 E.00231
-; LINE_WIDTH: 0.214801
-G1 X109.859 Y137.476 E.00151
-; LINE_WIDTH: 0.189063
-G1 X109.76 Y137.425 E.00132
-; LINE_WIDTH: 0.155942
-G1 X109.57 Y137.334 E.00194
-; LINE_WIDTH: 0.113928
-G1 X109.285 Y137.206 E.00181
+; LINE_WIDTH: 0.462668
+G1 F12000
+G1 X152.757 Y136.07 E.01927
+G1 X152.188 Y135.418 E.02964
+G1 X151.513 Y134.87 E.02974
+G2 X149.603 Y134.105 I-2.787 J4.196 E.07085
+G1 X148.702 Y134.017 E.03097
+G1 X147.999 Y134.073 E.02411
+G2 X147.345 Y134.219 I6.872 J32.285 E.02291
+G1 X147.025 Y134.78 E.02211
+G3 X149.535 Y134.51 I1.738 J4.353 E.08742
+G1 X150.27 Y134.707 E.02604
+G3 X151.192 Y135.159 I-4.16 J9.656 E.03514
+G1 X151.794 Y135.622 E.02598
+G1 X152.373 Y136.258 E.0294
+G3 X152.895 Y137.169 I-3.011 J2.331 E.03606
+G1 X153.149 Y137.922 E.02717
+G1 X153.221 Y138.234 E.01094
+G1 X153.282 Y139.177 E.03233
+G3 X152.859 Y140.923 I-5.729 J-.46 E.06171
+G3 X151.575 Y142.552 I-4.08 J-1.896 E.0716
+M73 P85 R1
+G1 X151.018 Y142.942 E.02324
+G1 X150.302 Y143.279 E.02707
+G1 X149.532 Y143.486 E.02727
+G3 X148.429 Y143.539 I-.736 J-3.835 E.03792
+G1 X148.043 Y143.51 E.01323
+G3 X146.451 Y142.974 I1.165 J-6.092 E.05765
+; LINE_WIDTH: 0.510605
+G1 X146.162 Y142.787 E.0131
+; LINE_WIDTH: 0.554342
+G1 X145.873 Y142.601 E.01433
+G1 X145.432 Y143.043 E.02604
+; LINE_WIDTH: 0.545625
+G1 X145.814 Y143.199 E.01694
+; LINE_WIDTH: 0.516455
+G1 X146.197 Y143.356 E.01596
+; LINE_WIDTH: 0.463474
+G2 X147.947 Y143.918 I3.326 J-7.353 E.06314
+G2 X151.196 Y143.32 I.731 J-5.149 E.11521
+G1 X151.668 Y143.006 E.01942
+G1 X152.323 Y142.443 E.0296
+G2 X153.606 Y139.974 I-3.872 J-3.58 E.0965
+G2 X153.628 Y138.189 I-5.422 J-.959 E.06145
+G2 X153.4 Y137.311 I-3.463 J.429 E.03119
+G1 X153.082 Y136.602 E.02664
 ; CHANGE_LAYER
 ; Z_HEIGHT: 2.4
 ; LAYER_HEIGHT: 0.2
 ; WIPE_START
-G1 F15000
-G1 X109.57 Y137.334 E-.76
+G1 F12000
+G1 X153.4 Y137.311 E-.29538
+G1 X153.557 Y137.798 E-.1946
+G1 X153.628 Y138.189 E-.151
+G1 X153.668 Y138.5 E-.11902
 ; WIPE_END
 G1 E-.04 F1800
-; stop printing object, unique label id: 104
+; stop printing object, unique label id: 194
 M625
 ; layer num/total_layer_count: 12/15
 ; update layer progress
@@ -9266,7 +7369,7 @@ M73 L12
 M991 S0 P11 ;notify layer change
 G17
 G3 Z2.6 I1.217 J0 P1  F30000
-; object ids of layer 12 start: 72,104
+; object ids of layer 12 start: 123,194
 M624 AwAAAAAAAAA=
 ;========Date 20250206========
 ; SKIPPABLE_START
@@ -9281,78 +7384,46 @@ M1004 S5 P1  ; external shutter
 M623
 ; SKIPPABLE_END
 
-; object ids of this layer12 end: 72,104
+; object ids of this layer12 end: 123,194
 M625
-; OBJECT_ID: 72
-; start printing object, unique label id: 72
+; OBJECT_ID: 123
+; start printing object, unique label id: 123
 M624 AQAAAAAAAAA=
-G1 X143.306 Y123.984
+G1 X147.842 Y121.943
 G1 Z2.4
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X143.212 Y124.262 E.00974
-G2 X143.306 Y128.017 I5.549 J1.739 E.12688
-G1 X139.927 Y126.77 E.11947
-G1 X116.072 Y126.77 E.79131
-G1 X112.694 Y128.017 E.11948
-G2 X112.694 Y123.984 I-5.525 J-2.017 E.13656
-G1 X116.073 Y125.23 E.11946
-G1 X139.927 Y125.23 E.7913
-G1 X143.25 Y124.005 E.11747
+G1 X148.183 Y121.885 E.01148
+G3 X148.59 Y121.851 I.551 J4.113 E.01355
+G3 X148.906 Y121.852 I.146 J3.621 E.01049
+G3 X147.784 Y121.958 I-.172 J4.146 E.82746
+G1 X147.947 Y122.323 F30000
+; FEATURE: Outer wall
+; LINE_WIDTH: 0.42
+G1 F12000
+M204 S5000
+G1 X148.234 Y122.274 E.00894
+G3 X148.605 Y122.243 I.5 J3.725 E.01144
+G3 X148.889 Y122.244 I.131 J3.243 E.00872
+G3 X147.889 Y122.337 I-.155 J3.755 E.69459
 ; WIPE_START
-G1 X143.212 Y124.262 E-.09886
-G1 X143.094 Y124.697 E-.17111
-G1 X142.993 Y125.246 E-.21231
-G1 X142.95 Y125.748 E-.19134
-G1 X142.95 Y125.975 E-.08639
+M204 S10000
+G1 X148.234 Y122.274 E-.13337
+G1 X148.605 Y122.243 E-.14145
+G1 X148.889 Y122.244 E-.10785
+G1 X149.378 Y122.297 E-.18684
+G1 X149.698 Y122.368 E-.12471
+G1 X149.863 Y122.42 E-.06578
 ; WIPE_END
 G1 E-.04 F1800
-G1 X139.638 Y124.823 Z2.8 F30000
+G1 X142.355 Y123.792 Z2.8 F30000
+G1 X107.621 Y130.137 Z2.8
 G1 Z2.4
 G1 E.8 F1800
-G1 F15476.087
-G1 X139.855 Y124.823 E.00717
-G1 X144.085 Y123.263 E.14956
-G2 X144.085 Y128.739 I4.78 J2.737 E.19011
-G1 X139.855 Y127.177 E.1496
-G1 X116.145 Y127.177 E.78649
-G1 X111.915 Y128.739 E.1496
-G2 X111.915 Y123.263 I-4.78 J-2.739 E.1901
-G1 X116.145 Y124.823 E.14956
-G1 X139.578 Y124.823 E.77731
-G1 X139.62 Y124.416 F30000
-G1 F15476.087
-G1 X139.782 Y124.416 E.00536
-G1 X144.931 Y122.517 E.18204
-G1 X145.038 Y122.673 E.0063
-G2 X145.04 Y129.329 I3.703 J3.327 E.24181
-G1 X144.932 Y129.485 E.0063
-G1 X139.782 Y127.584 E.18212
-G1 X116.218 Y127.584 E.78166
-G1 X111.068 Y129.485 E.18212
-G1 X110.96 Y129.329 E.0063
-G2 X110.962 Y122.673 I-3.701 J-3.329 E.24181
-G1 X111.069 Y122.517 E.0063
-G1 X116.218 Y124.416 E.18204
-G1 X139.56 Y124.416 E.7743
-; WIPE_START
-G1 X139.782 Y124.416 E-.08422
-G1 X141.45 Y123.801 E-.67578
-; WIPE_END
-M73 P85 R1
-G1 E-.04 F1800
-G1 X133.965 Y125.293 Z2.8 F30000
-G1 X107.64 Y130.543 Z2.8
-G1 Z2.4
-G1 E.8 F1800
-G1 F15476.087
-G1 X107.275 Y130.559 E.0121
-G3 X107.124 Y121.444 I.01 J-4.559 E.46942
-G3 X107.474 Y121.445 I.162 J4.004 E.0116
-G3 X107.699 Y130.54 I-.189 J4.555 E.45504
-G1 X107.621 Y130.137 F30000
+; FEATURE: Inner wall
+; LINE_WIDTH: 0.45
 G1 F15476.087
 G1 X107.275 Y130.148 E.01148
 G3 X107.14 Y121.851 I.01 J-4.15 E.42738
@@ -9361,7 +7432,7 @@ G3 X107.68 Y130.129 I-.172 J4.146 E.41365
 G1 X107.534 Y129.749 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
 G1 X107.275 Y129.756 E.00795
 G3 X107.155 Y122.243 I.009 J-3.758 E.35853
@@ -9378,60 +7449,12 @@ G1 X105.795 Y129.456 E-.14148
 G1 X105.651 Y129.384 E-.06134
 ; WIPE_END
 G1 E-.04 F1800
-G1 X113.155 Y127.987 Z2.8 F30000
-G1 X147.77 Y121.543 Z2.8
+G1 X113.175 Y128.102 Z2.8 F30000
+G1 X139.584 Y123.602 Z2.8
 G1 Z2.4
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
-G1 F15476.087
-G1 X148.13 Y121.481 E.01211
-G3 X148.574 Y121.444 I.605 J4.518 E.01479
-G3 X148.924 Y121.445 I.162 J4.004 E.0116
-G3 X147.712 Y121.557 I-.189 J4.555 E.90966
-G1 X147.842 Y121.943 F30000
-G1 F15476.087
-G1 X148.183 Y121.885 E.01148
-G3 X148.59 Y121.851 I.551 J4.113 E.01355
-G3 X148.906 Y121.852 I.146 J3.621 E.01049
-G3 X147.784 Y121.959 I-.172 J4.146 E.82746
-G1 X147.947 Y122.323 F30000
-; FEATURE: Outer wall
-; LINE_WIDTH: 0.42
-G1 F3600
-M204 S5000
-G1 X148.234 Y122.274 E.00894
-G3 X148.605 Y122.243 I.5 J3.725 E.01144
-G3 X148.889 Y122.244 I.131 J3.243 E.00872
-G3 X147.889 Y122.337 I-.155 J3.755 E.69459
-; WIPE_START
-M204 S10000
-G1 X148.234 Y122.274 E-.13337
-G1 X148.605 Y122.243 E-.14145
-G1 X148.889 Y122.244 E-.10785
-G1 X149.378 Y122.297 E-.18684
-G1 X149.698 Y122.368 E-.12471
-G1 X149.863 Y122.42 E-.06578
-; WIPE_END
-G1 E-.04 F1800
-G1 X142.321 Y123.588 Z2.8 F30000
-G1 X139.602 Y124.009 Z2.8
-G1 Z2.4
-G1 E.8 F1800
-; FEATURE: Inner wall
-; LINE_WIDTH: 0.45
-G1 F15476.087
-G1 X139.709 Y124.009 E.00355
-G1 X147.14 Y121.268 E.26274
-G3 X146.916 Y130.651 I1.581 J4.732 E.63464
-G1 X139.709 Y127.991 E.25482
-G1 X116.291 Y127.991 E.77683
-G1 X109.085 Y130.651 E.25482
-G3 X107.587 Y121.019 I-1.805 J-4.652 E.59152
-G3 X108.86 Y121.268 I-.412 J5.492 E.04313
-G1 X116.291 Y124.009 E.26273
-G1 X139.542 Y124.009 E.77128
-G1 X139.584 Y123.602 F30000
 G1 F15476.087
 G1 X139.636 Y123.602 E.00174
 G1 X147.009 Y120.882 E.26067
@@ -9446,7 +7469,7 @@ G1 X139.524 Y123.602 E.76827
 G1 X139.565 Y123.21 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
 G1 X139.566 Y123.21 E.00003
 G1 X146.883 Y120.511 E.23962
@@ -9454,7 +7477,6 @@ G3 X146.642 Y131.402 I1.838 J5.489 E.68162
 G1 X139.566 Y128.79 E.23174
 G1 X116.434 Y128.79 E.71081
 G1 X109.358 Y131.402 E.23174
-M73 P86 R1
 G3 X107.637 Y120.221 I-2.079 J-5.403 E.63516
 G3 X109.117 Y120.511 I-.481 J6.385 E.04645
 G1 X116.434 Y123.21 E.23962
@@ -9465,551 +7487,763 @@ G1 X139.566 Y123.21 E-.02321
 G1 X141.385 Y122.539 E-.73679
 ; WIPE_END
 G1 E-.04 F1800
-G1 X144.432 Y123.076 Z2.8 F30000
-G1 Z2.4
-G1 E.8 F1800
-; FEATURE: Gap infill
-; LINE_WIDTH: 0.109564
-G1 F15000
-G3 X144.576 Y122.885 I.311 J.085 E.00133
-G1 X145.154 Y122.482 F30000
-; LINE_WIDTH: 0.445746
-G1 F15000
-G1 X145.372 Y122.346 E.00842
-; LINE_WIDTH: 0.414064
-G1 X145.472 Y122.286 E.00354
-; LINE_WIDTH: 0.372976
-G1 X145.565 Y122.231 E.00291
-; LINE_WIDTH: 0.331818
-G1 X145.684 Y122.165 E.0032
-; LINE_WIDTH: 0.290711
-G1 X145.795 Y122.102 E.00257
-; LINE_WIDTH: 0.247421
-G1 X145.943 Y122.023 E.00279
-; LINE_WIDTH: 0.199553
-G1 X146.129 Y121.928 E.00267
-; LINE_WIDTH: 0.154639
-G1 X146.32 Y121.836 E.00192
-; LINE_WIDTH: 0.1133
-G1 X146.59 Y121.715 E.0017
-; WIPE_START
-G1 X146.32 Y121.836 E-.76
-; WIPE_END
-G1 E-.04 F1800
-G1 X144.433 Y128.925 Z2.8 F30000
-G1 Z2.4
-G1 E.8 F1800
-; LINE_WIDTH: 0.107515
-G1 F15000
-G2 X144.577 Y129.117 I.493 J-.221 E.00127
-G1 X145.156 Y129.52 F30000
-; LINE_WIDTH: 0.446742
-G1 F15000
-G1 X145.371 Y129.654 E.00834
-; LINE_WIDTH: 0.416243
-G1 X145.469 Y129.713 E.00348
-; LINE_WIDTH: 0.37617
-G1 X145.56 Y129.767 E.00287
-; LINE_WIDTH: 0.33873
-G1 X145.658 Y129.822 E.00271
-; LINE_WIDTH: 0.303729
-G1 X145.749 Y129.874 E.00224
-; LINE_WIDTH: 0.271378
-G1 X145.846 Y129.926 E.00205
-; LINE_WIDTH: 0.241508
-G1 X145.939 Y129.976 E.00169
-; LINE_WIDTH: 0.226435
-G1 X145.942 Y129.978 E.00006
-; LINE_WIDTH: 0.201343
-G1 X146.129 Y130.073 E.0027
-; LINE_WIDTH: 0.156441
-G1 X146.319 Y130.165 E.00196
-; LINE_WIDTH: 0.114065
-G1 X146.606 Y130.293 E.00182
-; WIPE_START
-G1 X146.319 Y130.165 E-.76
-; WIPE_END
-G1 E-.04 F1800
-G1 X138.753 Y129.162 Z2.8 F30000
-G1 X114.88 Y126 Z2.8
+G1 X133.799 Y123.373 Z2.8 F30000
+G1 X111.814 Y125.788 Z2.8
 G1 Z2.4
 G1 E.8 F1800
 ; FEATURE: Internal solid infill
-; LINE_WIDTH: 0.39742
-G1 F15000
-G1 X114.181 Y125.742 E.02154
-G1 X114.181 Y126.258 E.01492
-G1 X114.824 Y126.021 E.01981
-G1 X116.036 Y126 F30000
-; LINE_WIDTH: 0.420139
-G1 F15000
-G1 X115.84 Y125.965 E.00612
-G1 X113.762 Y125.198 E.0681
-G1 X113.825 Y125.975 E.02398
-G3 X113.769 Y126.8 I-4.716 J.098 E.02544
-G1 X115.841 Y126.035 E.06787
-G1 X115.977 Y126.011 E.00426
-G1 X116.036 Y126 F30000
-; LINE_WIDTH: 0.42104
-G1 F15000
-G1 X139.904 Y126 E.73541
-G1 X116.036 Y126.378 F30000
 ; LINE_WIDTH: 0.41999
 G1 F15000
-G1 X139.964 Y126.378 E.7352
-G1 X142.709 Y127.379 E.08979
-G3 X142.729 Y124.615 I5.732 J-1.342 E.08573
-G1 X139.964 Y125.622 E.09043
-G1 X116.036 Y125.622 E.7352
-G1 X113.276 Y124.617 E.09026
-G1 X113.422 Y125.445 E.02586
-G3 X113.281 Y127.382 I-5.851 J.547 E.05994
-G1 X115.977 Y126.388 E.0883
-G1 X139.964 Y126 F30000
-; LINE_WIDTH: 0.42014
+G1 X111.782 Y126.582 E.0244
+G1 X111.668 Y127.162 E.01818
+G1 X111.4 Y127.905 E.02427
+G1 X111.004 Y128.597 E.0245
+G1 X110.358 Y129.337 E.03019
+; LINE_WIDTH: 0.43684
+G1 X109.971 Y129.645 E.01585
+; LINE_WIDTH: 0.462087
+G1 X109.584 Y129.952 E.01687
+G1 X108.926 Y130.251 E.02471
+G1 X108.08 Y130.491 E.03004
+G1 X107.49 Y130.555 E.02029
+G1 X106.693 Y130.523 E.02725
+G1 X105.731 Y130.293 E.03378
+G1 X104.884 Y129.884 E.03212
+G1 X104.417 Y129.545 E.0197
+G1 X103.847 Y128.994 E.02709
+G1 X103.363 Y128.348 E.02757
+G1 X102.992 Y127.575 E.02927
+G1 X102.763 Y126.665 E.03207
+G1 X102.716 Y125.819 E.02894
+G3 X103.133 Y124.087 I5.903 J.508 E.0611
+G1 X103.42 Y123.563 E.0204
+G1 X103.9 Y122.929 E.02716
+G1 X104.64 Y122.275 E.03371
+G1 X105.335 Y121.87 E.02749
+G1 X106.265 Y121.55 E.0336
+G1 X107.112 Y121.44 E.02914
+G3 X108.728 Y121.684 I.069 J5.017 E.0561
+G1 X109.224 Y121.867 E.01806
+; LINE_WIDTH: 0.458765
+G1 X109.567 Y122.083 E.01371
+; LINE_WIDTH: 0.421164
+G3 X110.747 Y123.068 I-2.547 J4.25 E.04756
+G1 X111.202 Y123.714 E.02436
+G1 X111.539 Y124.43 E.02441
+G1 X111.755 Y125.245 E.02597
+G1 X111.808 Y125.729 E.01499
+G1 X115.05 Y126 F30000
+; LINE_WIDTH: 0.52009
+G1 F13202.842
+G1 X114.117 Y125.656 E.03864
+G1 X114.106 Y126.348 E.02692
+G1 X114.993 Y126.021 E.03676
+G1 X139.673 Y123.994 F30000
+; LINE_WIDTH: 0.41999
 G1 F15000
-G1 X140.16 Y126.035 E.00612
-G1 X142.225 Y126.798 E.06768
-G3 X142.225 Y125.202 I7.089 J-.798 E.04915
-G1 X140.159 Y125.965 E.06769
-G1 X140.023 Y125.989 E.00426
-G1 X141.122 Y126 F30000
-; LINE_WIDTH: 0.39889
+G1 X116.327 Y123.994 E.71732
+G1 X110.175 Y121.737 E.20137
+; LINE_WIDTH: 0.432915
+G1 X109.791 Y121.609 E.01286
+; LINE_WIDTH: 0.466297
+G1 F14880.352
+G3 X108.875 Y121.284 I4.331 J-13.644 E.03354
+G2 X107.171 Y121.018 I-1.723 J5.449 E.05972
+G1 X106.307 Y121.114 E.03
+G2 X103.266 Y123.047 I1.023 J4.967 E.12711
+G1 X102.814 Y123.784 E.02983
+G1 X102.499 Y124.596 E.03005
+G2 X102.353 Y126.765 I4.844 J1.416 E.0756
+G1 X102.556 Y127.599 E.02962
+G2 X103.906 Y129.655 I4.893 J-1.742 E.08565
+G1 X104.562 Y130.174 E.02885
+G1 X105.443 Y130.631 E.03425
+G1 X106.274 Y130.876 E.0299
+G1 X107.135 Y130.977 E.02988
+G1 X108.003 Y130.928 E.02999
+G1 X108.646 Y130.787 E.02273
+G1 X109.722 Y130.393 E.03953
+; LINE_WIDTH: 0.47549
+G1 F14564.117
+G1 X110.214 Y130.231 E.01826
+; LINE_WIDTH: 0.420258
 G1 F15000
-G1 X141.814 Y126.256 E.0214
-G1 X141.814 Y125.745 E.01482
-G1 X141.178 Y125.979 E.01966
-G1 X111.568 Y123.076 F30000
-; FEATURE: Gap infill
-; LINE_WIDTH: 0.10957
+G1 X110.706 Y130.069 E.01593
+G1 X116.327 Y128.006 E.18412
+G1 X139.673 Y128.006 E.71783
+G1 X145.278 Y130.063 E.18358
+; LINE_WIDTH: 0.43774
+G1 X145.641 Y130.178 E.01226
+; LINE_WIDTH: 0.465081
+G1 F14923.215
+G3 X146.911 Y130.641 I-3.274 J10.954 E.04653
+G2 X147.911 Y130.913 I1.985 J-5.326 E.03569
+G1 X148.829 Y130.98 E.03166
+G1 X149.544 Y130.907 E.02474
+G1 X150.38 Y130.691 E.02969
+G1 X151.17 Y130.333 E.02984
+G1 X151.887 Y129.843 E.02988
+G1 X152.316 Y129.453 E.01995
+G1 X152.856 Y128.776 E.02979
+G1 X153.277 Y128.016 E.02989
+G1 X153.507 Y127.397 E.02271
+G1 X153.673 Y126.557 E.02949
+G2 X153.677 Y125.477 I-5.082 J-.556 E.0372
+G1 X153.51 Y124.625 E.02988
+G1 X153.29 Y124.013 E.02237
+G2 X152.338 Y122.576 I-5.82 J2.823 E.05947
+G1 X151.69 Y121.996 E.02991
+G2 X150.061 Y121.207 I-3.043 J4.206 E.06258
+G1 X149.296 Y121.052 E.02686
+G1 X148.6 Y121.028 E.02395
+G1 X147.775 Y121.11 E.02854
+G2 X146.682 Y121.455 I1.153 J5.549 E.0395
+; LINE_WIDTH: 0.479858
+G1 F14418.538
+G1 X146.29 Y121.617 E.01509
+; LINE_WIDTH: 0.514173
+G1 F13368.629
+G1 X145.899 Y121.779 E.01628
+; LINE_WIDTH: 0.512774
+G1 F13408.44
+G1 X145.565 Y121.882 E.01337
+; LINE_WIDTH: 0.47566
+G1 F14558.394
+G1 X145.231 Y121.985 E.01231
+; LINE_WIDTH: 0.421097
 G1 F15000
-G2 X111.424 Y122.885 I-.311 J.085 E.00133
-G1 X110.846 Y122.482 F30000
-; LINE_WIDTH: 0.445403
+G1 X144.898 Y122.088 E.01076
+G1 X139.732 Y123.984 E.16958
+G1 X139.673 Y124.371 F30000
+; LINE_WIDTH: 0.41999
 G1 F15000
-G1 X110.621 Y122.342 E.00869
-; LINE_WIDTH: 0.413076
-G1 X110.53 Y122.288 E.00318
-; LINE_WIDTH: 0.373328
-G1 X110.434 Y122.231 E.00303
-; LINE_WIDTH: 0.336031
-G1 X110.342 Y122.179 E.00252
-; LINE_WIDTH: 0.30134
-G1 X110.246 Y122.124 E.00233
-; LINE_WIDTH: 0.260912
-G1 X110.102 Y122.047 E.0029
-; LINE_WIDTH: 0.222705
-G1 X109.989 Y121.989 E.00186
-; LINE_WIDTH: 0.19129
-G1 X109.873 Y121.929 E.00157
-; LINE_WIDTH: 0.154711
-G1 X109.678 Y121.835 E.00197
-; LINE_WIDTH: 0.11315
-G1 X109.41 Y121.715 E.00169
+G1 X116.327 Y124.371 E.71732
+G1 X116.131 Y124.336 E.00613
+G1 X110.431 Y122.233 E.18666
+G1 X111.019 Y122.807 E.02523
+G1 X111.511 Y123.498 E.02605
+G1 X111.881 Y124.271 E.02635
+G1 X112.12 Y125.15 E.02798
+G1 X112.189 Y125.749 E.01853
+G1 X112.158 Y126.598 E.02612
+G1 X112.038 Y127.236 E.01994
+G1 X111.754 Y128.034 E.02602
+G1 X111.33 Y128.786 E.02652
+G1 X110.641 Y129.586 E.03245
+G1 X110.4 Y129.78 E.00951
+G1 X116.131 Y127.664 E.18774
+G1 X116.327 Y127.629 E.00611
+G1 X139.673 Y127.629 E.71733
+G1 X139.869 Y127.664 E.00611
+G1 X145.588 Y129.775 E.18733
+G1 X145.372 Y129.601 E.00853
+G1 X144.981 Y129.193 E.01737
+G1 X144.489 Y128.502 E.02604
+G1 X144.118 Y127.727 E.02643
+G1 X143.857 Y126.703 E.03247
+G1 X143.811 Y125.906 E.02451
+G1 X143.924 Y124.932 E.03015
+G1 X144.242 Y123.975 E.03099
+G1 X144.668 Y123.217 E.02671
+G1 X145.072 Y122.703 E.02008
+G1 X145.595 Y122.233 E.0216
+G1 X139.868 Y124.337 E.18748
+G1 X139.732 Y124.361 E.00424
+G1 X139.673 Y124.748 F30000
+G1 F15000
+G1 X116.327 Y124.748 E.71732
+G1 X116 Y124.69 E.0102
+G1 X111.693 Y123.101 E.14106
+G1 X111.902 Y123.424 E.01181
+G1 X112.223 Y124.112 E.02333
+G1 X112.485 Y125.055 E.03007
+G1 X112.564 Y125.709 E.02026
+G1 X112.535 Y126.615 E.02784
+G1 X112.408 Y127.31 E.02171
+G1 X112.109 Y128.163 E.02778
+G1 X111.701 Y128.898 E.02581
+G1 X116.001 Y127.31 E.14084
+G1 X116.327 Y127.252 E.01019
+G1 X139.673 Y127.252 E.71733
+G1 X139.999 Y127.31 E.01019
+G1 X144.308 Y128.901 E.14113
+G1 X144.098 Y128.576 E.01188
+G1 X143.776 Y127.886 E.0234
+G1 X143.491 Y126.792 E.03474
+G1 X143.435 Y125.923 E.02677
+G1 X143.55 Y124.88 E.03224
+G1 X143.886 Y123.852 E.03323
+G1 X144.293 Y123.113 E.0259
+G1 X139.998 Y124.69 E.14059
+G1 X139.732 Y124.738 E.0083
+G1 X139.673 Y125.125 F30000
+G1 F15000
+G1 X116.327 Y125.125 E.71732
+G1 X115.87 Y125.044 E.01428
+G1 X112.492 Y123.797 E.11062
+G1 X112.645 Y124.177 E.01257
+G1 X112.849 Y124.959 E.02485
+G1 X112.939 Y125.67 E.022
+G1 X112.912 Y126.631 E.02956
+G1 X112.777 Y127.383 E.02348
+G1 X112.496 Y128.202 E.0266
+G1 X115.87 Y126.956 E.11053
+G1 X116.327 Y126.875 E.01426
+G1 X139.673 Y126.875 E.71733
+G1 X140.13 Y126.956 E.01427
+G1 X143.509 Y128.204 E.11066
+G1 X143.349 Y127.801 E.01332
+G1 X143.124 Y126.882 E.02907
+G1 X143.058 Y125.939 E.02903
+G1 X143.066 Y125.629 E.00953
+G1 X143.177 Y124.828 E.02484
+G1 X143.503 Y123.805 E.03301
+G1 X140.128 Y125.044 E.1105
+G1 X139.732 Y125.115 E.01235
+G1 X139.673 Y125.502 F30000
+G1 F15000
+G1 X116.327 Y125.502 E.71732
+G3 X115.739 Y125.397 I0 J-1.697 E.01845
+G1 X113.099 Y124.423 E.08646
+G1 X113.26 Y125.115 E.02181
+G1 X113.314 Y125.63 E.01592
+G1 X113.288 Y126.648 E.03128
+G1 X113.115 Y127.571 E.02887
+G1 X115.74 Y126.602 E.08597
+G3 X116.327 Y126.498 I.587 J1.592 E.01843
+G1 X139.673 Y126.498 E.71733
+G3 X140.261 Y126.603 I0 J1.697 E.01844
+G1 X142.907 Y127.58 E.08667
+G1 X142.758 Y126.971 E.01924
+G1 X142.681 Y125.956 E.0313
+G1 X142.692 Y125.577 E.01162
+M73 P86 R1
+G1 X142.803 Y124.777 E.02484
+G1 X142.888 Y124.432 E.01089
+G1 X140.257 Y125.398 E.0861
+G3 X139.732 Y125.497 I-.54 J-1.427 E.0165
+G1 X139.673 Y125.845 F30000
+; LINE_WIDTH: 0.35198
+G1 F15000
+G1 X116.327 Y125.845 E.58794
+; LINE_WIDTH: 0.368983
+G1 X116.139 Y125.845 E.005
+; LINE_WIDTH: 0.419539
+G1 X115.951 Y125.845 E.00577
+G1 X115.609 Y125.751 E.01089
+G1 X113.625 Y125.019 E.0649
+G1 X113.689 Y125.591 E.01765
+G1 X113.665 Y126.664 E.03296
+G1 X113.628 Y126.979 E.00972
+G2 X115.609 Y126.249 I-359.841 J-979.194 E.06481
+G1 X115.951 Y126.155 E.01087
+; LINE_WIDTH: 0.402988
+G1 X116.139 Y126.155 E.00552
+; LINE_WIDTH: 0.352116
+G1 X139.673 Y126.155 E.59294
+; LINE_WIDTH: 0.368983
+G1 X139.86 Y126.155 E.00497
+; LINE_WIDTH: 0.419544
+G1 X140.047 Y126.155 E.00575
+G1 X140.391 Y126.249 E.01094
+G1 X142.381 Y126.983 E.06509
+G1 X142.304 Y125.972 E.03113
+G3 X142.389 Y125.017 I4.569 J-.075 E.02947
+G1 X140.387 Y125.752 E.06544
+G1 X140.047 Y125.845 E.01083
+; LINE_WIDTH: 0.402988
+G1 X139.89 Y125.845 E.00462
+; LINE_WIDTH: 0.368983
+G1 X139.733 Y125.845 E.00418
+G1 X140.95 Y126 F30000
+; LINE_WIDTH: 0.51948
+G1 F13219.742
+G1 X141.894 Y126.349 E.03905
+G1 X141.887 Y125.656 E.02689
+G1 X141.007 Y125.98 E.03643
+G1 X144.188 Y125.89 F30000
+; LINE_WIDTH: 0.41999
+G1 F15000
+G1 X144.297 Y124.983 E.02806
+G1 X144.599 Y124.098 E.02874
+G1 X144.995 Y123.405 E.02451
+G1 X145.366 Y122.939 E.01832
+; LINE_WIDTH: 0.441008
+G1 X145.72 Y122.599 E.01594
+; LINE_WIDTH: 0.468323
+G1 F14809.502
+G1 X146.075 Y122.258 E.01703
+G1 X146.783 Y121.867 E.02806
+G3 X147.828 Y121.529 I2.891 J7.154 E.0381
+G3 X149.108 Y121.454 I.927 J4.856 E.04457
+G1 X149.831 Y121.575 E.0254
+G1 X150.592 Y121.837 E.0279
+G1 X151.369 Y122.281 E.03104
+; LINE_WIDTH: 0.460926
+G1 F15000
+G1 X151.795 Y122.628 E.01871
+G1 X152.363 Y123.25 E.02868
+G3 X153.251 Y126.493 I-3.724 J2.763 E.1172
+G3 X153.017 Y127.547 I-3.794 J-.288 E.03687
+G1 X152.682 Y128.267 E.02705
+G1 X152.102 Y129.067 E.03367
+G1 X151.698 Y129.462 E.01926
+G1 X151.087 Y129.901 E.02561
+G1 X150.375 Y130.251 E.02705
+G1 X149.612 Y130.473 E.02704
+G1 X148.94 Y130.558 E.02308
+G1 X148.143 Y130.524 E.02718
+G3 X147.078 Y130.252 I1.254 J-7.133 E.03745
+; LINE_WIDTH: 0.478426
+G1 F14465.942
+G1 X146.281 Y129.884 E.03118
+G1 X145.666 Y129.36 E.02869
+; LINE_WIDTH: 0.41999
+G1 F15000
+G1 X145.253 Y128.932 E.01825
+G1 X144.798 Y128.286 E.02428
+G1 X144.46 Y127.567 E.02441
+G1 X144.223 Y126.613 E.03021
+G1 X144.191 Y125.95 E.02041
+; OBJECT_ID: 194
 ; WIPE_START
-G1 X109.678 Y121.835 E-.76
+G1 X144.223 Y126.613 E-.25242
+G1 X144.46 Y127.567 E-.37356
+G1 X144.61 Y127.886 E-.13403
 ; WIPE_END
 G1 E-.04 F1800
-G1 X111.568 Y128.924 Z2.8 F30000
-G1 Z2.4
-G1 E.8 F1800
-; LINE_WIDTH: 0.107776
-G1 F15000
-G1 X111.53 Y128.99 E.0004
-G3 X111.421 Y129.117 I-.214 J-.073 E.00091
-G1 X110.844 Y129.52 F30000
-; LINE_WIDTH: 0.446368
-G1 F15000
-G1 X110.622 Y129.659 E.00862
-; LINE_WIDTH: 0.414645
-G1 X110.531 Y129.713 E.0032
-; LINE_WIDTH: 0.374886
-G1 X110.434 Y129.77 E.00305
-; LINE_WIDTH: 0.33759
-G1 X110.342 Y129.822 E.00253
-; LINE_WIDTH: 0.302882
-G1 X110.246 Y129.877 E.00235
-; LINE_WIDTH: 0.27063
-G1 X110.154 Y129.926 E.00194
-; LINE_WIDTH: 0.240928
-G1 X110.058 Y129.978 E.00176
-; LINE_WIDTH: 0.200977
-G1 X109.869 Y130.074 E.00273
-; LINE_WIDTH: 0.155948
-G1 X109.679 Y130.165 E.00194
-; LINE_WIDTH: 0.113925
-G1 X109.394 Y130.293 E.00181
-; OBJECT_ID: 104
-; WIPE_START
-G1 X109.679 Y130.165 E-.76
-; WIPE_END
-G1 E-.04 F1800
-; stop printing object, unique label id: 72
+; stop printing object, unique label id: 123
 M625
-; start printing object, unique label id: 104
+; start printing object, unique label id: 194
 M624 AgAAAAAAAAA=
-G1 X117.033 Y132.21 Z2.8 F30000
-G1 X143.198 Y139.483 Z2.8
+G1 X147.789 Y134.825 Z2.8 F30000
+G1 X147.842 Y134.941 Z2.8
 G1 Z2.4
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X143.103 Y139.761 E.00974
-G2 X143.198 Y143.517 I5.549 J1.739 E.12688
-G1 X139.819 Y142.269 E.11947
-G1 X115.964 Y142.269 E.79131
-G1 X112.585 Y143.517 E.11948
-G2 X112.585 Y139.483 I-5.525 J-2.017 E.13656
-G1 X115.964 Y140.73 E.11946
-G1 X139.819 Y140.73 E.7913
-G1 X143.141 Y139.504 E.11747
-; WIPE_START
-G1 X143.103 Y139.761 E-.09886
-G1 X142.985 Y140.196 E-.17111
-G1 X142.885 Y140.746 E-.21231
-G1 X142.841 Y141.247 E-.19134
-G1 X142.841 Y141.475 E-.08639
-; WIPE_END
-G1 E-.04 F1800
-G1 X139.53 Y140.323 Z2.8 F30000
-G1 Z2.4
-G1 E.8 F1800
-G1 F15476.087
-G1 X139.746 Y140.323 E.00717
-G1 X143.976 Y138.762 E.14956
-G2 X143.977 Y144.238 I4.78 J2.737 E.19011
-G1 X139.746 Y142.676 E.1496
-G1 X116.037 Y142.676 E.78649
-G1 X111.806 Y144.238 E.1496
-G2 X111.807 Y138.762 I-4.78 J-2.739 E.1901
-G1 X116.037 Y140.323 E.14956
-G1 X139.47 Y140.323 E.77731
-G1 X139.512 Y139.916 F30000
-G1 F15476.087
-G1 X139.673 Y139.916 E.00536
-G1 X144.822 Y138.016 E.18204
-G1 X144.93 Y138.173 E.0063
-G2 X144.931 Y144.828 I3.703 J3.327 E.24181
-G1 X144.824 Y144.985 E.0063
-G1 X139.673 Y143.083 E.18212
-G1 X116.109 Y143.083 E.78166
-G1 X110.959 Y144.985 E.18212
-G1 X110.851 Y144.828 E.0063
-G2 X110.853 Y138.173 I-3.701 J-3.329 E.24181
-G1 X110.961 Y138.016 E.0063
-G1 X116.11 Y139.916 E.18204
-G1 X139.452 Y139.916 E.7743
-; WIPE_START
-G1 X139.673 Y139.916 E-.08422
-G1 X141.342 Y139.3 E-.67578
-; WIPE_END
-G1 E-.04 F1800
-G1 X133.857 Y140.793 Z2.8 F30000
-G1 X107.531 Y146.043 Z2.8
-G1 Z2.4
-G1 E.8 F1800
-G1 F15476.087
-G1 X107.166 Y146.058 E.0121
-G3 X107.016 Y136.943 I.01 J-4.559 E.46942
-G3 X107.365 Y136.944 I.162 J4.004 E.0116
-G3 X107.591 Y146.039 I-.189 J4.555 E.45504
-G1 X107.512 Y145.637 F30000
-G1 F15476.087
-G1 X107.166 Y145.648 E.01148
-G3 X107.032 Y137.35 I.01 J-4.15 E.42738
-G3 X107.348 Y137.351 I.146 J3.621 E.01049
-G3 X107.572 Y145.629 I-.172 J4.146 E.41365
-G1 X107.425 Y145.248 F30000
+G1 X148.183 Y134.883 E.01148
+G3 X148.59 Y134.849 I.551 J4.113 E.01355
+G3 X148.906 Y134.85 I.146 J3.621 E.01049
+G3 X147.784 Y134.956 I-.172 J4.146 E.82746
+G1 X147.947 Y135.32 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
-G1 X107.166 Y145.256 E.00795
-G3 X107.047 Y137.742 I.009 J-3.758 E.35853
-G3 X107.331 Y137.743 I.131 J3.243 E.00872
-G3 X107.494 Y145.242 I-.155 J3.755 E.34822
-G1 X107.485 Y145.243 E.00028
+G1 X148.234 Y135.272 E.00894
+G3 X148.605 Y135.24 I.5 J3.725 E.01144
+G3 X148.889 Y135.241 I.131 J3.243 E.00872
+G3 X147.889 Y135.334 I-.155 J3.755 E.69459
 ; WIPE_START
 M204 S10000
-G1 X107.166 Y145.256 E-.12107
-G1 X106.675 Y145.227 E-.18719
-G1 X106.353 Y145.17 E-.12433
-G1 X106.036 Y145.086 E-.12459
-G1 X105.687 Y144.955 E-.14148
-G1 X105.543 Y144.883 E-.06134
+G1 X148.234 Y135.272 E-.13337
+G1 X148.605 Y135.24 E-.14145
+G1 X148.889 Y135.241 E-.10785
+G1 X149.378 Y135.295 E-.18684
+G1 X149.698 Y135.366 E-.12471
+G1 X149.863 Y135.418 E-.06578
 ; WIPE_END
 G1 E-.04 F1800
-G1 X113.046 Y143.487 Z2.8 F30000
-G1 X147.662 Y137.043 Z2.8
+G1 X142.355 Y136.79 Z2.8 F30000
+G1 X107.621 Y143.135 Z2.8
 G1 Z2.4
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X148.022 Y136.981 E.01211
-G3 X148.466 Y136.943 I.605 J4.518 E.01479
-G3 X148.815 Y136.944 I.162 J4.004 E.0116
-G3 X147.604 Y137.057 I-.189 J4.555 E.90966
-G1 X147.734 Y137.443 F30000
-G1 F15476.087
-G1 X148.075 Y137.384 E.01148
-G3 X148.482 Y137.35 I.551 J4.113 E.01355
-G3 X148.798 Y137.351 I.146 J3.621 E.01049
-G3 X147.676 Y137.458 I-.172 J4.146 E.82746
-G1 X147.839 Y137.822 F30000
+G1 X107.275 Y143.146 E.01148
+G3 X107.14 Y134.849 I.01 J-4.15 E.42738
+G3 X107.456 Y134.85 I.146 J3.621 E.01049
+G3 X107.68 Y143.127 I-.172 J4.146 E.41365
+G1 X107.534 Y142.747 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
-G1 X148.126 Y137.773 E.00894
-G3 X148.497 Y137.742 I.5 J3.725 E.01144
-G3 X148.781 Y137.743 I.131 J3.243 E.00872
-G3 X147.781 Y137.836 I-.155 J3.755 E.69459
+G1 X107.275 Y142.754 E.00795
+G3 X107.155 Y135.24 I.009 J-3.758 E.35853
+G3 X107.439 Y135.241 I.131 J3.243 E.00872
+G3 X107.602 Y142.741 I-.155 J3.755 E.34822
+G1 X107.593 Y142.742 E.00028
 ; WIPE_START
 M204 S10000
-G1 X148.126 Y137.773 E-.13337
-G1 X148.497 Y137.742 E-.14145
-G1 X148.781 Y137.743 E-.10785
-G1 X149.269 Y137.797 E-.18684
-G1 X149.59 Y137.868 E-.12471
-G1 X149.755 Y137.92 E-.06578
+G1 X107.275 Y142.754 E-.12107
+G1 X106.783 Y142.726 E-.18719
+G1 X106.461 Y142.669 E-.12433
+G1 X106.144 Y142.584 E-.12459
+G1 X105.795 Y142.454 E-.14148
+G1 X105.651 Y142.382 E-.06134
 ; WIPE_END
 G1 E-.04 F1800
-G1 X142.212 Y139.088 Z2.8 F30000
-G1 X139.494 Y139.509 Z2.8
+G1 X113.175 Y141.1 Z2.8 F30000
+G1 X139.584 Y136.6 Z2.8
 G1 Z2.4
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X139.601 Y139.509 E.00355
-G1 X147.032 Y136.767 E.26274
-G3 X146.807 Y146.151 I1.581 J4.732 E.63464
-G1 X139.601 Y143.49 E.25482
-G1 X116.182 Y143.49 E.77683
-G1 X108.976 Y146.151 E.25482
-G3 X107.478 Y136.519 I-1.805 J-4.652 E.59152
-G3 X108.752 Y136.767 I-.412 J5.492 E.04313
-G1 X116.182 Y139.509 E.26273
-M73 P87 R1
-G1 X139.434 Y139.509 E.77128
-G1 X139.475 Y139.102 F30000
-G1 F15476.087
-G1 X139.528 Y139.102 E.00174
-G1 X146.9 Y136.382 E.26067
-G3 X146.667 Y146.533 I1.712 J5.118 E.68621
-G1 X139.528 Y143.897 E.25244
-G1 X116.255 Y143.897 E.77201
-G1 X109.116 Y146.533 E.25246
-G3 X107.504 Y136.112 I-1.945 J-5.034 E.63949
-G3 X108.883 Y136.382 I-.447 J5.947 E.0467
-G1 X116.255 Y139.102 E.26067
-G1 X139.415 Y139.102 E.76827
-G1 X139.457 Y138.71 F30000
+G1 X139.636 Y136.6 E.00174
+G1 X147.009 Y133.88 E.26067
+G3 X146.776 Y144.032 I1.712 J5.118 E.68621
+G1 X139.636 Y141.396 E.25244
+G1 X116.364 Y141.396 E.77201
+G1 X109.224 Y144.032 E.25246
+G3 X107.613 Y133.611 I-1.945 J-5.034 E.63949
+G3 X108.991 Y133.88 I-.447 J5.947 E.0467
+G1 X116.364 Y136.6 E.26067
+G1 X139.524 Y136.6 E.76827
+G1 X139.565 Y136.208 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
-G1 X139.458 Y138.71 E.00003
-G1 X146.774 Y136.011 E.23962
-G3 X146.533 Y146.902 I1.838 J5.489 E.68162
-G1 X139.458 Y144.29 E.23174
-G1 X116.325 Y144.29 E.71081
-G1 X109.25 Y146.902 E.23174
-G3 X107.529 Y135.721 I-2.079 J-5.403 E.63516
-G3 X109.009 Y136.01 I-.481 J6.385 E.04645
-G1 X116.325 Y138.71 E.23962
-G1 X139.397 Y138.71 E.70893
+G1 X139.566 Y136.208 E.00003
+G1 X146.883 Y133.509 E.23962
+G3 X146.642 Y144.4 I1.838 J5.489 E.68162
+G1 X139.566 Y141.788 E.23174
+G1 X116.434 Y141.788 E.71081
+G1 X109.358 Y144.4 E.23174
+G3 X107.637 Y133.219 I-2.079 J-5.403 E.63516
+G3 X109.117 Y133.509 I-.481 J6.385 E.04645
+G1 X116.434 Y136.208 E.23962
+G1 X139.505 Y136.208 E.70893
 ; WIPE_START
 M204 S10000
-G1 X139.458 Y138.71 E-.02321
-G1 X141.277 Y138.038 E-.73679
+G1 X139.566 Y136.208 E-.02321
+G1 X141.385 Y135.537 E-.73679
 ; WIPE_END
 G1 E-.04 F1800
-G1 X144.323 Y138.575 Z2.8 F30000
-G1 Z2.4
-G1 E.8 F1800
-; FEATURE: Gap infill
-; LINE_WIDTH: 0.109564
-G1 F15000
-G3 X144.467 Y138.385 I.311 J.085 E.00133
-G1 X145.045 Y137.982 F30000
-; LINE_WIDTH: 0.445746
-G1 F15000
-G1 X145.263 Y137.846 E.00842
-; LINE_WIDTH: 0.414064
-G1 X145.364 Y137.786 E.00354
-; LINE_WIDTH: 0.372976
-G1 X145.457 Y137.731 E.00291
-; LINE_WIDTH: 0.331818
-G1 X145.575 Y137.664 E.0032
-; LINE_WIDTH: 0.290711
-G1 X145.687 Y137.602 E.00257
-; LINE_WIDTH: 0.247421
-G1 X145.834 Y137.523 E.00279
-; LINE_WIDTH: 0.199553
-G1 X146.021 Y137.428 E.00267
-; LINE_WIDTH: 0.154639
-G1 X146.211 Y137.336 E.00192
-; LINE_WIDTH: 0.1133
-G1 X146.482 Y137.214 E.0017
-; WIPE_START
-G1 X146.211 Y137.336 E-.76
-; WIPE_END
-G1 E-.04 F1800
-G1 X144.324 Y144.425 Z2.8 F30000
-G1 Z2.4
-G1 E.8 F1800
-; LINE_WIDTH: 0.107515
-G1 F15000
-G2 X144.468 Y144.616 I.493 J-.221 E.00127
-G1 X145.047 Y145.019 F30000
-; LINE_WIDTH: 0.446742
-G1 F15000
-G1 X145.262 Y145.154 E.00834
-; LINE_WIDTH: 0.416243
-G1 X145.361 Y145.212 E.00348
-; LINE_WIDTH: 0.37617
-G1 X145.451 Y145.266 E.00287
-; LINE_WIDTH: 0.33873
-G1 X145.549 Y145.322 E.00271
-; LINE_WIDTH: 0.303729
-G1 X145.641 Y145.374 E.00224
-; LINE_WIDTH: 0.271378
-G1 X145.738 Y145.426 E.00205
-; LINE_WIDTH: 0.241508
-G1 X145.83 Y145.475 E.00169
-; LINE_WIDTH: 0.226435
-G1 X145.834 Y145.477 E.00006
-; LINE_WIDTH: 0.201343
-G1 X146.02 Y145.572 E.0027
-; LINE_WIDTH: 0.156441
-G1 X146.211 Y145.664 E.00196
-; LINE_WIDTH: 0.114065
-G1 X146.498 Y145.793 E.00182
-; WIPE_START
-G1 X146.211 Y145.664 E-.76
-; WIPE_END
-G1 E-.04 F1800
-G1 X138.644 Y144.662 Z2.8 F30000
-G1 X114.772 Y141.5 Z2.8
+G1 X133.799 Y136.37 Z2.8 F30000
+G1 X111.814 Y138.786 Z2.8
 G1 Z2.4
 G1 E.8 F1800
 ; FEATURE: Internal solid infill
-; LINE_WIDTH: 0.39742
-G1 F15000
-G1 X114.072 Y141.241 E.02154
-G1 X114.072 Y141.758 E.01492
-G1 X114.715 Y141.52 E.01981
-G1 X115.928 Y141.5 F30000
-; LINE_WIDTH: 0.420139
-G1 F15000
-G1 X115.732 Y141.464 E.00612
-G1 X113.653 Y140.697 E.0681
-G1 X113.716 Y141.475 E.02398
-G3 X113.661 Y142.3 I-4.716 J.098 E.02544
-G1 X115.732 Y141.535 E.06787
-G1 X115.869 Y141.51 E.00426
-G1 X115.928 Y141.5 F30000
-; LINE_WIDTH: 0.42104
-G1 F15000
-G1 X139.795 Y141.5 E.73541
-G1 X115.928 Y141.877 F30000
 ; LINE_WIDTH: 0.41999
 G1 F15000
-G1 X139.855 Y141.877 E.7352
-G1 X142.601 Y142.878 E.08979
-G3 X142.62 Y140.114 I5.732 J-1.342 E.08573
-G1 X139.855 Y141.122 E.09043
-G1 X115.928 Y141.122 E.7352
-G1 X113.168 Y140.116 E.09026
-G1 X113.314 Y140.945 E.02586
-G3 X113.173 Y142.882 I-5.851 J.547 E.05994
-G1 X115.869 Y141.888 E.0883
-G1 X139.855 Y141.5 F30000
-; LINE_WIDTH: 0.42014
+G1 X111.782 Y139.58 E.0244
+G1 X111.668 Y140.16 E.01818
+G1 X111.4 Y140.903 E.02427
+G1 X111.004 Y141.595 E.0245
+G1 X110.358 Y142.335 E.03019
+; LINE_WIDTH: 0.43684
+G1 X109.971 Y142.642 E.01585
+; LINE_WIDTH: 0.462087
+G1 X109.584 Y142.949 E.01687
+G1 X108.926 Y143.249 E.02471
+G1 X108.08 Y143.489 E.03004
+G1 X107.49 Y143.553 E.02029
+G1 X106.693 Y143.521 E.02725
+G1 X105.731 Y143.29 E.03378
+G1 X104.884 Y142.882 E.03212
+G1 X104.417 Y142.543 E.0197
+G1 X103.847 Y141.992 E.02709
+G1 X103.363 Y141.346 E.02757
+G1 X102.993 Y140.573 E.02927
+G1 X102.763 Y139.663 E.03207
+G1 X102.716 Y138.817 E.02894
+G3 X103.133 Y137.084 I5.903 J.508 E.0611
+G1 X103.42 Y136.561 E.0204
+G1 X103.9 Y135.927 E.02716
+G1 X104.64 Y135.273 E.03371
+G1 X105.335 Y134.868 E.02749
+G1 X106.265 Y134.548 E.0336
+G1 X107.112 Y134.438 E.02914
+G3 X108.728 Y134.682 I.069 J5.017 E.0561
+G1 X109.224 Y134.865 E.01806
+; LINE_WIDTH: 0.458765
+G1 X109.567 Y135.081 E.01371
+; LINE_WIDTH: 0.421164
+G3 X110.747 Y136.066 I-2.547 J4.25 E.04756
+G1 X111.202 Y136.712 E.02436
+G1 X111.539 Y137.428 E.02441
+G1 X111.755 Y138.243 E.02597
+G1 X111.808 Y138.726 E.01499
+G1 X115.05 Y138.998 F30000
+; LINE_WIDTH: 0.52009
+G1 F13202.842
+G1 X114.117 Y138.654 E.03864
+G1 X114.106 Y139.346 E.02692
+G1 X114.993 Y139.019 E.03676
+G1 X139.673 Y136.992 F30000
+; LINE_WIDTH: 0.41999
 G1 F15000
-G1 X140.051 Y141.535 E.00612
-G1 X142.117 Y142.298 E.06768
-G3 X142.117 Y140.702 I7.089 J-.798 E.04915
-G1 X140.051 Y141.464 E.06769
-G1 X139.914 Y141.489 E.00426
-G1 X141.013 Y141.5 F30000
-; LINE_WIDTH: 0.39889
+G1 X116.327 Y136.992 E.71732
+G1 X110.175 Y134.735 E.20137
+; LINE_WIDTH: 0.432915
+G1 X109.791 Y134.607 E.01286
+; LINE_WIDTH: 0.466297
+G1 F14880.352
+G3 X108.875 Y134.282 I4.331 J-13.644 E.03354
+G2 X107.171 Y134.016 I-1.723 J5.449 E.05972
+G1 X106.307 Y134.111 E.03
+G2 X103.266 Y136.045 I1.023 J4.967 E.12711
+G1 X102.814 Y136.782 E.02983
+G1 X102.499 Y137.594 E.03005
+G2 X102.353 Y139.763 I4.844 J1.416 E.0756
+G1 X102.556 Y140.597 E.02962
+G2 X103.906 Y142.653 I4.893 J-1.742 E.08565
+G1 X104.562 Y143.172 E.02885
+G1 X105.443 Y143.629 E.03425
+G1 X106.274 Y143.873 E.0299
+G1 X107.135 Y143.974 E.02988
+G1 X108.003 Y143.926 E.02999
+G1 X108.646 Y143.785 E.02273
+G1 X109.722 Y143.39 E.03953
+; LINE_WIDTH: 0.47549
+G1 F14564.117
+G1 X110.214 Y143.229 E.01826
+; LINE_WIDTH: 0.420258
 G1 F15000
-G1 X141.705 Y141.755 E.0214
-G1 X141.705 Y141.244 E.01482
-G1 X141.07 Y141.479 E.01966
-G1 X111.46 Y138.575 F30000
-; FEATURE: Gap infill
-; LINE_WIDTH: 0.10957
+G1 X110.706 Y143.067 E.01593
+G1 X116.327 Y141.004 E.18412
+G1 X139.673 Y141.004 E.71783
+G1 X145.278 Y143.061 E.18358
+; LINE_WIDTH: 0.43774
+G1 X145.641 Y143.176 E.01226
+; LINE_WIDTH: 0.465081
+G1 F14923.215
+G3 X146.911 Y143.639 I-3.274 J10.954 E.04653
+G2 X147.911 Y143.911 I1.985 J-5.326 E.03569
+G1 X148.829 Y143.978 E.03166
+G1 X149.544 Y143.905 E.02474
+G1 X150.38 Y143.689 E.02969
+G1 X151.17 Y143.33 E.02984
+G1 X151.887 Y142.841 E.02988
+G1 X152.316 Y142.451 E.01995
+G1 X152.856 Y141.774 E.02979
+G1 X153.277 Y141.014 E.02989
+G1 X153.507 Y140.395 E.02271
+G1 X153.673 Y139.554 E.02949
+G2 X153.677 Y138.475 I-5.082 J-.556 E.0372
+G1 X153.51 Y137.623 E.02988
+G1 X153.29 Y137.01 E.02237
+G2 X152.338 Y135.574 I-5.82 J2.823 E.05947
+G1 X151.69 Y134.994 E.02991
+G2 X150.061 Y134.205 I-3.043 J4.206 E.06258
+G1 X149.296 Y134.049 E.02686
+G1 X148.6 Y134.026 E.02395
+G1 X147.775 Y134.108 E.02854
+G2 X146.682 Y134.453 I1.153 J5.549 E.0395
+; LINE_WIDTH: 0.479858
+G1 F14418.538
+G1 X146.29 Y134.615 E.01509
+; LINE_WIDTH: 0.514173
+G1 F13368.629
+G1 X145.899 Y134.777 E.01628
+; LINE_WIDTH: 0.512774
+G1 F13408.44
+G1 X145.565 Y134.88 E.01337
+; LINE_WIDTH: 0.47566
+G1 F14558.394
+G1 X145.231 Y134.983 E.01231
+; LINE_WIDTH: 0.421097
 G1 F15000
-G2 X111.316 Y138.385 I-.311 J.085 E.00133
-G1 X110.738 Y137.982 F30000
-; LINE_WIDTH: 0.445403
+G1 X144.898 Y135.085 E.01076
+G1 X139.732 Y136.981 E.16958
+G1 X139.673 Y137.369 F30000
+; LINE_WIDTH: 0.41999
 G1 F15000
-G1 X110.513 Y137.842 E.00869
-; LINE_WIDTH: 0.413076
-G1 X110.422 Y137.788 E.00318
-; LINE_WIDTH: 0.373328
-G1 X110.325 Y137.73 E.00303
-; LINE_WIDTH: 0.336031
-G1 X110.234 Y137.678 E.00252
-; LINE_WIDTH: 0.30134
-G1 X110.137 Y137.624 E.00233
-; LINE_WIDTH: 0.260912
-G1 X109.993 Y137.546 E.0029
-; LINE_WIDTH: 0.222705
-G1 X109.881 Y137.488 E.00186
-; LINE_WIDTH: 0.19129
-G1 X109.765 Y137.429 E.00157
-; LINE_WIDTH: 0.154711
-G1 X109.57 Y137.335 E.00197
-; LINE_WIDTH: 0.11315
-G1 X109.301 Y137.214 E.00169
-; WIPE_START
-G1 X109.57 Y137.335 E-.76
-; WIPE_END
-G1 E-.04 F1800
-G1 X111.46 Y144.424 Z2.8 F30000
-G1 Z2.4
-G1 E.8 F1800
-; LINE_WIDTH: 0.107776
+G1 X116.327 Y137.369 E.71732
+G1 X116.131 Y137.334 E.00613
+G1 X110.431 Y135.231 E.18666
+G1 X111.019 Y135.805 E.02523
+G1 X111.511 Y136.495 E.02605
+G1 X111.881 Y137.269 E.02635
+G1 X112.12 Y138.148 E.02798
+G1 X112.189 Y138.747 E.01853
+G1 X112.158 Y139.596 E.02612
+G1 X112.038 Y140.234 E.01994
+G1 X111.754 Y141.032 E.02602
+G1 X111.33 Y141.784 E.02652
+G1 X110.641 Y142.584 E.03245
+G1 X110.4 Y142.778 E.00951
+G1 X116.131 Y140.662 E.18774
+G1 X116.327 Y140.627 E.00611
+G1 X139.673 Y140.627 E.71733
+G1 X139.869 Y140.662 E.00611
+G1 X145.588 Y142.773 E.18733
+G1 X145.372 Y142.599 E.00853
+G1 X144.981 Y142.191 E.01737
+G1 X144.489 Y141.5 E.02604
+G1 X144.118 Y140.724 E.02643
+G1 X143.857 Y139.701 E.03247
+G1 X143.811 Y138.904 E.02451
+G1 X143.924 Y137.929 E.03015
+G1 X144.242 Y136.973 E.03099
+G1 X144.668 Y136.214 E.02671
+G1 X145.072 Y135.701 E.02008
+G1 X145.595 Y135.231 E.0216
+G1 X139.868 Y137.334 E.18748
+G1 X139.732 Y137.358 E.00424
+G1 X139.673 Y137.746 F30000
 G1 F15000
-G1 X111.422 Y144.489 E.0004
-G3 X111.313 Y144.617 I-.214 J-.073 E.00091
-G1 X110.736 Y145.019 F30000
-; LINE_WIDTH: 0.446368
+G1 X116.327 Y137.746 E.71732
+G1 X116 Y137.688 E.0102
+G1 X111.693 Y136.099 E.14106
+G1 X111.902 Y136.422 E.01181
+G1 X112.223 Y137.11 E.02333
+G1 X112.485 Y138.052 E.03007
+G1 X112.564 Y138.707 E.02026
+G1 X112.535 Y139.613 E.02784
+G1 X112.408 Y140.308 E.02171
+G1 X112.109 Y141.161 E.02778
+G1 X111.701 Y141.895 E.02581
+G1 X116.001 Y140.308 E.14084
+G1 X116.327 Y140.25 E.01019
+G1 X139.673 Y140.25 E.71733
+G1 X139.999 Y140.308 E.01019
+G1 X144.308 Y141.899 E.14113
+G1 X144.098 Y141.574 E.01188
+G1 X143.776 Y140.884 E.0234
+G1 X143.491 Y139.79 E.03474
+G1 X143.435 Y138.921 E.02677
+G1 X143.55 Y137.878 E.03224
+G1 X143.886 Y136.85 E.03323
+G1 X144.293 Y136.111 E.0259
+G1 X139.998 Y137.688 E.14059
+G1 X139.732 Y137.736 E.0083
+G1 X139.673 Y138.123 F30000
 G1 F15000
-G1 X110.513 Y145.158 E.00862
-; LINE_WIDTH: 0.414645
-G1 X110.422 Y145.212 E.0032
-; LINE_WIDTH: 0.374886
-G1 X110.326 Y145.27 E.00305
-; LINE_WIDTH: 0.33759
-G1 X110.234 Y145.322 E.00253
-; LINE_WIDTH: 0.302882
-G1 X110.137 Y145.376 E.00235
-; LINE_WIDTH: 0.27063
-G1 X110.045 Y145.426 E.00194
-; LINE_WIDTH: 0.240928
-G1 X109.949 Y145.477 E.00176
-; LINE_WIDTH: 0.200977
-G1 X109.76 Y145.573 E.00273
-; LINE_WIDTH: 0.155948
-G1 X109.57 Y145.665 E.00194
-; LINE_WIDTH: 0.113925
-G1 X109.285 Y145.793 E.00181
+G1 X116.327 Y138.123 E.71732
+G1 X115.87 Y138.041 E.01428
+G1 X112.492 Y136.795 E.11062
+G1 X112.645 Y137.175 E.01257
+G1 X112.849 Y137.957 E.02485
+G1 X112.939 Y138.667 E.022
+M73 P87 R1
+G1 X112.912 Y139.629 E.02956
+G1 X112.777 Y140.381 E.02348
+G1 X112.496 Y141.2 E.0266
+G1 X115.87 Y139.954 E.11053
+G1 X116.327 Y139.872 E.01426
+G1 X139.673 Y139.872 E.71733
+G1 X140.13 Y139.954 E.01427
+G1 X143.509 Y141.202 E.11066
+G1 X143.349 Y140.799 E.01332
+G1 X143.124 Y139.88 E.02907
+G1 X143.058 Y138.937 E.02903
+G1 X143.066 Y138.627 E.00953
+G1 X143.177 Y137.826 E.02484
+G1 X143.503 Y136.803 E.03301
+G1 X140.128 Y138.042 E.1105
+G1 X139.732 Y138.113 E.01235
+G1 X139.673 Y138.5 F30000
+G1 F15000
+G1 X116.327 Y138.5 E.71732
+G3 X115.739 Y138.395 I0 J-1.697 E.01845
+G1 X113.099 Y137.421 E.08646
+G1 X113.26 Y138.113 E.02181
+G1 X113.314 Y138.628 E.01592
+G1 X113.288 Y139.646 E.03128
+G1 X113.115 Y140.569 E.02887
+G1 X115.74 Y139.6 E.08597
+G3 X116.327 Y139.495 I.587 J1.592 E.01843
+G1 X139.673 Y139.495 E.71733
+G3 X140.261 Y139.6 I0 J1.697 E.01844
+G1 X142.907 Y140.577 E.08667
+G1 X142.758 Y139.969 E.01924
+G1 X142.681 Y138.953 E.0313
+G1 X142.692 Y138.575 E.01162
+G1 X142.803 Y137.774 E.02484
+G1 X142.888 Y137.43 E.01089
+G1 X140.258 Y138.396 E.0861
+G3 X139.732 Y138.495 I-.54 J-1.427 E.0165
+G1 X139.673 Y138.843 F30000
+; LINE_WIDTH: 0.35198
+G1 F15000
+G1 X116.327 Y138.843 E.58794
+; LINE_WIDTH: 0.368983
+G1 X116.139 Y138.843 E.005
+; LINE_WIDTH: 0.419539
+G1 X115.951 Y138.843 E.00577
+G1 X115.609 Y138.749 E.01089
+G1 X113.625 Y138.017 E.0649
+G1 X113.689 Y138.588 E.01765
+G1 X113.665 Y139.662 E.03296
+G1 X113.628 Y139.977 E.00972
+G2 X115.609 Y139.246 I-359.841 J-979.194 E.06481
+G1 X115.951 Y139.153 E.01087
+; LINE_WIDTH: 0.402988
+G1 X116.139 Y139.153 E.00552
+; LINE_WIDTH: 0.352116
+G1 X139.673 Y139.152 E.59294
+; LINE_WIDTH: 0.368983
+G1 X139.86 Y139.152 E.00497
+; LINE_WIDTH: 0.419544
+G1 X140.047 Y139.152 E.00575
+G1 X140.391 Y139.247 E.01094
+G1 X142.381 Y139.981 E.06509
+G1 X142.304 Y138.97 E.03113
+G3 X142.389 Y138.015 I4.569 J-.075 E.02947
+G1 X140.387 Y138.75 E.06544
+G1 X140.047 Y138.843 E.01083
+; LINE_WIDTH: 0.402988
+G1 X139.89 Y138.843 E.00462
+; LINE_WIDTH: 0.368983
+G1 X139.733 Y138.843 E.00418
+G1 X140.95 Y138.998 F30000
+; LINE_WIDTH: 0.51948
+G1 F13219.742
+G1 X141.894 Y139.346 E.03905
+G1 X141.887 Y138.654 E.02689
+G1 X141.007 Y138.977 E.03643
+G1 X144.188 Y138.888 F30000
+; LINE_WIDTH: 0.41999
+G1 F15000
+G1 X144.297 Y137.981 E.02806
+G1 X144.599 Y137.095 E.02874
+G1 X144.995 Y136.403 E.02451
+G1 X145.366 Y135.937 E.01832
+; LINE_WIDTH: 0.441008
+G1 X145.721 Y135.596 E.01594
+; LINE_WIDTH: 0.468323
+G1 F14809.502
+G1 X146.075 Y135.256 E.01703
+G1 X146.783 Y134.865 E.02806
+G3 X147.828 Y134.527 I2.891 J7.154 E.0381
+G3 X149.108 Y134.452 I.927 J4.856 E.04457
+G1 X149.831 Y134.573 E.0254
+G1 X150.592 Y134.835 E.0279
+G1 X151.369 Y135.279 E.03104
+; LINE_WIDTH: 0.460926
+G1 F15000
+G1 X151.795 Y135.626 E.01871
+G1 X152.363 Y136.248 E.02868
+G3 X153.251 Y139.491 I-3.724 J2.763 E.1172
+G3 X153.017 Y140.545 I-3.794 J-.288 E.03687
+G1 X152.682 Y141.265 E.02705
+G1 X152.102 Y142.065 E.03367
+G1 X151.698 Y142.46 E.01926
+G1 X151.087 Y142.899 E.02561
+G1 X150.375 Y143.249 E.02705
+G1 X149.612 Y143.471 E.02704
+G1 X148.94 Y143.555 E.02308
+G1 X148.143 Y143.522 E.02718
+G3 X147.078 Y143.25 I1.254 J-7.133 E.03745
+; LINE_WIDTH: 0.478426
+G1 F14465.942
+G1 X146.281 Y142.882 E.03118
+G1 X145.666 Y142.357 E.02869
+; LINE_WIDTH: 0.41999
+G1 F15000
+G1 X145.253 Y141.93 E.01825
+G1 X144.798 Y141.284 E.02428
+G1 X144.46 Y140.565 E.02441
+G1 X144.223 Y139.611 E.03021
+G1 X144.191 Y138.948 E.02041
 ; CHANGE_LAYER
 ; Z_HEIGHT: 2.6
 ; LAYER_HEIGHT: 0.2
 ; WIPE_START
 G1 F15000
-G1 X109.57 Y145.665 E-.76
+G1 X144.223 Y139.611 E-.25242
+G1 X144.46 Y140.565 E-.37356
+G1 X144.61 Y140.884 E-.13403
 ; WIPE_END
 G1 E-.04 F1800
-; stop printing object, unique label id: 104
+; stop printing object, unique label id: 194
 M625
 ; layer num/total_layer_count: 13/15
 ; update layer progress
@@ -10017,7 +8251,7 @@ M73 L13
 M991 S0 P12 ;notify layer change
 G17
 G3 Z2.8 I1.217 J0 P1  F30000
-; object ids of layer 13 start: 72,104
+; object ids of layer 13 start: 123,194
 M624 AwAAAAAAAAA=
 ;========Date 20250206========
 ; SKIPPABLE_START
@@ -10032,87 +8266,16 @@ M1004 S5 P1  ; external shutter
 M623
 ; SKIPPABLE_END
 
-; object ids of this layer13 end: 72,104
+; object ids of this layer13 end: 123,194
 M625
-; OBJECT_ID: 72
-; start printing object, unique label id: 72
+; OBJECT_ID: 123
+; start printing object, unique label id: 123
 M624 AQAAAAAAAAA=
-G1 X143.306 Y123.984
+G1 X147.811 Y121.95
 G1 Z2.6
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
-G1 F15476.087
-G1 X143.212 Y124.262 E.00974
-G2 X143.306 Y128.017 I5.549 J1.739 E.12689
-G1 X139.927 Y126.77 E.11947
-G1 X116.072 Y126.77 E.79131
-G1 X112.694 Y128.017 E.11948
-G2 X112.694 Y123.984 I-5.524 J-2.017 E.13656
-G1 X116.073 Y125.23 E.11946
-G1 X139.927 Y125.23 E.7913
-G1 X143.25 Y124.005 E.11747
-; WIPE_START
-G1 X143.212 Y124.262 E-.09879
-G1 X143.081 Y124.749 E-.19165
-G1 X142.999 Y125.208 E-.17705
-G1 X142.95 Y125.748 E-.20611
-G1 X142.95 Y125.975 E-.08639
-; WIPE_END
-G1 E-.04 F1800
-G1 X144.085 Y123.263 Z3 F30000
-G1 Z2.6
-G1 E.8 F1800
-G1 F15476.087
-G1 X143.855 Y123.729 E.01725
-G2 X144.085 Y128.739 I4.955 J2.282 E.17285
-G1 X139.855 Y127.177 E.1496
-G1 X116.145 Y127.177 E.78649
-G1 X111.915 Y128.739 E.1496
-G2 X111.915 Y123.263 I-4.78 J-2.739 E.1901
-G1 X116.145 Y124.823 E.14956
-G1 X139.855 Y124.823 E.78647
-G1 X144.028 Y123.283 E.14758
-; WIPE_START
-G1 X143.855 Y123.729 E-.18177
-G1 X143.6 Y124.384 E-.26704
-G1 X143.433 Y125.066 E-.26687
-G1 X143.418 Y125.182 E-.04432
-; WIPE_END
-G1 E-.04 F1800
-G1 X145.038 Y122.673 Z3 F30000
-G1 Z2.6
-G1 E.8 F1800
-G1 F15476.087
-G2 X145.04 Y129.329 I3.703 J3.327 E.24181
-G1 X144.932 Y129.485 E.0063
-G1 X139.782 Y127.584 E.18212
-G1 X116.218 Y127.584 E.78166
-G1 X111.068 Y129.485 E.18212
-G1 X110.96 Y129.329 E.0063
-G2 X110.962 Y122.673 I-3.701 J-3.329 E.24181
-G1 X111.069 Y122.517 E.0063
-G1 X116.218 Y124.416 E.18204
-G1 X139.782 Y124.416 E.78165
-G1 X144.931 Y122.517 E.18204
-G1 X145.004 Y122.624 E.00431
-; WIPE_START
-G1 X144.657 Y123.151 E-.24002
-G1 X144.424 Y123.516 E-.16449
-G1 X144.224 Y123.901 E-.16489
-G1 X144.058 Y124.302 E-.16466
-G1 X144.037 Y124.367 E-.02595
-; WIPE_END
-G1 E-.04 F1800
-G1 X147.77 Y121.543 Z3 F30000
-G1 Z2.6
-G1 E.8 F1800
-G1 F15476.087
-G1 X148.13 Y121.481 E.01212
-G3 X148.561 Y121.444 I.602 J4.517 E.01433
-G3 X148.924 Y121.445 I.173 J4.151 E.01206
-G3 X147.712 Y121.557 I-.191 J4.552 E.90919
-G1 X147.811 Y121.95 F30000
 G1 F15476.087
 G1 X147.827 Y121.948 E.00053
 G3 X148.577 Y121.851 I.905 J4.05 E.02513
@@ -10122,7 +8285,7 @@ G1 X147.753 Y121.966 E.0095
 G1 X147.927 Y122.326 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
 G1 X148.234 Y122.273 E.00959
 G3 X148.593 Y122.243 I.498 J3.725 E.01106
@@ -10131,7 +8294,6 @@ G3 X147.868 Y122.341 I-.157 J3.754 E.69386
 ; WIPE_START
 M204 S10000
 G1 X148.234 Y122.273 E-.14139
-M73 P88 R1
 G1 X148.593 Y122.243 E-.13667
 G1 X148.889 Y122.244 E-.11265
 G1 X149.378 Y122.297 E-.18681
@@ -10139,18 +8301,12 @@ G1 X149.698 Y122.368 E-.12472
 G1 X149.843 Y122.414 E-.05776
 ; WIPE_END
 G1 E-.04 F1800
-G1 X142.349 Y123.857 Z3 F30000
-G1 X107.64 Y130.543 Z3
+G1 X142.335 Y123.787 Z3 F30000
+G1 X107.621 Y130.137 Z3
 G1 Z2.6
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
-G1 F15476.087
-G1 X107.272 Y130.554 E.01221
-G3 X107.111 Y121.444 I.011 J-4.556 E.46877
-G3 X107.474 Y121.445 I.173 J4.151 E.01206
-G3 X107.699 Y130.535 I-.191 J4.552 E.45467
-G1 X107.621 Y130.137 F30000
 G1 F15476.087
 G1 X107.273 Y130.147 E.01154
 G3 X107.127 Y121.851 I.009 J-4.15 E.42697
@@ -10159,7 +8315,7 @@ G3 X107.68 Y130.128 I-.174 J4.146 E.41346
 G1 X107.539 Y129.749 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
 G1 X107.274 Y129.755 E.00814
 G3 X107.143 Y122.243 I.008 J-3.758 E.35822
@@ -10176,24 +8332,12 @@ G1 X105.807 Y129.461 E-.13672
 G1 X105.656 Y129.386 E-.06412
 ; WIPE_END
 G1 E-.04 F1800
-G1 X113.194 Y128.192 Z3 F30000
-G1 X139.602 Y124.009 Z3
+G1 X113.18 Y128.103 Z3 F30000
+G1 X139.584 Y123.602 Z3
 G1 Z2.6
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
-G1 F15476.087
-G1 X139.709 Y124.009 E.00354
-G1 X147.14 Y121.268 E.26274
-G3 X146.915 Y130.651 I1.581 J4.732 E.63467
-G1 X139.709 Y127.991 E.25479
-G1 X116.291 Y127.991 E.77683
-G1 X109.085 Y130.651 E.2548
-G3 X107.587 Y121.019 I-1.806 J-4.652 E.59154
-G3 X108.86 Y121.268 I-.432 J5.591 E.04312
-G1 X116.291 Y124.009 E.26273
-G1 X139.542 Y124.009 E.77129
-G1 X139.584 Y123.602 F30000
 G1 F15476.087
 G1 X139.636 Y123.602 E.00173
 G1 X147.009 Y120.882 E.26068
@@ -10208,7 +8352,7 @@ G1 X139.524 Y123.602 E.76828
 G1 X139.568 Y123.209 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
 G1 X146.883 Y120.511 E.23957
 G3 X146.642 Y131.402 I1.838 J5.489 E.68161
@@ -10224,569 +8368,775 @@ M204 S10000
 G1 X141.386 Y122.523 E-.76
 ; WIPE_END
 G1 E-.04 F1800
-G1 X144.432 Y123.075 Z3 F30000
-G1 Z2.6
-G1 E.8 F1800
-; FEATURE: Gap infill
-; LINE_WIDTH: 0.109542
-G1 F15000
-G3 X144.576 Y122.885 I.31 J.085 E.00132
-G1 X145.154 Y122.482 F30000
-; LINE_WIDTH: 0.445857
-G1 F15000
-G1 X145.371 Y122.347 E.00841
-; LINE_WIDTH: 0.414725
-G1 X145.47 Y122.288 E.00347
-; LINE_WIDTH: 0.374491
-G1 X145.561 Y122.234 E.00286
-; LINE_WIDTH: 0.336998
-G1 X145.658 Y122.179 E.00269
-; LINE_WIDTH: 0.302076
-G1 X145.75 Y122.127 E.00222
-; LINE_WIDTH: 0.269751
-G1 X145.847 Y122.075 E.00203
-; LINE_WIDTH: 0.23985
-G1 X145.939 Y122.025 E.00168
-; LINE_WIDTH: 0.224752
-G1 X145.943 Y122.023 E.00006
-; LINE_WIDTH: 0.199613
-G1 X146.129 Y121.928 E.00267
-; LINE_WIDTH: 0.154622
-G1 X146.32 Y121.836 E.00193
-; LINE_WIDTH: 0.113268
-G1 X146.59 Y121.715 E.0017
-; WIPE_START
-G1 X146.32 Y121.836 E-.76
-; WIPE_END
-G1 E-.04 F1800
-G1 X144.432 Y128.924 Z3 F30000
-G1 Z2.6
-G1 E.8 F1800
-; LINE_WIDTH: 0.1076
-G1 F15000
-G2 X144.577 Y129.117 I.495 J-.222 E.00128
-G1 X145.156 Y129.52 F30000
-; LINE_WIDTH: 0.446734
-G1 F15000
-G1 X145.371 Y129.654 E.00834
-; LINE_WIDTH: 0.416237
-G1 X145.469 Y129.713 E.00348
-; LINE_WIDTH: 0.37616
-G1 X145.56 Y129.767 E.00287
-; LINE_WIDTH: 0.33871
-G1 X145.658 Y129.822 E.00271
-; LINE_WIDTH: 0.303736
-G1 X145.749 Y129.874 E.00224
-; LINE_WIDTH: 0.27139
-G1 X145.846 Y129.926 E.00205
-; LINE_WIDTH: 0.241505
-G1 X145.939 Y129.976 E.0017
-; LINE_WIDTH: 0.226426
-G1 X145.942 Y129.978 E.00006
-; LINE_WIDTH: 0.201335
-G1 X146.129 Y130.073 E.0027
-; LINE_WIDTH: 0.156458
-G1 X146.319 Y130.165 E.00196
-; LINE_WIDTH: 0.114078
-G1 X146.606 Y130.293 E.00182
-; WIPE_START
-G1 X146.319 Y130.165 E-.76
-; WIPE_END
-G1 E-.04 F1800
-G1 X138.753 Y129.162 Z3 F30000
-G1 X114.88 Y126 Z3
+G1 X133.8 Y123.361 Z3 F30000
+G1 X111.814 Y125.789 Z3
 G1 Z2.6
 G1 E.8 F1800
 ; FEATURE: Internal solid infill
-; LINE_WIDTH: 0.39742
-G1 F15000
-G1 X114.181 Y125.742 E.02154
-G1 X114.181 Y126.258 E.01492
-G1 X114.824 Y126.021 E.01981
-G1 X116.036 Y126 F30000
-; LINE_WIDTH: 0.420139
-G1 F15000
-G1 X115.84 Y125.965 E.00612
-G1 X113.771 Y125.201 E.06779
-G1 X113.825 Y125.975 E.02385
-G3 X113.771 Y126.799 I-4.98 J.09 E.02542
-G1 X115.841 Y126.035 E.06781
-G1 X115.977 Y126.011 E.00426
-G1 X116.036 Y126 F30000
-; LINE_WIDTH: 0.42104
-G1 F15000
-G1 X139.904 Y126 E.73541
-G1 X116.036 Y126.378 F30000
 ; LINE_WIDTH: 0.41999
 G1 F15000
-G1 X139.964 Y126.378 E.7352
-G1 X142.709 Y127.379 E.08979
-G3 X142.728 Y124.615 I5.871 J-1.342 E.08569
-G1 X139.964 Y125.622 E.09041
-G1 X116.036 Y125.622 E.7352
-G1 X113.286 Y124.62 E.08994
-G1 X113.424 Y125.454 E.02595
-G3 X113.28 Y127.383 I-5.852 J.533 E.05971
-G1 X115.977 Y126.388 E.08835
-G1 X139.964 Y126 F30000
-; LINE_WIDTH: 0.42014
+G1 X111.753 Y126.769 E.03015
+G1 X111.549 Y127.543 E.0246
+G1 X111.118 Y128.424 E.03014
+G1 X110.635 Y129.059 E.02453
+G1 X110.207 Y129.472 E.01825
+; LINE_WIDTH: 0.437315
+G1 X109.894 Y129.713 E.01271
+; LINE_WIDTH: 0.460584
+G1 X109.581 Y129.955 E.01346
+G1 X108.927 Y130.251 E.02444
+G1 X108.081 Y130.491 E.02993
+G3 X106.497 Y130.496 I-.805 J-5.041 E.05411
+G1 X105.788 Y130.312 E.02493
+G1 X105.182 Y130.054 E.02242
+G1 X104.512 Y129.63 E.02698
+G1 X103.898 Y129.068 E.02833
+G1 X103.545 Y128.63 E.01916
+G1 X103.148 Y127.944 E.02696
+G3 X102.718 Y126.221 I5.437 J-2.27 E.06068
+G1 X102.754 Y125.386 E.02845
+G1 X102.863 Y124.833 E.01916
+G1 X103.133 Y124.088 E.02696
+G1 X103.529 Y123.396 E.02714
+G3 X104.746 Y122.218 I3.79 J2.697 E.05797
+G1 X105.011 Y122.041 E.01086
+G1 X105.732 Y121.705 E.02708
+G1 X106.273 Y121.548 E.01916
+G1 X107.095 Y121.441 E.02822
+G1 X108.046 Y121.503 E.03243
+G1 X108.748 Y121.684 E.02467
+; LINE_WIDTH: 0.478722
+G1 F14456.105
+G1 X109.719 Y122.116 E.03776
+G1 X110.335 Y122.641 E.02871
+; LINE_WIDTH: 0.41999
 G1 F15000
-G1 X140.16 Y126.035 E.00612
-G1 X142.225 Y126.798 E.06768
-G3 X142.228 Y125.202 I6.914 J-.789 E.04919
-G1 X140.159 Y125.965 E.06776
-G1 X140.023 Y125.989 E.00426
-G1 X141.122 Y126 F30000
-; LINE_WIDTH: 0.39888
+G1 X110.747 Y123.068 E.01824
+G1 X111.202 Y123.714 E.02428
+G1 X111.539 Y124.43 E.02434
+G1 X111.748 Y125.199 E.02447
+G1 X111.808 Y125.73 E.01641
+G1 X115.049 Y126 F30000
+; LINE_WIDTH: 0.52023
+G1 F13198.969
+G1 X114.116 Y125.656 E.03871
+G1 X114.098 Y126.351 E.02707
+G1 X114.993 Y126.021 E.03712
+G1 X139.673 Y123.994 F30000
+; LINE_WIDTH: 0.41999
 G1 F15000
-G1 X141.814 Y126.256 E.0214
-G1 X141.814 Y125.745 E.01482
-G1 X141.178 Y125.979 E.01966
-G1 X111.568 Y123.076 F30000
-; FEATURE: Gap infill
-; LINE_WIDTH: 0.109578
+G1 X116.327 Y123.994 E.71732
+G1 X110.722 Y121.939 E.18345
+; LINE_WIDTH: 0.437588
+G1 X110.358 Y121.823 E.01226
+; LINE_WIDTH: 0.465384
+G1 F14912.538
+G3 X109.027 Y121.336 I3.4 J-11.347 E.04882
+G1 X108.245 Y121.113 E.028
+G2 X103.264 Y123.044 I-.945 J4.953 E.1938
+G1 X102.814 Y123.784 E.02984
+G1 X102.497 Y124.593 E.02991
+G1 X102.353 Y125.227 E.02239
+G1 X102.295 Y126.09 E.02978
+G1 X102.389 Y126.954 E.02991
+G2 X103.122 Y128.75 I5.303 J-1.116 E.06713
+G1 X103.514 Y129.268 E.02238
+G1 X104.137 Y129.868 E.02977
+G1 X104.855 Y130.353 E.02984
+G1 X105.53 Y130.66 E.02553
+G1 X106.278 Y130.88 E.02682
+G1 X106.98 Y130.966 E.02434
+G2 X108.646 Y130.787 I.253 J-5.507 E.05791
+G1 X109.722 Y130.393 E.03945
+; LINE_WIDTH: 0.475498
+G1 F14563.865
+G1 X110.122 Y130.264 E.01483
+; LINE_WIDTH: 0.420207
 G1 F15000
-G2 X111.424 Y122.885 I-.311 J.085 E.00133
-G1 X110.846 Y122.482 F30000
-; LINE_WIDTH: 0.445447
+G1 X110.523 Y130.136 E.01294
+G1 X116.327 Y128.006 E.19008
+G1 X139.673 Y128.006 E.71774
+G1 X145.278 Y130.063 E.18355
+; LINE_WIDTH: 0.437748
+G1 X145.641 Y130.178 E.01226
+; LINE_WIDTH: 0.462957
+G1 F14998.696
+G3 X146.911 Y130.641 I-3.267 J10.933 E.04628
+G1 X147.819 Y130.894 E.03227
+G2 X149.562 Y130.9 I.889 J-5.236 E.05995
+G1 X150.111 Y130.782 E.01922
+G1 X150.918 Y130.467 E.02964
+G2 X152.074 Y129.673 I-2.41 J-4.748 E.04815
+G1 X152.646 Y129.066 E.02856
+G1 X153.116 Y128.339 E.02962
+G2 X153.641 Y126.745 I-4.554 J-2.384 E.05769
+G1 X153.706 Y125.907 E.02878
+G1 X153.634 Y125.181 E.02497
+G1 X153.417 Y124.346 E.02952
+G1 X153.058 Y123.555 E.02972
+G1 X152.616 Y122.894 E.02723
+G2 X151.145 Y121.646 I-4.183 J3.441 E.06638
+G1 X150.467 Y121.339 E.02545
+G1 X149.724 Y121.12 E.02652
+G1 X148.856 Y121.023 E.02989
+G2 X147.341 Y121.218 I-.047 J5.631 E.05245
+G1 X146.679 Y121.456 E.02409
+; LINE_WIDTH: 0.479993
+G1 F14414.084
+G1 X146.288 Y121.618 E.01504
+; LINE_WIDTH: 0.514238
+G1 F13366.785
+G1 X145.898 Y121.78 E.01622
+; LINE_WIDTH: 0.512799
+G1 F13407.727
+G1 X145.565 Y121.882 E.01336
+; LINE_WIDTH: 0.475675
+G1 F14557.891
+G1 X145.231 Y121.985 E.01231
+; LINE_WIDTH: 0.421097
 G1 F15000
-G1 X110.621 Y122.342 E.00869
-; LINE_WIDTH: 0.41311
-G1 X110.53 Y122.288 E.00319
-; LINE_WIDTH: 0.373263
-G1 X110.433 Y122.23 E.00304
-; LINE_WIDTH: 0.335965
-G1 X110.342 Y122.179 E.00251
-; LINE_WIDTH: 0.301312
-G1 X110.246 Y122.124 E.00233
-; LINE_WIDTH: 0.26906
-G1 X110.153 Y122.075 E.00193
-; LINE_WIDTH: 0.2393
-G1 X110.057 Y122.023 E.00174
-; LINE_WIDTH: 0.199274
-G1 X109.868 Y121.927 E.0027
-; LINE_WIDTH: 0.1542
-G1 X109.678 Y121.835 E.00191
-; LINE_WIDTH: 0.113166
-G1 X109.41 Y121.715 E.00169
+G1 X144.898 Y122.088 E.01075
+G1 X139.732 Y123.984 E.16958
+G1 X139.673 Y124.371 F30000
+; LINE_WIDTH: 0.41999
+G1 F15000
+G1 X116.327 Y124.371 E.71732
+G1 X116.131 Y124.336 E.00613
+G1 X110.416 Y122.228 E.18716
+G1 X110.628 Y122.399 E.00838
+G1 X111.019 Y122.807 E.01736
+G1 X111.511 Y123.498 E.02604
+G1 X111.881 Y124.271 E.02635
+G1 X112.112 Y125.102 E.02649
+G1 X112.189 Y125.749 E.02002
+G1 X112.129 Y126.794 E.03216
+G1 X111.913 Y127.641 E.02686
+G1 X111.456 Y128.591 E.0324
+G1 X110.934 Y129.289 E.02679
+G1 X110.444 Y129.764 E.02095
+G1 X116.131 Y127.664 E.18628
+G1 X116.327 Y127.629 E.00611
+G1 X139.673 Y127.629 E.71733
+G1 X139.869 Y127.664 E.00611
+G1 X145.588 Y129.775 E.18733
+G1 X145.355 Y129.583 E.00929
+G1 X144.731 Y128.871 E.02907
+G1 X144.287 Y128.123 E.02672
+G1 X143.976 Y127.283 E.02753
+G1 X143.814 Y126.274 E.0314
+G1 X143.847 Y125.369 E.02785
+G1 X143.963 Y124.762 E.01896
+G1 X144.246 Y123.966 E.02597
+G1 X144.668 Y123.217 E.02643
+G1 X145.072 Y122.703 E.02009
+G1 X145.595 Y122.233 E.02159
+G1 X139.868 Y124.337 E.18748
+G1 X139.732 Y124.361 E.00424
+G1 X139.673 Y124.748 F30000
+G1 F15000
+G1 X116.327 Y124.748 E.71732
+G1 X116 Y124.69 E.0102
+G1 X111.693 Y123.101 E.14106
+G1 X111.902 Y123.424 E.01181
+G1 X112.223 Y124.112 E.02333
+G1 X112.476 Y125.004 E.02851
+G1 X112.564 Y125.708 E.02178
+G1 X112.505 Y126.818 E.03418
+G1 X112.277 Y127.738 E.02913
+G1 X111.794 Y128.758 E.03467
+G1 X111.709 Y128.895 E.00495
+M73 P88 R1
+G1 X116.001 Y127.31 E.14058
+G1 X116.327 Y127.252 E.01019
+G1 X139.673 Y127.252 E.71733
+G1 X139.999 Y127.31 E.01019
+G1 X144.299 Y128.897 E.14082
+G1 X143.961 Y128.312 E.02077
+G1 X143.621 Y127.41 E.0296
+G1 X143.441 Y126.33 E.03365
+G1 X143.47 Y125.35 E.03012
+G1 X143.593 Y124.688 E.0207
+G1 X143.891 Y123.837 E.0277
+G1 X144.293 Y123.113 E.02543
+G1 X139.998 Y124.69 E.14059
+G1 X139.732 Y124.738 E.0083
+G1 X139.673 Y125.125 F30000
+G1 F15000
+G1 X116.327 Y125.125 E.71732
+G1 X115.87 Y125.044 E.01428
+G1 X112.492 Y123.797 E.11062
+G1 X112.643 Y124.169 E.01232
+G1 X112.841 Y124.907 E.02347
+G1 X112.939 Y125.667 E.02355
+G1 X112.882 Y126.843 E.03619
+G1 X112.641 Y127.836 E.03139
+G1 X112.488 Y128.205 E.01229
+G1 X115.87 Y126.956 E.1108
+G1 X116.327 Y126.875 E.01426
+G1 X139.673 Y126.875 E.71733
+G1 X140.13 Y126.956 E.01427
+G1 X143.505 Y128.202 E.11054
+G1 X143.266 Y127.538 E.0217
+G1 X143.068 Y126.386 E.0359
+G1 X143.093 Y125.332 E.0324
+G1 X143.223 Y124.613 E.02245
+G1 X143.501 Y123.805 E.02625
+G1 X140.128 Y125.044 E.11044
+G1 X139.732 Y125.115 E.01235
+G1 X139.673 Y125.502 F30000
+G1 F15000
+G1 X116.327 Y125.502 E.71732
+G3 X115.739 Y125.397 I0 J-1.697 E.01845
+G1 X113.102 Y124.424 E.08638
+G3 X113.314 Y125.626 I-4.766 J1.46 E.03758
+G1 X113.258 Y126.868 E.0382
+G1 X113.102 Y127.577 E.0223
+G1 X115.74 Y126.602 E.08642
+G3 X116.327 Y126.498 I.587 J1.592 E.01843
+G1 X139.673 Y126.498 E.71733
+G3 X140.261 Y126.603 I0 J1.697 E.01844
+G1 X142.888 Y127.573 E.08607
+G1 X142.695 Y126.442 E.03524
+G1 X142.717 Y125.314 E.03468
+G1 X142.883 Y124.434 E.0275
+G1 X140.257 Y125.398 E.08594
+G3 X139.732 Y125.497 I-.54 J-1.427 E.0165
+G1 X139.673 Y125.845 F30000
+; LINE_WIDTH: 0.35198
+G1 F15000
+G1 X116.327 Y125.845 E.58794
+; LINE_WIDTH: 0.368983
+G1 X116.139 Y125.845 E.005
+; LINE_WIDTH: 0.41954
+G1 X115.951 Y125.845 E.00577
+G1 X115.609 Y125.751 E.01089
+G2 X113.629 Y125.023 I-112.028 J301.449 E.06474
+G1 X113.689 Y125.585 E.01735
+G1 X113.619 Y126.983 E.04298
+G1 X115.609 Y126.249 E.06511
+G1 X115.951 Y126.155 E.01087
+; LINE_WIDTH: 0.402988
+G1 X116.139 Y126.155 E.00552
+; LINE_WIDTH: 0.352116
+G1 X139.673 Y126.155 E.59294
+; LINE_WIDTH: 0.368983
+G1 X139.86 Y126.155 E.00497
+; LINE_WIDTH: 0.419544
+G1 X140.047 Y126.155 E.00575
+G1 X140.391 Y126.249 E.01094
+G1 X142.396 Y126.989 E.06559
+G1 X142.302 Y126.09 E.02775
+G3 X142.374 Y125.023 I7.101 J-.054 E.03286
+G1 X140.387 Y125.752 E.06495
+G1 X140.047 Y125.845 E.01083
+; LINE_WIDTH: 0.402988
+G1 X139.89 Y125.845 E.00462
+; LINE_WIDTH: 0.368983
+G1 X139.733 Y125.845 E.00418
+G1 X140.95 Y126 F30000
+; LINE_WIDTH: 0.51954
+G1 F13218.077
+G1 X141.889 Y126.347 E.03888
+G1 X141.896 Y125.653 E.02695
+G1 X141.007 Y125.98 E.03678
+G1 X144.187 Y126.218 F30000
+; LINE_WIDTH: 0.41999
+G1 F15000
+G1 X144.223 Y125.387 E.02557
+G1 X144.332 Y124.837 E.01722
+G1 X144.6 Y124.095 E.02424
+G1 X144.995 Y123.405 E.02441
+G1 X145.366 Y122.939 E.01832
+; LINE_WIDTH: 0.44102
+G1 X145.72 Y122.599 E.01593
+; LINE_WIDTH: 0.465636
+G1 F14903.648
+G1 X146.075 Y122.258 E.01692
+G1 X146.78 Y121.868 E.02778
+G3 X147.828 Y121.529 I2.908 J7.19 E.03797
+G1 X148.458 Y121.448 E.02188
+G1 X149.496 Y121.504 E.03578
+G1 X150.211 Y121.688 E.02545
+G1 X150.818 Y121.946 E.0227
+G1 X151.488 Y122.37 E.02731
+G1 X152.039 Y122.865 E.02552
+G1 X152.634 Y123.652 E.03399
+G1 X152.982 Y124.362 E.02723
+G1 X153.21 Y125.163 E.02871
+G1 X153.283 Y125.785 E.02157
+G1 X153.255 Y126.505 E.0248
+G1 X153.081 Y127.317 E.02861
+G1 X152.814 Y128.022 E.02597
+G1 X152.397 Y128.705 E.02759
+G1 X152.017 Y129.145 E.02001
+G1 X151.42 Y129.67 E.02738
+; LINE_WIDTH: 0.456319
+G1 F15000
+G1 X151.154 Y129.859 E.01099
+G1 X150.305 Y130.277 E.03188
+G1 X149.53 Y130.489 E.02707
+G3 X147.926 Y130.493 I-.815 J-4.973 E.05426
+G1 X147.177 Y130.293 E.02613
+; LINE_WIDTH: 0.473545
+G1 F14629.898
+G1 X146.729 Y130.089 E.01729
+; LINE_WIDTH: 0.499595
+G1 F13795.369
+G1 X146.28 Y129.884 E.01833
+; LINE_WIDTH: 0.489463
+G1 F14108.399
+G1 X145.973 Y129.622 E.01471
+; LINE_WIDTH: 0.42239
+G1 F15000
+G1 X145.666 Y129.36 E.0125
+G1 X145.015 Y128.623 E.0304
+G1 X144.614 Y127.935 E.02462
+G1 X144.331 Y127.156 E.02563
+G1 X144.196 Y126.277 E.02748
+; OBJECT_ID: 194
 ; WIPE_START
-G1 X109.678 Y121.835 E-.76
+G1 X144.331 Y127.156 E-.33769
+G1 X144.614 Y127.935 E-.31492
+G1 X144.756 Y128.179 E-.1074
 ; WIPE_END
 G1 E-.04 F1800
-G1 X111.568 Y128.924 Z3 F30000
-G1 Z2.6
-G1 E.8 F1800
-; LINE_WIDTH: 0.109704
-G1 F15000
-G1 X111.478 Y129.075 E.00095
-G1 X111.423 Y129.117 E.00037
-G1 X110.844 Y129.52 F30000
-; LINE_WIDTH: 0.446373
-G1 F15000
-G1 X110.622 Y129.659 E.00862
-; LINE_WIDTH: 0.414663
-G1 X110.531 Y129.713 E.0032
-; LINE_WIDTH: 0.374913
-G1 X110.434 Y129.77 E.00305
-; LINE_WIDTH: 0.33763
-G1 X110.342 Y129.822 E.00253
-; LINE_WIDTH: 0.302924
-G1 X110.246 Y129.876 E.00235
-; LINE_WIDTH: 0.270661
-G1 X110.154 Y129.926 E.00195
-; LINE_WIDTH: 0.240939
-G1 X110.058 Y129.978 E.00176
-; LINE_WIDTH: 0.200979
-G1 X109.869 Y130.074 E.00273
-; LINE_WIDTH: 0.155955
-G1 X109.679 Y130.166 E.00194
-; LINE_WIDTH: 0.113907
-G1 X109.394 Y130.293 E.00181
-; OBJECT_ID: 104
-; WIPE_START
-G1 X109.679 Y130.166 E-.76
-; WIPE_END
-G1 E-.04 F1800
-; stop printing object, unique label id: 72
+; stop printing object, unique label id: 123
 M625
-; start printing object, unique label id: 104
+; start printing object, unique label id: 194
 M624 AgAAAAAAAAA=
-G1 X117.032 Y132.21 Z3 F30000
-G1 X143.197 Y139.483 Z3
+G1 X147.811 Y134.948 Z3 F30000
 G1 Z2.6
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X143.103 Y139.761 E.00974
-G2 X143.198 Y143.517 I5.549 J1.739 E.12689
-G1 X139.819 Y142.269 E.11947
-G1 X115.964 Y142.269 E.79131
-G1 X112.585 Y143.517 E.11948
-G2 X112.586 Y139.483 I-5.524 J-2.017 E.13656
-G1 X115.964 Y140.73 E.11946
-G1 X139.819 Y140.73 E.7913
-G1 X143.141 Y139.504 E.11747
-; WIPE_START
-G1 X143.103 Y139.761 E-.09879
-G1 X142.973 Y140.249 E-.19165
-G1 X142.891 Y140.707 E-.17705
-G1 X142.841 Y141.247 E-.20611
-G1 X142.841 Y141.475 E-.08639
-; WIPE_END
-G1 E-.04 F1800
-G1 X143.976 Y138.762 Z3 F30000
-G1 Z2.6
-G1 E.8 F1800
-G1 F15476.087
-G1 X143.746 Y139.229 E.01725
-G2 X143.977 Y144.238 I4.955 J2.282 E.17285
-G1 X139.746 Y142.676 E.1496
-G1 X116.037 Y142.676 E.78649
-G1 X111.806 Y144.238 E.1496
-G2 X111.807 Y138.762 I-4.78 J-2.739 E.1901
-G1 X116.037 Y140.323 E.14956
-G1 X139.746 Y140.323 E.78647
-G1 X143.92 Y138.783 E.14758
-; WIPE_START
-G1 X143.746 Y139.229 E-.18177
-G1 X143.491 Y139.884 E-.26704
-G1 X143.325 Y140.566 E-.26687
-G1 X143.309 Y140.681 E-.04432
-; WIPE_END
-G1 E-.04 F1800
-G1 X144.93 Y138.173 Z3 F30000
-G1 Z2.6
-G1 E.8 F1800
-G1 F15476.087
-M73 P89 R1
-G2 X144.931 Y144.828 I3.703 J3.327 E.24181
-G1 X144.824 Y144.985 E.0063
-G1 X139.673 Y143.083 E.18212
-G1 X116.109 Y143.083 E.78166
-G1 X110.959 Y144.985 E.18212
-G1 X110.851 Y144.828 E.0063
-G2 X110.853 Y138.173 I-3.701 J-3.329 E.24181
-G1 X110.961 Y138.016 E.0063
-G1 X116.11 Y139.916 E.18204
-G1 X139.673 Y139.916 E.78165
-G1 X144.822 Y138.016 E.18204
-G1 X144.896 Y138.123 E.00431
-; WIPE_START
-G1 X144.548 Y138.651 E-.24002
-G1 X144.316 Y139.016 E-.16449
-G1 X144.115 Y139.401 E-.16489
-G1 X143.949 Y139.801 E-.16466
-G1 X143.929 Y139.866 E-.02595
-; WIPE_END
-G1 E-.04 F1800
-G1 X147.662 Y137.043 Z3 F30000
-G1 Z2.6
-G1 E.8 F1800
-G1 F15476.087
-G1 X148.022 Y136.98 E.01212
-G3 X148.452 Y136.944 I.602 J4.517 E.01433
-G3 X148.815 Y136.944 I.173 J4.151 E.01206
-G3 X147.603 Y137.056 I-.191 J4.552 E.90919
-G1 X147.702 Y137.45 F30000
-G1 F15476.087
-G1 X147.718 Y137.448 E.00053
-G3 X148.468 Y137.351 I.905 J4.05 E.02513
-G3 X148.798 Y137.351 I.156 J3.764 E.01093
-G3 X147.369 Y137.542 I-.174 J4.146 E.8168
-G1 X147.645 Y137.466 E.0095
-G1 X147.818 Y137.826 F30000
+G1 X147.827 Y134.946 E.00053
+G3 X148.577 Y134.849 I.905 J4.05 E.02513
+G3 X148.906 Y134.85 I.156 J3.764 E.01093
+G3 X147.477 Y135.04 I-.174 J4.146 E.8168
+G1 X147.753 Y134.964 E.0095
+G1 X147.927 Y135.324 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
-G1 X148.126 Y137.773 E.00959
-G3 X148.484 Y137.742 I.498 J3.725 E.01106
-G3 X148.781 Y137.743 I.14 J3.385 E.00911
-G3 X147.76 Y137.84 I-.157 J3.754 E.69386
+G1 X148.234 Y135.271 E.00959
+G3 X148.593 Y135.241 I.498 J3.725 E.01106
+G3 X148.889 Y135.241 I.14 J3.385 E.00911
+G3 X147.868 Y135.339 I-.157 J3.754 E.69386
 ; WIPE_START
 M204 S10000
-G1 X148.126 Y137.773 E-.14139
-G1 X148.484 Y137.742 E-.13667
-G1 X148.781 Y137.743 E-.11265
-G1 X149.269 Y137.797 E-.18681
-G1 X149.59 Y137.868 E-.12472
-G1 X149.735 Y137.913 E-.05776
+G1 X148.234 Y135.271 E-.14139
+G1 X148.593 Y135.241 E-.13667
+G1 X148.889 Y135.241 E-.11265
+G1 X149.378 Y135.295 E-.18681
+G1 X149.698 Y135.366 E-.12472
+G1 X149.843 Y135.412 E-.05776
 ; WIPE_END
 G1 E-.04 F1800
-G1 X142.24 Y139.357 Z3 F30000
-G1 X107.531 Y146.043 Z3
+G1 X142.335 Y136.785 Z3 F30000
+G1 X107.621 Y143.135 Z3
 G1 Z2.6
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X107.163 Y146.053 E.01221
-G3 X107.002 Y136.944 I.011 J-4.556 E.46877
-G3 X107.365 Y136.944 I.173 J4.151 E.01206
-G3 X107.59 Y146.034 I-.191 J4.552 E.45467
-G1 X107.512 Y145.637 F30000
-G1 F15476.087
-G1 X107.164 Y145.647 E.01154
-G3 X107.018 Y137.351 I.009 J-4.15 E.42697
-G3 X107.348 Y137.351 I.156 J3.765 E.01093
-G3 X107.571 Y145.628 I-.174 J4.146 E.41346
-G1 X107.43 Y145.248 F30000
+G1 X107.273 Y143.145 E.01154
+G3 X107.127 Y134.849 I.009 J-4.15 E.42697
+G3 X107.456 Y134.85 I.156 J3.765 E.01093
+G3 X107.68 Y143.126 I-.174 J4.146 E.41346
+G1 X107.539 Y142.746 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
-G1 X107.166 Y145.255 E.00814
-G3 X107.034 Y137.742 I.008 J-3.758 E.35822
-G3 X107.331 Y137.743 I.14 J3.385 E.00911
-G3 X107.494 Y145.241 I-.157 J3.754 E.34805
-G1 X107.49 Y145.242 E.00011
+G1 X107.274 Y142.753 E.00814
+G3 X107.143 Y135.241 I.008 J-3.758 E.35822
+G3 X107.439 Y135.241 I.14 J3.385 E.00911
+G3 X107.602 Y142.74 I-.157 J3.754 E.34805
+G1 X107.599 Y142.74 E.00011
 ; WIPE_START
 M204 S10000
-G1 X107.166 Y145.255 E-.12338
-G1 X106.676 Y145.227 E-.18651
-G1 X106.353 Y145.17 E-.12463
-G1 X106.036 Y145.086 E-.12463
-G1 X105.699 Y144.961 E-.13672
-G1 X105.547 Y144.885 E-.06412
+G1 X107.274 Y142.753 E-.12338
+G1 X106.784 Y142.726 E-.18651
+G1 X106.461 Y142.669 E-.12463
+G1 X106.144 Y142.584 E-.12463
+G1 X105.807 Y142.459 E-.13672
+G1 X105.656 Y142.384 E-.06412
 ; WIPE_END
 G1 E-.04 F1800
-G1 X113.086 Y143.691 Z3 F30000
-G1 X139.494 Y139.509 Z3
+G1 X113.18 Y141.101 Z3 F30000
+G1 X139.584 Y136.6 Z3
 G1 Z2.6
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X139.601 Y139.509 E.00354
-G1 X147.032 Y136.767 E.26274
-G3 X146.806 Y146.151 I1.581 J4.732 E.63467
-G1 X139.601 Y143.49 E.25479
-G1 X116.182 Y143.49 E.77683
-G1 X108.976 Y146.151 E.2548
-G3 X107.479 Y136.519 I-1.806 J-4.652 E.59154
-G3 X108.751 Y136.767 I-.432 J5.591 E.04312
-G1 X116.182 Y139.509 E.26273
-G1 X139.434 Y139.509 E.77129
-G1 X139.476 Y139.102 F30000
-G1 F15476.087
-G1 X139.528 Y139.102 E.00173
-G1 X146.901 Y136.382 E.26068
-G3 X146.667 Y146.533 I1.712 J5.118 E.68622
-G1 X139.528 Y143.897 E.25243
-G1 X116.255 Y143.897 E.77201
-G1 X109.116 Y146.533 E.25243
-G3 X107.504 Y136.112 I-1.946 J-5.034 E.63952
-G3 X108.883 Y136.382 I-.467 J6.048 E.0467
-G1 X116.255 Y139.102 E.26067
-G1 X139.416 Y139.102 E.76828
-G1 X139.46 Y138.709 F30000
+G1 X139.636 Y136.6 E.00173
+G1 X147.009 Y133.88 E.26068
+G3 X146.775 Y144.031 I1.712 J5.118 E.68622
+G1 X139.636 Y141.396 E.25243
+G1 X116.364 Y141.396 E.77201
+G1 X109.225 Y144.031 E.25243
+G3 X107.613 Y133.611 I-1.946 J-5.034 E.63952
+G3 X108.991 Y133.88 I-.467 J6.048 E.0467
+G1 X116.364 Y136.6 E.26067
+G1 X139.524 Y136.6 E.76828
+G1 X139.568 Y136.207 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
-G1 X146.774 Y136.01 E.23957
-G3 X146.533 Y146.902 I1.838 J5.489 E.68161
-G1 X139.458 Y144.29 E.23174
-G1 X116.325 Y144.29 E.71081
-G1 X109.25 Y146.902 E.23174
-G3 X107.529 Y135.721 I-2.079 J-5.403 E.63516
-G3 X109.009 Y136.011 I-.501 J6.489 E.04645
-G1 X116.325 Y138.71 E.23962
-G1 X139.4 Y138.71 E.70901
+G1 X146.883 Y133.509 E.23957
+G3 X146.642 Y144.4 I1.838 J5.489 E.68161
+G1 X139.566 Y141.788 E.23174
+G1 X116.434 Y141.788 E.71081
+G1 X109.358 Y144.4 E.23174
+G3 X107.637 Y133.219 I-2.079 J-5.403 E.63516
+G3 X109.117 Y133.509 I-.501 J6.489 E.04645
+G1 X116.434 Y136.208 E.23962
+G1 X139.508 Y136.208 E.70901
 ; WIPE_START
 M204 S10000
-G1 X141.278 Y138.022 E-.76
+G1 X141.386 Y135.52 E-.76
 ; WIPE_END
 G1 E-.04 F1800
-G1 X144.324 Y138.575 Z3 F30000
-G1 Z2.6
-G1 E.8 F1800
-; FEATURE: Gap infill
-; LINE_WIDTH: 0.109542
-G1 F15000
-G3 X144.467 Y138.385 I.31 J.085 E.00132
-G1 X145.045 Y137.982 F30000
-; LINE_WIDTH: 0.445857
-G1 F15000
-G1 X145.263 Y137.846 E.00841
-; LINE_WIDTH: 0.414725
-G1 X145.361 Y137.787 E.00347
-; LINE_WIDTH: 0.374491
-G1 X145.452 Y137.733 E.00286
-; LINE_WIDTH: 0.336998
-G1 X145.55 Y137.678 E.00269
-; LINE_WIDTH: 0.302076
-G1 X145.641 Y137.626 E.00222
-; LINE_WIDTH: 0.269751
-G1 X145.738 Y137.574 E.00203
-; LINE_WIDTH: 0.23985
-G1 X145.83 Y137.525 E.00168
-; LINE_WIDTH: 0.224752
-G1 X145.834 Y137.523 E.00006
-; LINE_WIDTH: 0.199613
-G1 X146.021 Y137.428 E.00267
-; LINE_WIDTH: 0.154622
-G1 X146.211 Y137.336 E.00193
-; LINE_WIDTH: 0.113268
-G1 X146.482 Y137.214 E.0017
-; WIPE_START
-G1 X146.211 Y137.336 E-.76
-; WIPE_END
-G1 E-.04 F1800
-G1 X144.323 Y144.423 Z3 F30000
-G1 Z2.6
-G1 E.8 F1800
-; LINE_WIDTH: 0.1076
-G1 F15000
-G2 X144.468 Y144.616 I.495 J-.222 E.00128
-G1 X145.047 Y145.019 F30000
-; LINE_WIDTH: 0.446734
-G1 F15000
-G1 X145.262 Y145.154 E.00834
-; LINE_WIDTH: 0.416237
-G1 X145.361 Y145.212 E.00348
-; LINE_WIDTH: 0.37616
-G1 X145.451 Y145.266 E.00287
-; LINE_WIDTH: 0.33871
-G1 X145.549 Y145.322 E.00271
-; LINE_WIDTH: 0.303736
-G1 X145.641 Y145.373 E.00224
-; LINE_WIDTH: 0.27139
-G1 X145.738 Y145.426 E.00205
-; LINE_WIDTH: 0.241505
-G1 X145.83 Y145.475 E.0017
-; LINE_WIDTH: 0.226426
-G1 X145.834 Y145.477 E.00006
-; LINE_WIDTH: 0.201335
-G1 X146.02 Y145.572 E.0027
-; LINE_WIDTH: 0.156458
-G1 X146.211 Y145.664 E.00196
-; LINE_WIDTH: 0.114078
-G1 X146.498 Y145.793 E.00182
-; WIPE_START
-G1 X146.211 Y145.664 E-.76
-; WIPE_END
-G1 E-.04 F1800
-G1 X138.644 Y144.662 Z3 F30000
-G1 X114.772 Y141.5 Z3
+G1 X133.8 Y136.358 Z3 F30000
+G1 X111.814 Y138.787 Z3
 G1 Z2.6
 G1 E.8 F1800
 ; FEATURE: Internal solid infill
-; LINE_WIDTH: 0.39742
-G1 F15000
-G1 X114.072 Y141.241 E.02154
-G1 X114.072 Y141.758 E.01492
-G1 X114.715 Y141.52 E.01981
-G1 X115.928 Y141.5 F30000
-; LINE_WIDTH: 0.420139
-G1 F15000
-G1 X115.732 Y141.464 E.00612
-G1 X113.663 Y140.701 E.06779
-G1 X113.716 Y141.475 E.02385
-G3 X113.663 Y142.299 I-4.98 J.09 E.02542
-G1 X115.732 Y141.535 E.06781
-G1 X115.869 Y141.51 E.00426
-G1 X115.928 Y141.5 F30000
-; LINE_WIDTH: 0.42104
-G1 F15000
-G1 X139.795 Y141.5 E.73541
-G1 X115.928 Y141.877 F30000
 ; LINE_WIDTH: 0.41999
 G1 F15000
-G1 X139.855 Y141.877 E.7352
-G1 X142.601 Y142.878 E.08979
-G3 X142.619 Y140.115 I5.871 J-1.342 E.08569
-G1 X139.855 Y141.122 E.09041
-G1 X115.928 Y141.122 E.7352
-G1 X113.178 Y140.12 E.08994
-G1 X113.315 Y140.953 E.02595
-G3 X113.171 Y142.882 I-5.852 J.533 E.05971
-G1 X115.869 Y141.888 E.08835
-G1 X139.855 Y141.5 F30000
-; LINE_WIDTH: 0.42014
+G1 X111.753 Y139.767 E.03015
+G1 X111.549 Y140.541 E.0246
+G1 X111.118 Y141.422 E.03014
+G1 X110.635 Y142.057 E.02453
+G1 X110.207 Y142.47 E.01825
+; LINE_WIDTH: 0.437315
+G1 X109.894 Y142.711 E.01271
+; LINE_WIDTH: 0.460584
+G1 X109.581 Y142.953 E.01346
+G1 X108.927 Y143.249 E.02444
+G1 X108.081 Y143.489 E.02993
+G3 X106.497 Y143.493 I-.805 J-5.041 E.05411
+G1 X105.788 Y143.31 E.02493
+G1 X105.182 Y143.052 E.02242
+G1 X104.512 Y142.628 E.02698
+G1 X103.898 Y142.066 E.02833
+G1 X103.545 Y141.627 E.01916
+G1 X103.148 Y140.942 E.02696
+G3 X102.719 Y139.219 I5.437 J-2.27 E.06068
+G1 X102.754 Y138.384 E.02845
+G1 X102.863 Y137.831 E.01916
+G1 X103.133 Y137.086 E.02696
+G1 X103.529 Y136.394 E.02714
+G3 X104.746 Y135.216 I3.79 J2.697 E.05797
+G1 X105.011 Y135.039 E.01086
+G1 X105.732 Y134.703 E.02708
+G1 X106.273 Y134.546 E.01916
+G1 X107.095 Y134.439 E.02822
+G1 X108.046 Y134.5 E.03243
+G1 X108.748 Y134.682 E.02467
+; LINE_WIDTH: 0.478722
+G1 F14456.105
+G1 X109.719 Y135.114 E.03776
+G1 X110.335 Y135.638 E.02871
+; LINE_WIDTH: 0.41999
 G1 F15000
-G1 X140.051 Y141.535 E.00612
-G1 X142.117 Y142.298 E.06768
-G3 X142.119 Y140.701 I6.914 J-.789 E.04919
-G1 X140.051 Y141.464 E.06776
-G1 X139.914 Y141.489 E.00426
-G1 X141.013 Y141.5 F30000
-; LINE_WIDTH: 0.39888
+G1 X110.747 Y136.066 E.01824
+G1 X111.202 Y136.712 E.02428
+G1 X111.539 Y137.428 E.02434
+G1 X111.748 Y138.197 E.02447
+G1 X111.808 Y138.728 E.01641
+G1 X115.049 Y138.998 F30000
+; LINE_WIDTH: 0.52023
+G1 F13198.969
+G1 X114.116 Y138.653 E.03871
+G1 X114.098 Y139.349 E.02707
+G1 X114.993 Y139.019 E.03712
+G1 X139.673 Y136.992 F30000
+; LINE_WIDTH: 0.41999
 G1 F15000
-G1 X141.705 Y141.755 E.0214
-G1 X141.705 Y141.244 E.01482
-G1 X141.07 Y141.479 E.01966
-G1 X111.46 Y138.575 F30000
-; FEATURE: Gap infill
-; LINE_WIDTH: 0.109578
+G1 X116.327 Y136.992 E.71732
+G1 X110.722 Y134.936 E.18345
+; LINE_WIDTH: 0.437588
+G1 X110.358 Y134.821 E.01226
+; LINE_WIDTH: 0.465384
+G1 F14912.538
+G3 X109.027 Y134.334 I3.4 J-11.347 E.04882
+G1 X108.245 Y134.111 E.028
+G2 X103.264 Y136.042 I-.945 J4.953 E.1938
+G1 X102.814 Y136.782 E.02984
+G1 X102.497 Y137.591 E.02991
+G1 X102.353 Y138.225 E.02239
+G1 X102.295 Y139.088 E.02978
+G1 X102.389 Y139.952 E.02991
+G2 X103.122 Y141.748 I5.303 J-1.116 E.06713
+G1 X103.514 Y142.266 E.02238
+G1 X104.137 Y142.866 E.02977
+G1 X104.855 Y143.351 E.02984
+G1 X105.53 Y143.658 E.02553
+G1 X106.278 Y143.878 E.02682
+G1 X106.98 Y143.964 E.02434
+G2 X108.646 Y143.785 I.253 J-5.507 E.05791
+G1 X109.722 Y143.391 E.03945
+; LINE_WIDTH: 0.475498
+G1 F14563.865
+G1 X110.122 Y143.262 E.01483
+; LINE_WIDTH: 0.420207
 G1 F15000
-G2 X111.316 Y138.385 I-.311 J.085 E.00133
-G1 X110.738 Y137.982 F30000
-; LINE_WIDTH: 0.445447
+G1 X110.523 Y143.134 E.01294
+G1 X116.327 Y141.004 E.19008
+G1 X139.673 Y141.004 E.71774
+G1 X145.278 Y143.061 E.18355
+; LINE_WIDTH: 0.437748
+G1 X145.641 Y143.176 E.01226
+; LINE_WIDTH: 0.462957
+G1 F14998.696
+G3 X146.911 Y143.639 I-3.267 J10.933 E.04628
+G1 X147.819 Y143.892 E.03227
+G2 X149.562 Y143.898 I.889 J-5.236 E.05995
+G1 X150.111 Y143.78 E.01922
+G1 X150.918 Y143.465 E.02964
+G2 X152.074 Y142.671 I-2.41 J-4.748 E.04815
+G1 X152.646 Y142.064 E.02856
+G1 X153.116 Y141.337 E.02962
+G2 X153.641 Y139.743 I-4.554 J-2.384 E.05769
+G1 X153.706 Y138.905 E.02878
+G1 X153.634 Y138.179 E.02497
+G1 X153.417 Y137.344 E.02952
+G1 X153.058 Y136.553 E.02972
+G1 X152.616 Y135.892 E.02723
+G2 X151.145 Y134.644 I-4.183 J3.441 E.06638
+G1 X150.467 Y134.337 E.02545
+G1 X149.724 Y134.118 E.02652
+G1 X148.856 Y134.021 E.02989
+G2 X147.341 Y134.216 I-.047 J5.631 E.05245
+G1 X146.679 Y134.454 E.02409
+; LINE_WIDTH: 0.479993
+G1 F14414.084
+G1 X146.288 Y134.616 E.01504
+; LINE_WIDTH: 0.514238
+G1 F13366.785
+G1 X145.898 Y134.777 E.01622
+; LINE_WIDTH: 0.512799
+G1 F13407.727
+G1 X145.565 Y134.88 E.01336
+; LINE_WIDTH: 0.475675
+G1 F14557.891
+G1 X145.231 Y134.983 E.01231
+; LINE_WIDTH: 0.421097
 G1 F15000
-G1 X110.513 Y137.842 E.00869
-; LINE_WIDTH: 0.41311
-G1 X110.422 Y137.788 E.00319
-; LINE_WIDTH: 0.373263
-G1 X110.325 Y137.73 E.00304
-; LINE_WIDTH: 0.335965
-G1 X110.233 Y137.678 E.00251
-; LINE_WIDTH: 0.301312
-G1 X110.137 Y137.624 E.00233
-; LINE_WIDTH: 0.26906
-G1 X110.045 Y137.574 E.00193
-; LINE_WIDTH: 0.2393
-G1 X109.949 Y137.523 E.00174
-; LINE_WIDTH: 0.199274
-G1 X109.76 Y137.426 E.0027
-; LINE_WIDTH: 0.1542
-G1 X109.57 Y137.335 E.00191
-; LINE_WIDTH: 0.113166
-G1 X109.301 Y137.214 E.00169
-; WIPE_START
-G1 X109.57 Y137.335 E-.76
-; WIPE_END
-G1 E-.04 F1800
-G1 X111.459 Y144.424 Z3 F30000
-G1 Z2.6
-G1 E.8 F1800
-; LINE_WIDTH: 0.109704
-M73 P90 R1
+G1 X144.898 Y135.085 E.01075
+G1 X139.732 Y136.981 E.16958
+G1 X139.673 Y137.369 F30000
+; LINE_WIDTH: 0.41999
 G1 F15000
-G1 X111.369 Y144.574 E.00095
-G1 X111.315 Y144.616 E.00037
-G1 X110.736 Y145.019 F30000
-; LINE_WIDTH: 0.446373
+G1 X116.327 Y137.369 E.71732
+G1 X116.131 Y137.334 E.00613
+G1 X110.416 Y135.226 E.18716
+G1 X110.628 Y135.397 E.00838
+G1 X111.019 Y135.805 E.01736
+G1 X111.511 Y136.495 E.02604
+G1 X111.881 Y137.269 E.02635
+G1 X112.112 Y138.1 E.02649
+G1 X112.189 Y138.746 E.02002
+G1 X112.129 Y139.791 E.03216
+G1 X111.913 Y140.639 E.02686
+G1 X111.456 Y141.589 E.0324
+G1 X110.934 Y142.287 E.02679
+G1 X110.444 Y142.761 E.02095
+G1 X116.131 Y140.662 E.18628
+G1 X116.327 Y140.627 E.00611
+G1 X139.673 Y140.627 E.71733
+G1 X139.869 Y140.662 E.00611
+G1 X145.588 Y142.773 E.18733
+G1 X145.355 Y142.581 E.00929
+G1 X144.731 Y141.869 E.02907
+G1 X144.287 Y141.121 E.02672
+G1 X143.976 Y140.281 E.02753
+G1 X143.814 Y139.272 E.0314
+G1 X143.847 Y138.366 E.02785
+G1 X143.963 Y137.76 E.01896
+G1 X144.246 Y136.964 E.02597
+G1 X144.668 Y136.215 E.02643
+G1 X145.072 Y135.701 E.02009
+G1 X145.595 Y135.231 E.02159
+G1 X139.868 Y137.334 E.18748
+G1 X139.732 Y137.358 E.00424
+G1 X139.673 Y137.746 F30000
 G1 F15000
-G1 X110.513 Y145.158 E.00862
-; LINE_WIDTH: 0.414663
-G1 X110.422 Y145.212 E.0032
-; LINE_WIDTH: 0.374913
-G1 X110.326 Y145.27 E.00305
-; LINE_WIDTH: 0.33763
-G1 X110.234 Y145.322 E.00253
-; LINE_WIDTH: 0.302924
-G1 X110.138 Y145.376 E.00235
-; LINE_WIDTH: 0.270661
-G1 X110.045 Y145.426 E.00195
-; LINE_WIDTH: 0.240939
-G1 X109.949 Y145.477 E.00176
-; LINE_WIDTH: 0.200979
-G1 X109.76 Y145.573 E.00273
-; LINE_WIDTH: 0.155955
-G1 X109.57 Y145.665 E.00194
-; LINE_WIDTH: 0.113907
-G1 X109.285 Y145.793 E.00181
+G1 X116.327 Y137.746 E.71732
+G1 X116 Y137.688 E.0102
+M73 P89 R1
+G1 X111.693 Y136.099 E.14106
+G1 X111.902 Y136.421 E.01181
+G1 X112.223 Y137.11 E.02333
+G1 X112.476 Y138.002 E.02851
+G1 X112.564 Y138.705 E.02178
+G1 X112.505 Y139.816 E.03418
+G1 X112.277 Y140.736 E.02913
+G1 X111.794 Y141.756 E.03467
+G1 X111.709 Y141.892 E.00495
+G1 X116.001 Y140.308 E.14058
+G1 X116.327 Y140.25 E.01019
+G1 X139.673 Y140.25 E.71733
+G1 X139.999 Y140.308 E.01019
+G1 X144.299 Y141.895 E.14082
+G1 X143.961 Y141.31 E.02077
+G1 X143.621 Y140.408 E.0296
+G1 X143.441 Y139.328 E.03365
+G1 X143.47 Y138.348 E.03012
+G1 X143.593 Y137.686 E.0207
+G1 X143.891 Y136.835 E.0277
+G1 X144.293 Y136.111 E.02543
+G1 X139.998 Y137.688 E.14059
+G1 X139.732 Y137.736 E.0083
+G1 X139.673 Y138.123 F30000
+G1 F15000
+G1 X116.327 Y138.123 E.71732
+G1 X115.87 Y138.041 E.01428
+G1 X112.492 Y136.795 E.11062
+G1 X112.643 Y137.167 E.01232
+G1 X112.841 Y137.905 E.02347
+G1 X112.939 Y138.665 E.02355
+G1 X112.882 Y139.841 E.03619
+G1 X112.642 Y140.834 E.03139
+G1 X112.488 Y141.203 E.01229
+G1 X115.87 Y139.954 E.1108
+G1 X116.327 Y139.872 E.01426
+G1 X139.673 Y139.872 E.71733
+G1 X140.13 Y139.954 E.01427
+G1 X143.505 Y141.2 E.11054
+G1 X143.266 Y140.535 E.0217
+G1 X143.068 Y139.384 E.0359
+G1 X143.093 Y138.33 E.0324
+G1 X143.223 Y137.611 E.02245
+G1 X143.501 Y136.803 E.02625
+G1 X140.128 Y138.042 E.11044
+G1 X139.732 Y138.113 E.01235
+G1 X139.673 Y138.5 F30000
+G1 F15000
+G1 X116.327 Y138.5 E.71732
+G3 X115.739 Y138.395 I0 J-1.697 E.01845
+G1 X113.102 Y137.422 E.08638
+G3 X113.314 Y138.624 I-4.766 J1.46 E.03758
+G1 X113.258 Y139.866 E.0382
+G1 X113.102 Y140.574 E.0223
+G1 X115.74 Y139.6 E.08642
+G3 X116.327 Y139.495 I.587 J1.592 E.01843
+G1 X139.673 Y139.495 E.71733
+G3 X140.261 Y139.6 I0 J1.697 E.01844
+G1 X142.888 Y140.571 E.08607
+G1 X142.695 Y139.44 E.03524
+G1 X142.717 Y138.312 E.03468
+G1 X142.883 Y137.432 E.0275
+G1 X140.258 Y138.396 E.08594
+G3 X139.732 Y138.495 I-.54 J-1.427 E.0165
+G1 X139.673 Y138.843 F30000
+; LINE_WIDTH: 0.35198
+G1 F15000
+G1 X116.327 Y138.843 E.58794
+; LINE_WIDTH: 0.368983
+G1 X116.139 Y138.843 E.005
+; LINE_WIDTH: 0.41954
+G1 X115.951 Y138.843 E.00577
+G1 X115.609 Y138.749 E.01089
+G2 X113.629 Y138.021 I-112.028 J301.449 E.06474
+G1 X113.689 Y138.583 E.01735
+G1 X113.619 Y139.981 E.04298
+G1 X115.609 Y139.246 E.06511
+G1 X115.951 Y139.153 E.01087
+; LINE_WIDTH: 0.402988
+G1 X116.139 Y139.153 E.00552
+; LINE_WIDTH: 0.352116
+G1 X139.673 Y139.152 E.59294
+; LINE_WIDTH: 0.368983
+G1 X139.86 Y139.152 E.00497
+; LINE_WIDTH: 0.419544
+G1 X140.047 Y139.152 E.00575
+G1 X140.391 Y139.247 E.01094
+G1 X142.396 Y139.987 E.06559
+G1 X142.302 Y139.088 E.02775
+G3 X142.374 Y138.021 I7.101 J-.054 E.03286
+G1 X140.387 Y138.75 E.06495
+G1 X140.047 Y138.843 E.01083
+; LINE_WIDTH: 0.402988
+G1 X139.89 Y138.843 E.00462
+; LINE_WIDTH: 0.368983
+G1 X139.733 Y138.843 E.00418
+G1 X140.95 Y138.998 F30000
+; LINE_WIDTH: 0.51954
+G1 F13218.077
+G1 X141.889 Y139.345 E.03888
+G1 X141.896 Y138.651 E.02695
+G1 X141.007 Y138.977 E.03678
+G1 X144.187 Y139.216 F30000
+; LINE_WIDTH: 0.41999
+G1 F15000
+G1 X144.223 Y138.385 E.02557
+G1 X144.332 Y137.835 E.01722
+G1 X144.6 Y137.093 E.02424
+G1 X144.995 Y136.403 E.02441
+G1 X145.366 Y135.937 E.01832
+; LINE_WIDTH: 0.44102
+G1 X145.72 Y135.596 E.01593
+; LINE_WIDTH: 0.465636
+G1 F14903.648
+G1 X146.075 Y135.256 E.01692
+G1 X146.78 Y134.866 E.02778
+G3 X147.828 Y134.526 I2.908 J7.19 E.03797
+G1 X148.458 Y134.446 E.02188
+G1 X149.496 Y134.502 E.03578
+G1 X150.211 Y134.686 E.02545
+G1 X150.818 Y134.944 E.0227
+G1 X151.488 Y135.367 E.02731
+G1 X152.039 Y135.863 E.02552
+G1 X152.634 Y136.649 E.03399
+G1 X152.982 Y137.36 E.02723
+G1 X153.21 Y138.161 E.02871
+G1 X153.283 Y138.783 E.02157
+G1 X153.255 Y139.503 E.0248
+G1 X153.081 Y140.315 E.02861
+G1 X152.814 Y141.02 E.02597
+G1 X152.397 Y141.703 E.02759
+G1 X152.017 Y142.143 E.02001
+G1 X151.42 Y142.668 E.02738
+; LINE_WIDTH: 0.456319
+G1 F15000
+G1 X151.154 Y142.857 E.01099
+G1 X150.305 Y143.275 E.03188
+G1 X149.53 Y143.487 E.02707
+G3 X147.926 Y143.491 I-.815 J-4.973 E.05426
+G1 X147.177 Y143.291 E.02613
+; LINE_WIDTH: 0.473545
+G1 F14629.898
+G1 X146.729 Y143.087 E.01729
+; LINE_WIDTH: 0.499595
+G1 F13795.369
+G1 X146.28 Y142.882 E.01833
+; LINE_WIDTH: 0.489463
+G1 F14108.399
+G1 X145.973 Y142.62 E.01471
+; LINE_WIDTH: 0.42239
+G1 F15000
+G1 X145.666 Y142.357 E.0125
+G1 X145.015 Y141.62 E.0304
+G1 X144.614 Y140.933 E.02462
+G1 X144.331 Y140.154 E.02563
+G1 X144.196 Y139.275 E.02748
 ; CHANGE_LAYER
 ; Z_HEIGHT: 2.8
 ; LAYER_HEIGHT: 0.2
 ; WIPE_START
 G1 F15000
-G1 X109.57 Y145.665 E-.76
+G1 X144.331 Y140.154 E-.33769
+G1 X144.614 Y140.933 E-.31492
+G1 X144.756 Y141.177 E-.10739
 ; WIPE_END
 G1 E-.04 F1800
-; stop printing object, unique label id: 104
+; stop printing object, unique label id: 194
 M625
 ; layer num/total_layer_count: 14/15
 ; update layer progress
@@ -10794,7 +9144,7 @@ M73 L14
 M991 S0 P13 ;notify layer change
 G17
 G3 Z3 I1.217 J0 P1  F30000
-; object ids of layer 14 start: 72,104
+; object ids of layer 14 start: 123,194
 M624 AwAAAAAAAAA=
 ;========Date 20250206========
 ; SKIPPABLE_START
@@ -10809,86 +9159,16 @@ M1004 S5 P1  ; external shutter
 M623
 ; SKIPPABLE_END
 
-; object ids of this layer14 end: 72,104
+; object ids of this layer14 end: 123,194
 M625
-; OBJECT_ID: 72
-; start printing object, unique label id: 72
+; OBJECT_ID: 123
+; start printing object, unique label id: 123
 M624 AQAAAAAAAAA=
-G1 X143.306 Y123.984
+G1 X147.811 Y121.95
 G1 Z2.8
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
-G1 F15476.087
-G1 X143.212 Y124.262 E.00973
-G2 X143.306 Y128.017 I5.548 J1.739 E.12689
-G1 X139.927 Y126.77 E.11948
-G1 X116.072 Y126.77 E.79131
-G1 X112.694 Y128.017 E.11948
-G2 X112.694 Y123.984 I-5.538 J-2.017 E.13655
-G1 X116.073 Y125.23 E.11946
-G1 X139.927 Y125.23 E.7913
-G1 X143.25 Y124.005 E.11747
-; WIPE_START
-G1 X143.212 Y124.262 E-.09876
-G1 X143.081 Y124.749 E-.1916
-G1 X142.997 Y125.222 E-.18272
-G1 X142.95 Y125.748 E-.20055
-G1 X142.95 Y125.975 E-.08637
-; WIPE_END
-G1 E-.04 F1800
-G1 X139.639 Y124.823 Z3.2 F30000
-G1 Z2.8
-G1 E.8 F1800
-G1 F15476.087
-G1 X139.855 Y124.823 E.00716
-G1 X144.085 Y123.263 E.14956
-G2 X144.085 Y128.739 I4.781 J2.737 E.19011
-G1 X139.855 Y127.177 E.1496
-G1 X116.145 Y127.177 E.78649
-G1 X111.915 Y128.739 E.1496
-G2 X111.915 Y123.263 I-4.786 J-2.739 E.19009
-G1 X116.145 Y124.823 E.14957
-G1 X139.579 Y124.823 E.77732
-; WIPE_START
-G1 X139.855 Y124.823 E-.10486
-G1 X141.472 Y124.227 E-.65514
-; WIPE_END
-G1 E-.04 F1800
-G1 X145.038 Y122.673 Z3.2 F30000
-G1 Z2.8
-G1 E.8 F1800
-G1 F15476.087
-G2 X145.04 Y129.329 I3.703 J3.327 E.24181
-G1 X144.932 Y129.485 E.0063
-G1 X139.782 Y127.584 E.18212
-G1 X116.218 Y127.584 E.78166
-G1 X111.068 Y129.485 E.18212
-G1 X110.96 Y129.329 E.0063
-G2 X110.962 Y122.673 I-3.704 J-3.329 E.24179
-G1 X111.069 Y122.517 E.0063
-G1 X116.218 Y124.416 E.18204
-G1 X139.782 Y124.416 E.78165
-G1 X144.931 Y122.517 E.18204
-G1 X145.004 Y122.624 E.00431
-; WIPE_START
-G1 X144.657 Y123.151 E-.24007
-G1 X144.424 Y123.517 E-.16459
-G1 X144.224 Y123.901 E-.16474
-G1 X144.058 Y124.301 E-.16442
-G1 X144.037 Y124.367 E-.02618
-; WIPE_END
-G1 E-.04 F1800
-G1 X147.707 Y121.557 Z3.2 F30000
-G1 Z2.8
-G1 E.8 F1800
-G1 F15476.087
-G1 X147.739 Y121.551 E.00109
-G3 X148.547 Y121.444 I.996 J4.449 E.02707
-G1 X148.725 Y121.441 E.00591
-G3 X147.355 Y121.655 I.01 J4.559 E.90397
-G1 X147.649 Y121.573 E.01012
-G1 X147.811 Y121.95 F30000
 G1 F15476.087
 G1 X147.827 Y121.948 E.00053
 G3 X148.564 Y121.851 I.908 J4.051 E.02469
@@ -10898,7 +9178,7 @@ G1 X147.753 Y121.966 E.00949
 G1 X147.903 Y122.331 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
 G1 X147.912 Y122.331 E.00027
 G3 X148.58 Y122.243 I.823 J3.668 E.02074
@@ -10916,18 +9196,12 @@ G1 X149.539 Y122.329 E-.18692
 G1 X149.821 Y122.405 E-.11086
 ; WIPE_END
 G1 E-.04 F1800
-G1 X142.326 Y123.851 Z3.2 F30000
-G1 X107.64 Y130.543 Z3.2
+G1 X142.313 Y123.78 Z3.2 F30000
+G1 X107.621 Y130.137 Z3.2
 G1 Z2.8
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
-G1 F15476.087
-G1 X107.273 Y130.558 E.01217
-G3 X107.097 Y121.444 I.012 J-4.559 E.46844
-G1 X107.275 Y121.441 E.0059
-G3 X107.699 Y130.539 I.01 J4.559 E.46164
-G1 X107.621 Y130.137 F30000
 G1 F15476.087
 G1 X107.274 Y130.151 E.01152
 G3 X107.114 Y121.851 I.011 J-4.152 E.42663
@@ -10936,7 +9210,7 @@ G3 X107.681 Y130.132 I.01 J4.152 E.41981
 G1 X107.544 Y129.748 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
 G1 X107.275 Y129.759 E.0083
 G3 X107.13 Y122.243 I.01 J-3.759 E.35788
@@ -10952,24 +9226,12 @@ G1 X105.836 Y129.474 E-.12473
 G1 X105.66 Y129.392 E-.07391
 ; WIPE_END
 G1 E-.04 F1800
-G1 X113.198 Y128.196 Z3.2 F30000
-G1 X139.602 Y124.009 Z3.2
+G1 X113.183 Y128.108 Z3.2 F30000
+G1 X139.584 Y123.602 Z3.2
 G1 Z2.8
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
-G1 F15476.087
-G1 X139.709 Y124.009 E.00354
-G1 X147.14 Y121.268 E.26273
-G3 X146.915 Y130.651 I1.581 J4.732 E.63468
-G1 X139.709 Y127.991 E.25479
-G1 X116.291 Y127.991 E.77683
-G1 X109.086 Y130.651 E.25477
-G3 X107.585 Y121.019 I-1.807 J-4.651 E.59151
-G3 X108.86 Y121.268 I-.429 J5.589 E.04318
-G1 X116.291 Y124.009 E.26273
-G1 X139.542 Y124.009 E.7713
-G1 X139.584 Y123.602 F30000
 G1 F15476.087
 G1 X139.636 Y123.602 E.00173
 G1 X147.009 Y120.882 E.26067
@@ -10984,7 +9246,7 @@ G1 X139.524 Y123.602 E.76828
 G1 X139.564 Y123.21 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
 G1 X139.566 Y123.21 E.00008
 G1 X146.883 Y120.511 E.23962
@@ -11002,571 +9264,782 @@ G1 X139.566 Y123.21 E-.02374
 G1 X141.384 Y122.539 E-.73626
 ; WIPE_END
 G1 E-.04 F1800
-G1 X144.432 Y123.076 Z3.2 F30000
-G1 Z2.8
-G1 E.8 F1800
-; FEATURE: Gap infill
-; LINE_WIDTH: 0.109565
-G1 F15000
-G3 X144.576 Y122.885 I.311 J.085 E.00133
-G1 X145.154 Y122.482 F30000
-; LINE_WIDTH: 0.445825
-G1 F15000
-G1 X145.371 Y122.347 E.00841
-; LINE_WIDTH: 0.414686
-G1 X145.47 Y122.288 E.00347
-; LINE_WIDTH: 0.374526
-G1 X145.561 Y122.234 E.00286
-; LINE_WIDTH: 0.337085
-G1 X145.658 Y122.179 E.00269
-; LINE_WIDTH: 0.302172
-G1 X145.75 Y122.127 E.00222
-; LINE_WIDTH: 0.269808
-G1 X145.847 Y122.075 E.00204
-; LINE_WIDTH: 0.23984
-G1 X145.939 Y122.025 E.00168
-; LINE_WIDTH: 0.224709
-G1 X145.943 Y122.023 E.00006
-; LINE_WIDTH: 0.199592
-G1 X146.129 Y121.928 E.00267
-; LINE_WIDTH: 0.154639
-G1 X146.32 Y121.836 E.00193
-; LINE_WIDTH: 0.113291
-G1 X146.59 Y121.715 E.0017
-; WIPE_START
-G1 X146.32 Y121.836 E-.76
-; WIPE_END
-G1 E-.04 F1800
-G1 X144.432 Y128.924 Z3.2 F30000
-G1 Z2.8
-G1 E.8 F1800
-; LINE_WIDTH: 0.107557
-G1 F15000
-G2 X144.577 Y129.117 I.494 J-.222 E.00128
-G1 X145.156 Y129.52 F30000
-; LINE_WIDTH: 0.44675
-G1 F15000
-G1 X145.371 Y129.654 E.00834
-; LINE_WIDTH: 0.416264
-G1 X145.469 Y129.713 E.00348
-; LINE_WIDTH: 0.376212
-G1 X145.56 Y129.767 E.00287
-; LINE_WIDTH: 0.338781
-G1 X145.658 Y129.822 E.00271
-; LINE_WIDTH: 0.303779
-G1 X145.749 Y129.874 E.00224
-; LINE_WIDTH: 0.271411
-G1 X145.846 Y129.926 E.00205
-; LINE_WIDTH: 0.241489
-G1 X145.939 Y129.976 E.0017
-; LINE_WIDTH: 0.226394
-G1 X145.942 Y129.978 E.00006
-; LINE_WIDTH: 0.201317
-G1 X146.129 Y130.073 E.0027
-; LINE_WIDTH: 0.156435
-G1 X146.319 Y130.165 E.00196
-; LINE_WIDTH: 0.114055
-G1 X146.606 Y130.293 E.00182
-; WIPE_START
-G1 X146.319 Y130.165 E-.76
-; WIPE_END
-G1 E-.04 F1800
-G1 X138.753 Y129.162 Z3.2 F30000
-G1 X114.88 Y126 Z3.2
+G1 X133.807 Y123.453 Z3.2 F30000
+G1 X111.81 Y126.104 Z3.2
 G1 Z2.8
 G1 E.8 F1800
 ; FEATURE: Internal solid infill
-; LINE_WIDTH: 0.3974
-G1 F15000
-G1 X114.181 Y125.742 E.02154
-G1 X114.181 Y126.258 E.01492
-G1 X114.824 Y126.021 E.01981
-G1 X116.036 Y126 F30000
-; LINE_WIDTH: 0.420139
-G1 F15000
-G1 X115.84 Y125.965 E.00612
-G1 X113.771 Y125.201 E.0678
-G1 X113.825 Y125.98 E.02401
-G3 X113.771 Y126.8 I-5.012 J.081 E.02527
-G1 X115.841 Y126.035 E.06783
-G1 X115.977 Y126.011 E.00426
-G1 X116.036 Y126 F30000
-; LINE_WIDTH: 0.42104
-G1 F15000
-G1 X139.904 Y126 E.73541
-G1 X116.036 Y126.378 F30000
 ; LINE_WIDTH: 0.41999
 G1 F15000
-G1 X139.964 Y126.378 E.7352
-G1 X142.709 Y127.379 E.0898
-G3 X142.728 Y124.615 I5.863 J-1.342 E.08569
-G1 X139.964 Y125.622 E.09042
-G1 X116.036 Y125.622 E.7352
-G1 X113.279 Y124.618 E.09017
-G1 X113.424 Y125.454 E.02607
-G3 X113.28 Y127.383 I-5.846 J.533 E.05971
-G1 X115.977 Y126.388 E.08835
-G1 X139.964 Y126 F30000
-; LINE_WIDTH: 0.42014
+G1 X111.753 Y126.775 E.0207
+G1 X111.55 Y127.541 E.02434
+G1 X111.118 Y128.424 E.0302
+G1 X110.635 Y129.059 E.02453
+; LINE_WIDTH: 0.442015
+G1 X110.281 Y129.401 E.016
+; LINE_WIDTH: 0.474054
+G1 F14612.652
+G1 X109.927 Y129.743 E.01729
+G1 X109.223 Y130.134 E.02827
+G3 X108.451 Y130.409 I-4.591 J-11.647 E.0288
+G1 X107.949 Y130.512 E.01801
+G1 X107.15 Y130.558 E.02812
+; LINE_WIDTH: 0.460934
 G1 F15000
-G1 X140.16 Y126.035 E.00612
-G1 X142.225 Y126.798 E.06768
-G3 X142.227 Y125.202 I6.977 J-.792 E.04917
-G1 X140.159 Y125.965 E.06774
-G1 X140.023 Y125.989 E.00426
-G1 X141.122 Y126 F30000
-; LINE_WIDTH: 0.39888
+G1 X106.498 Y130.496 E.02231
+G1 X105.788 Y130.312 E.02496
+G1 X105.182 Y130.054 E.02243
+G1 X104.512 Y129.63 E.02701
+G1 X103.924 Y129.095 E.02709
+G3 X103.278 Y128.191 I4.265 J-3.729 E.0379
+G1 X102.96 Y127.455 E.02733
+G3 X102.719 Y126.221 I5.299 J-1.677 E.0429
+G1 X102.752 Y125.399 E.02802
+G1 X102.863 Y124.834 E.01964
+G1 X103.142 Y124.069 E.02771
+G1 X103.529 Y123.396 E.02646
+G3 X104.978 Y122.057 I4.08 J2.963 E.06762
+G1 X105.7 Y121.718 E.02718
+G1 X106.273 Y121.551 E.02032
+G1 X106.994 Y121.449 E.02482
+G3 X108.728 Y121.684 I.194 J5.081 E.0599
+G1 X109.223 Y121.867 E.01797
+; LINE_WIDTH: 0.487695
+G1 F14164.466
+G1 X109.561 Y122.043 E.01381
+; LINE_WIDTH: 0.520185
+G1 F13200.214
+G1 X109.899 Y122.219 E.01482
+; LINE_WIDTH: 0.517024
+G1 F13288.243
+G1 X110.137 Y122.452 E.01286
+; LINE_WIDTH: 0.47821
+G1 F14473.111
+G1 X110.375 Y122.684 E.0118
+; LINE_WIDTH: 0.421707
 G1 F15000
-G1 X141.814 Y126.256 E.0214
-G1 X141.814 Y125.745 E.01482
-G1 X141.178 Y125.979 E.01966
-G1 X111.568 Y123.076 F30000
-; FEATURE: Gap infill
-; LINE_WIDTH: 0.109556
+G3 X111.386 Y124.065 I-3.441 J3.582 E.05309
+G1 X111.665 Y124.831 E.02516
+G1 X111.778 Y125.393 E.0177
+G1 X111.807 Y126.044 E.02012
+G1 X115.049 Y126 F30000
+; LINE_WIDTH: 0.52058
+G1 F13189.298
+G1 X114.106 Y125.652 E.03913
+G1 X114.116 Y126.344 E.02695
+G1 X114.993 Y126.021 E.03636
+G1 X139.673 Y123.994 F30000
+; LINE_WIDTH: 0.41999
 G1 F15000
-G2 X111.424 Y122.885 I-.31 J.085 E.00133
-G1 X110.846 Y122.482 F30000
-; LINE_WIDTH: 0.445415
+G1 X116.327 Y123.994 E.71732
+G1 X111.11 Y122.082 E.17074
+; LINE_WIDTH: 0.441885
+G1 X110.657 Y121.938 E.01544
+; LINE_WIDTH: 0.4677
+G1 F14831.232
+G3 X109.404 Y121.48 I2.779 J-9.542 E.04621
+G2 X106.523 Y121.077 I-2.156 J4.915 E.10197
+G1 X105.681 Y121.28 E.02999
+G1 X104.884 Y121.63 E.03014
+G1 X104.337 Y121.98 E.02244
+G1 X103.683 Y122.548 E.03001
+G1 X103.263 Y123.046 E.02252
+G1 X102.814 Y123.784 E.02992
+G1 X102.496 Y124.594 E.03012
+G1 X102.353 Y125.227 E.02248
+G1 X102.295 Y126.09 E.02994
+G1 X102.39 Y126.954 E.03007
+G1 X102.554 Y127.583 E.02249
+; LINE_WIDTH: 0.460844
 G1 F15000
-G1 X110.621 Y122.342 E.00869
-; LINE_WIDTH: 0.413115
-G1 X110.531 Y122.288 E.00318
-; LINE_WIDTH: 0.373416
-G1 X110.434 Y122.231 E.00303
-; LINE_WIDTH: 0.336097
-G1 X110.342 Y122.179 E.00252
-; LINE_WIDTH: 0.301314
-G1 X110.246 Y122.124 E.00233
-; LINE_WIDTH: 0.269008
-G1 X110.153 Y122.075 E.00193
-; LINE_WIDTH: 0.239264
-G1 X110.057 Y122.023 E.00174
-; LINE_WIDTH: 0.199235
-G1 X109.868 Y121.927 E.0027
-; LINE_WIDTH: 0.154174
-M73 P91 R1
-G1 X109.679 Y121.835 E.00191
-; LINE_WIDTH: 0.113165
-G1 X109.41 Y121.715 E.00169
+G2 X103.513 Y129.266 I5.399 J-1.961 E.06631
+G1 X104.137 Y129.868 E.02952
+G1 X104.855 Y130.353 E.02952
+G1 X105.532 Y130.661 E.02532
+G1 X106.277 Y130.88 E.02644
+G1 X106.994 Y130.967 E.02458
+G1 X107.875 Y130.939 E.03004
+G2 X109.083 Y130.641 I-.591 J-4.986 E.04247
+; LINE_WIDTH: 0.486973
+G1 F14187.511
+G1 X109.594 Y130.434 E.01996
+; LINE_WIDTH: 0.520338
+G1 F13195.997
+G1 X110.106 Y130.228 E.02146
+; LINE_WIDTH: 0.517515
+G1 F13274.476
+G1 X110.439 Y130.126 E.01348
+; LINE_WIDTH: 0.478505
+G1 F14463.308
+G1 X110.772 Y130.023 E.01237
+; LINE_WIDTH: 0.420183
+G1 F15000
+G1 X111.106 Y129.921 E.01072
+G1 X116.327 Y128.006 E.17098
+G1 X139.673 Y128.006 E.71769
+G1 X145.28 Y130.063 E.18361
+; LINE_WIDTH: 0.437745
+G1 X145.642 Y130.178 E.01223
+; LINE_WIDTH: 0.464601
+G1 F14940.206
+G3 X146.91 Y130.641 I-3.259 J10.911 E.04641
+G1 X147.819 Y130.894 E.03241
+G1 X148.396 Y130.972 E.02002
+G1 X149.263 Y130.952 E.02979
+G1 X149.951 Y130.821 E.02407
+G1 X150.784 Y130.529 E.03033
+G2 X152.736 Y128.954 I-2.279 J-4.823 E.08699
+G1 X153.186 Y128.216 E.02971
+G1 X153.503 Y127.409 E.0298
+G1 X153.671 Y126.557 E.02982
+G1 X153.703 Y125.907 E.02236
+M73 P90 R1
+G2 X153.373 Y124.216 I-6.628 J.418 E.05939
+G1 X152.992 Y123.435 E.02986
+G1 X152.621 Y122.902 E.02231
+G1 X152.131 Y122.374 E.02474
+G1 X151.506 Y121.866 E.02768
+G2 X149.724 Y121.12 I-3.233 J5.218 E.06665
+G1 X148.856 Y121.024 E.03001
+G2 X147.051 Y121.316 I-.071 J5.285 E.06316
+G1 X146.282 Y121.615 E.02834
+; LINE_WIDTH: 0.470983
+G1 F14717.477
+G1 X145.882 Y121.744 E.01466
+; LINE_WIDTH: 0.421081
+G1 F15000
+G1 X145.482 Y121.873 E.01295
+G1 X139.732 Y123.984 E.18877
+G1 X139.673 Y124.371 F30000
+; LINE_WIDTH: 0.41999
+G1 F15000
+G1 X116.327 Y124.371 E.71732
+G1 X116.131 Y124.336 E.00613
+G1 X110.386 Y122.217 E.18813
+G1 X110.861 Y122.634 E.01941
+G1 X111.283 Y123.146 E.02039
+G1 X111.713 Y123.876 E.02604
+G1 X112.02 Y124.703 E.0271
+G1 X112.148 Y125.32 E.01937
+G1 X112.186 Y126.089 E.02365
+G1 X112.127 Y126.817 E.02245
+G1 X111.914 Y127.639 E.02608
+G1 X111.456 Y128.591 E.03247
+G1 X110.934 Y129.289 E.02679
+G1 X110.383 Y129.786 E.0228
+G1 X116.131 Y127.664 E.18828
+G1 X116.327 Y127.629 E.00611
+G1 X139.673 Y127.629 E.71733
+G1 X139.869 Y127.664 E.00611
+G1 X145.588 Y129.775 E.18732
+G1 X145.365 Y129.593 E.00884
+G1 X144.851 Y129.032 E.02339
+G1 X144.294 Y128.134 E.03247
+G1 X143.98 Y127.297 E.02746
+G1 X143.814 Y126.275 E.03182
+G1 X143.845 Y125.383 E.02744
+G1 X143.962 Y124.763 E.01937
+G1 X144.246 Y123.966 E.026
+G1 X144.668 Y123.217 E.02642
+G3 X145.532 Y122.256 I4.007 J2.734 E.0398
+G1 X139.868 Y124.337 E.1854
+G1 X139.732 Y124.361 E.00424
+G1 X139.673 Y124.748 F30000
+G1 F15000
+G1 X116.327 Y124.748 E.71732
+G1 X116 Y124.69 E.0102
+G1 X111.702 Y123.104 E.14077
+G1 X112.039 Y123.688 E.02071
+G1 X112.375 Y124.575 E.02915
+G1 X112.518 Y125.247 E.02112
+G1 X112.563 Y126.073 E.02543
+G1 X112.502 Y126.859 E.0242
+G1 X112.278 Y127.736 E.02783
+G1 X111.794 Y128.758 E.03473
+G1 X111.709 Y128.895 E.00495
+G1 X116.001 Y127.31 E.14058
+G1 X116.327 Y127.252 E.01019
+G1 X139.673 Y127.252 E.71733
+G1 X139.999 Y127.31 E.01019
+G1 X144.32 Y128.905 E.14152
+G1 X143.971 Y128.33 E.02069
+G1 X143.625 Y127.425 E.02976
+G1 X143.441 Y126.331 E.03408
+G1 X143.468 Y125.365 E.02971
+G1 X143.593 Y124.689 E.02112
+G1 X143.891 Y123.837 E.02774
+G1 X144.293 Y123.113 E.02542
+G1 X139.998 Y124.69 E.14059
+G1 X139.732 Y124.738 E.0083
+G1 X139.673 Y125.125 F30000
+G1 F15000
+G1 X116.327 Y125.125 E.71732
+G1 X115.87 Y125.044 E.01428
+G1 X112.496 Y123.799 E.1105
+G1 X112.73 Y124.447 E.02117
+G1 X112.888 Y125.174 E.02287
+G1 X112.94 Y126.058 E.0272
+G1 X112.877 Y126.9 E.02595
+G1 X112.642 Y127.834 E.02958
+G1 X112.487 Y128.205 E.01237
+G1 X115.87 Y126.956 E.11081
+G1 X116.327 Y126.875 E.01426
+G1 X139.673 Y126.875 E.71733
+G1 X140.13 Y126.956 E.01427
+G1 X143.505 Y128.202 E.11053
+G1 X143.27 Y127.553 E.02121
+G1 X143.068 Y126.388 E.03633
+G1 X143.091 Y125.347 E.03198
+G1 X143.223 Y124.615 E.02287
+G1 X143.501 Y123.805 E.0263
+G1 X140.128 Y125.044 E.11044
+G1 X139.732 Y125.115 E.01235
+G1 X139.673 Y125.502 F30000
+G1 F15000
+G1 X116.327 Y125.502 E.71732
+G3 X115.739 Y125.397 I0 J-1.697 E.01845
+G1 X113.115 Y124.429 E.08596
+G1 X113.258 Y125.101 E.02112
+G1 X113.317 Y126.043 E.02898
+G1 X113.252 Y126.942 E.02771
+G1 X113.102 Y127.577 E.02003
+G1 X115.74 Y126.602 E.08642
+G3 X116.327 Y126.498 I.587 J1.592 E.01843
+G1 X139.673 Y126.498 E.71733
+G3 X140.261 Y126.603 I0 J1.697 E.01844
+G1 X142.888 Y127.573 E.08607
+G1 X142.696 Y126.444 E.03517
+G1 X142.715 Y125.33 E.03425
+G1 X142.883 Y124.434 E.028
+G1 X140.257 Y125.398 E.08594
+G3 X139.732 Y125.497 I-.54 J-1.427 E.0165
+G1 X139.673 Y125.845 F30000
+; LINE_WIDTH: 0.35198
+G1 F15000
+G1 X116.327 Y125.845 E.58794
+; LINE_WIDTH: 0.368983
+G1 X116.139 Y125.845 E.005
+; LINE_WIDTH: 0.419538
+G1 X115.951 Y125.845 E.00577
+G1 X115.609 Y125.751 E.01089
+G2 X113.633 Y125.027 I-25.73 J67.192 E.06458
+G1 X113.693 Y126.027 E.03074
+G1 X113.627 Y126.981 E.02933
+G1 X115.609 Y126.249 E.06487
+G1 X115.951 Y126.155 E.01087
+; LINE_WIDTH: 0.402988
+G1 X116.139 Y126.155 E.00552
+; LINE_WIDTH: 0.352116
+G1 X139.673 Y126.155 E.59294
+; LINE_WIDTH: 0.368983
+G1 X139.86 Y126.155 E.00497
+; LINE_WIDTH: 0.419544
+G1 X140.047 Y126.155 E.00575
+G1 X140.391 Y126.249 E.01094
+G1 X142.397 Y126.989 E.06561
+G1 X142.302 Y126.094 E.02765
+G3 X142.374 Y125.023 I7.092 J-.061 E.03296
+G1 X140.387 Y125.752 E.06493
+G1 X140.047 Y125.845 E.01083
+; LINE_WIDTH: 0.402988
+G1 X139.89 Y125.845 E.00462
+; LINE_WIDTH: 0.368983
+G1 X139.733 Y125.845 E.00418
+G1 X140.95 Y126 F30000
+; LINE_WIDTH: 0.51952
+G1 F13218.633
+G1 X141.889 Y126.347 E.03888
+G1 X141.895 Y125.654 E.02693
+G1 X141.007 Y125.98 E.03674
+G1 X144.187 Y126.218 F30000
+; LINE_WIDTH: 0.41999
+G1 F15000
+G1 X144.221 Y125.4 E.02516
+G1 X144.332 Y124.837 E.01762
+G1 X144.6 Y124.095 E.02426
+G1 X144.995 Y123.405 E.0244
+G3 X145.793 Y122.528 I5.062 J3.805 E.0365
+; LINE_WIDTH: 0.43593
+G1 X146.107 Y122.288 E.01266
+; LINE_WIDTH: 0.462141
+G1 X146.421 Y122.047 E.01351
+G1 X147.15 Y121.719 E.02733
+G1 X147.722 Y121.547 E.02038
+G1 X148.459 Y121.447 E.02543
+G1 X149.495 Y121.504 E.03545
+G1 X150.211 Y121.688 E.02525
+G3 X151.249 Y122.201 I-2.546 J6.453 E.03957
+G1 X151.746 Y122.583 E.02143
+G1 X152.284 Y123.166 E.02709
+G3 X153.131 Y124.825 I-3.746 J2.957 E.06406
+G3 X153.137 Y127.159 I-4.871 J1.18 E.08047
+G1 X152.867 Y127.912 E.0273
+G1 X152.471 Y128.604 E.02724
+G3 X151.189 Y129.838 I-4.307 J-3.191 E.06109
+G1 X150.743 Y130.091 E.01751
+G1 X149.998 Y130.377 E.02724
+G1 X149.336 Y130.522 E.02318
+G1 X148.521 Y130.558 E.02786
+G3 X147.077 Y130.252 I.393 J-5.413 E.05056
+; LINE_WIDTH: 0.478447
+G1 F14465.245
+G1 X146.281 Y129.884 E.03114
+G1 X145.667 Y129.361 E.02862
+; LINE_WIDTH: 0.41999
+G1 F15000
+G1 X145.129 Y128.777 E.0244
+G1 X144.616 Y127.939 E.0302
+G1 X144.335 Y127.169 E.02517
+G1 X144.196 Y126.278 E.02772
+; OBJECT_ID: 194
 ; WIPE_START
-G1 X109.679 Y121.835 E-.76
+G1 X144.335 Y127.169 E-.34287
+G1 X144.616 Y127.939 E-.3113
+G1 X144.761 Y128.176 E-.10583
 ; WIPE_END
 G1 E-.04 F1800
-G1 X111.568 Y128.924 Z3.2 F30000
-G1 Z2.8
-G1 E.8 F1800
-; LINE_WIDTH: 0.109727
-G1 F15000
-G1 X111.478 Y129.075 E.00096
-G1 X111.423 Y129.117 E.00038
-G1 X110.844 Y129.52 F30000
-; LINE_WIDTH: 0.446344
-G1 F15000
-G1 X110.622 Y129.659 E.00862
-; LINE_WIDTH: 0.414614
-G1 X110.531 Y129.713 E.0032
-; LINE_WIDTH: 0.374831
-G1 X110.434 Y129.77 E.00305
-; LINE_WIDTH: 0.337541
-G1 X110.342 Y129.822 E.00253
-; LINE_WIDTH: 0.302839
-G1 X110.246 Y129.877 E.00235
-; LINE_WIDTH: 0.270609
-G1 X110.154 Y129.926 E.00194
-; LINE_WIDTH: 0.240919
-G1 X110.058 Y129.978 E.00176
-; LINE_WIDTH: 0.20096
-G1 X109.869 Y130.074 E.00273
-; LINE_WIDTH: 0.155955
-G1 X109.679 Y130.165 E.00194
-; LINE_WIDTH: 0.113918
-G1 X109.394 Y130.293 E.00181
-; OBJECT_ID: 104
-; WIPE_START
-G1 X109.679 Y130.165 E-.76
-; WIPE_END
-G1 E-.04 F1800
-; stop printing object, unique label id: 72
+; stop printing object, unique label id: 123
 M625
-; start printing object, unique label id: 104
+; start printing object, unique label id: 194
 M624 AgAAAAAAAAA=
-G1 X117.033 Y132.21 Z3.2 F30000
-G1 X143.197 Y139.483 Z3.2
+G1 X147.811 Y134.948 Z3.2 F30000
 G1 Z2.8
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X143.103 Y139.761 E.00973
-G2 X143.198 Y143.517 I5.548 J1.739 E.12689
-G1 X139.819 Y142.269 E.11948
-G1 X115.964 Y142.269 E.79131
-G1 X112.585 Y143.517 E.11948
-G2 X112.586 Y139.483 I-5.538 J-2.017 E.13655
-G1 X115.964 Y140.73 E.11946
-G1 X139.819 Y140.73 E.7913
-G1 X143.141 Y139.504 E.11747
-; WIPE_START
-G1 X143.103 Y139.761 E-.09876
-G1 X142.973 Y140.248 E-.1916
-G1 X142.889 Y140.722 E-.18272
-G1 X142.841 Y141.247 E-.20055
-G1 X142.841 Y141.475 E-.08637
-; WIPE_END
-G1 E-.04 F1800
-G1 X139.53 Y140.323 Z3.2 F30000
-G1 Z2.8
-G1 E.8 F1800
-G1 F15476.087
-G1 X139.746 Y140.323 E.00716
-G1 X143.976 Y138.762 E.14956
-G2 X143.977 Y144.238 I4.781 J2.737 E.19011
-G1 X139.746 Y142.676 E.1496
-G1 X116.037 Y142.676 E.78649
-G1 X111.806 Y144.238 E.1496
-G2 X111.807 Y138.762 I-4.786 J-2.739 E.19009
-G1 X116.037 Y140.323 E.14957
-G1 X139.47 Y140.323 E.77732
-; WIPE_START
-G1 X139.746 Y140.323 E-.10486
-G1 X141.363 Y139.726 E-.65514
-; WIPE_END
-G1 E-.04 F1800
-G1 X144.93 Y138.173 Z3.2 F30000
-G1 Z2.8
-G1 E.8 F1800
-G1 F15476.087
-G2 X144.931 Y144.828 I3.703 J3.327 E.24181
-G1 X144.824 Y144.985 E.0063
-G1 X139.673 Y143.083 E.18212
-G1 X116.109 Y143.083 E.78166
-G1 X110.959 Y144.985 E.18212
-G1 X110.851 Y144.828 E.0063
-G2 X110.853 Y138.173 I-3.704 J-3.329 E.24179
-G1 X110.961 Y138.016 E.0063
-G1 X116.11 Y139.916 E.18204
-G1 X139.673 Y139.916 E.78165
-G1 X144.822 Y138.016 E.18204
-G1 X144.896 Y138.123 E.00431
-; WIPE_START
-G1 X144.548 Y138.651 E-.24007
-G1 X144.315 Y139.016 E-.16459
-G1 X144.115 Y139.401 E-.16474
-G1 X143.95 Y139.801 E-.16442
-G1 X143.929 Y139.866 E-.02618
-; WIPE_END
-G1 E-.04 F1800
-G1 X147.598 Y137.057 Z3.2 F30000
-G1 Z2.8
-G1 E.8 F1800
-G1 F15476.087
-G1 X147.63 Y137.05 E.00109
-G3 X148.438 Y136.944 I.996 J4.449 E.02707
-G1 X148.616 Y136.94 E.00591
-G3 X147.246 Y137.154 I.01 J4.559 E.90397
-G1 X147.54 Y137.073 E.01012
-G1 X147.702 Y137.45 F30000
-G1 F15476.087
-G1 X147.718 Y137.448 E.00053
-G3 X148.455 Y137.351 I.908 J4.051 E.02469
-G1 X148.616 Y137.347 E.00535
-G3 X147.369 Y137.542 I.01 J4.152 E.82325
-G1 X147.645 Y137.466 E.00949
-G1 X147.794 Y137.831 F30000
+G1 X147.827 Y134.946 E.00053
+G3 X148.564 Y134.849 I.908 J4.051 E.02469
+G1 X148.725 Y134.846 E.00535
+G3 X147.477 Y135.041 I.01 J4.152 E.82325
+G1 X147.753 Y134.964 E.00949
+G1 X147.903 Y135.329 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
-G1 X147.803 Y137.831 E.00027
-G3 X148.472 Y137.743 I.823 J3.668 E.02074
-G1 X148.616 Y137.739 E.00445
-G3 X147.487 Y137.916 I.009 J3.759 E.69056
-G1 X147.737 Y137.847 E.00796
+G1 X147.912 Y135.329 E.00027
+G3 X148.58 Y135.241 I.823 J3.668 E.02074
+G1 X148.725 Y135.238 E.00445
+G3 X147.595 Y135.414 I.009 J3.759 E.69056
+G1 X147.845 Y135.345 E.00796
 ; WIPE_START
 M204 S10000
-G1 X147.803 Y137.831 E-.02604
-G1 X148.126 Y137.772 E-.12462
-G1 X148.472 Y137.743 E-.13187
-G1 X148.616 Y137.739 E-.05509
-G1 X148.944 Y137.754 E-.1246
-G1 X149.43 Y137.829 E-.18692
-G1 X149.712 Y137.904 E-.11086
+G1 X147.912 Y135.329 E-.02604
+G1 X148.234 Y135.27 E-.12462
+G1 X148.58 Y135.241 E-.13187
+G1 X148.725 Y135.238 E-.05509
+G1 X149.053 Y135.252 E-.1246
+G1 X149.539 Y135.327 E-.18692
+G1 X149.821 Y135.402 E-.11086
 ; WIPE_END
 G1 E-.04 F1800
-G1 X142.218 Y139.35 Z3.2 F30000
-G1 X107.531 Y146.043 Z3.2
+G1 X142.313 Y136.778 Z3.2 F30000
+G1 X107.621 Y143.135 Z3.2
 G1 Z2.8
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X107.164 Y146.058 E.01217
-G3 X106.989 Y136.944 I.012 J-4.559 E.46844
-G1 X107.166 Y136.94 E.0059
-G3 X107.591 Y146.039 I.01 J4.559 E.46164
-G1 X107.512 Y145.637 F30000
-G1 F15476.087
-G1 X107.165 Y145.651 E.01152
-G3 X107.005 Y137.351 I.011 J-4.152 E.42663
-G1 X107.166 Y137.347 E.00535
-G3 X107.572 Y145.632 I.01 J4.152 E.41981
-G1 X107.436 Y145.248 F30000
+G1 X107.274 Y143.149 E.01152
+G3 X107.114 Y134.849 I.011 J-4.152 E.42663
+G1 X107.275 Y134.846 E.00535
+G3 X107.681 Y143.13 I.01 J4.152 E.41981
+G1 X107.544 Y142.746 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
-G1 X107.166 Y145.258 E.0083
-G3 X107.022 Y137.743 I.01 J-3.759 E.35788
-G1 X107.166 Y137.739 E.00445
-G3 X107.496 Y145.245 I.009 J3.759 E.35335
+G1 X107.275 Y142.757 E.0083
+G3 X107.13 Y135.241 I.01 J-3.759 E.35788
+G1 X107.275 Y135.238 E.00445
+G3 X107.604 Y142.743 I.009 J3.759 E.35335
 ; WIPE_START
 M204 S10000
-G1 X107.166 Y145.258 E-.12542
-G1 X106.676 Y145.227 E-.1867
-G1 X106.353 Y145.17 E-.1247
-G1 X106.036 Y145.086 E-.12454
-G1 X105.728 Y144.973 E-.12473
-G1 X105.551 Y144.891 E-.07391
+G1 X107.275 Y142.757 E-.12542
+G1 X106.784 Y142.726 E-.1867
+G1 X106.461 Y142.669 E-.1247
+G1 X106.144 Y142.584 E-.12454
+G1 X105.836 Y142.472 E-.12473
+G1 X105.66 Y142.389 E-.07391
 ; WIPE_END
 G1 E-.04 F1800
-G1 X113.089 Y143.696 Z3.2 F30000
-G1 X139.494 Y139.509 Z3.2
+G1 X113.183 Y141.105 Z3.2 F30000
+G1 X139.584 Y136.6 Z3.2
 G1 Z2.8
 G1 E.8 F1800
 ; FEATURE: Inner wall
 ; LINE_WIDTH: 0.45
 G1 F15476.087
-G1 X139.601 Y139.509 E.00354
-G1 X147.031 Y136.767 E.26273
-G3 X146.806 Y146.151 I1.581 J4.732 E.63468
-G1 X139.601 Y143.49 E.25479
-G1 X116.182 Y143.49 E.77683
-G1 X108.977 Y146.151 E.25477
-G3 X107.477 Y136.519 I-1.807 J-4.651 E.59151
-G3 X108.751 Y136.767 I-.429 J5.589 E.04318
-G1 X116.182 Y139.509 E.26273
-G1 X139.434 Y139.509 E.7713
-G1 X139.476 Y139.102 F30000
-G1 F15476.087
-G1 X139.528 Y139.102 E.00173
-G1 X146.9 Y136.382 E.26067
-G3 X146.666 Y146.533 I1.712 J5.118 E.68624
-G1 X139.528 Y143.897 E.25242
-G1 X116.255 Y143.897 E.77201
-G1 X109.117 Y146.533 E.25242
-G3 X107.503 Y136.112 I-1.946 J-5.034 E.6395
-G3 X108.883 Y136.382 I-.465 J6.047 E.04673
-G1 X116.255 Y139.102 E.26067
-G1 X139.416 Y139.102 E.76828
-G1 X139.455 Y138.71 F30000
+G1 X139.636 Y136.6 E.00173
+G1 X147.009 Y133.88 E.26067
+G3 X146.775 Y144.031 I1.712 J5.118 E.68624
+G1 X139.636 Y141.396 E.25242
+G1 X116.364 Y141.396 E.77201
+G1 X109.225 Y144.031 E.25242
+G3 X107.611 Y133.611 I-1.946 J-5.034 E.6395
+G3 X108.991 Y133.88 I-.465 J6.047 E.04673
+G1 X116.364 Y136.6 E.26067
+G1 X139.524 Y136.6 E.76828
+G1 X139.564 Y136.208 F30000
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
-G1 X139.458 Y138.71 E.00008
-G1 X146.774 Y136.011 E.23962
-G3 X146.533 Y146.902 I1.838 J5.489 E.68163
-G1 X139.458 Y144.29 E.23173
-G1 X116.325 Y144.29 E.71081
-G1 X109.251 Y146.901 E.23172
-G3 X107.528 Y135.721 I-2.08 J-5.403 E.63518
-G3 X109.009 Y136.011 I-.501 J6.489 E.04646
-G1 X116.325 Y138.71 E.23962
-G1 X139.395 Y138.71 E.70888
+G1 X139.566 Y136.208 E.00008
+G1 X146.883 Y133.509 E.23962
+G3 X146.641 Y144.4 I1.838 J5.489 E.68163
+G1 X139.566 Y141.788 E.23173
+G1 X116.434 Y141.788 E.71081
+G1 X109.359 Y144.4 E.23172
+G3 X107.637 Y133.219 I-2.08 J-5.403 E.63518
+G3 X109.117 Y133.509 I-.501 J6.489 E.04646
+G1 X116.434 Y136.208 E.23962
+G1 X139.504 Y136.208 E.70888
 ; WIPE_START
 M204 S10000
-G1 X139.458 Y138.71 E-.02374
-G1 X141.276 Y138.039 E-.73626
+G1 X139.566 Y136.208 E-.02374
+G1 X141.384 Y135.537 E-.73626
 ; WIPE_END
 G1 E-.04 F1800
-G1 X144.323 Y138.575 Z3.2 F30000
-G1 Z2.8
-G1 E.8 F1800
-; FEATURE: Gap infill
-; LINE_WIDTH: 0.109565
-G1 F15000
-G3 X144.467 Y138.385 I.311 J.085 E.00133
-G1 X145.045 Y137.982 F30000
-; LINE_WIDTH: 0.445825
-G1 F15000
-G1 X145.263 Y137.846 E.00841
-; LINE_WIDTH: 0.414686
-G1 X145.361 Y137.787 E.00347
-; LINE_WIDTH: 0.374526
-G1 X145.452 Y137.733 E.00286
-; LINE_WIDTH: 0.337085
-G1 X145.55 Y137.678 E.00269
-; LINE_WIDTH: 0.302172
-G1 X145.641 Y137.626 E.00222
-; LINE_WIDTH: 0.269808
-G1 X145.738 Y137.574 E.00204
-; LINE_WIDTH: 0.23984
-G1 X145.831 Y137.524 E.00168
-; LINE_WIDTH: 0.224709
-G1 X145.834 Y137.523 E.00006
-; LINE_WIDTH: 0.199592
-G1 X146.021 Y137.428 E.00267
-; LINE_WIDTH: 0.154639
-G1 X146.211 Y137.336 E.00193
-; LINE_WIDTH: 0.113291
-G1 X146.482 Y137.214 E.0017
-; WIPE_START
-G1 X146.211 Y137.336 E-.76
-; WIPE_END
-G1 E-.04 F1800
-G1 X144.324 Y144.424 Z3.2 F30000
-G1 Z2.8
-G1 E.8 F1800
-; LINE_WIDTH: 0.107557
-G1 F15000
-G2 X144.468 Y144.616 I.494 J-.222 E.00128
-G1 X145.047 Y145.019 F30000
-; LINE_WIDTH: 0.44675
-G1 F15000
-G1 X145.262 Y145.154 E.00834
-; LINE_WIDTH: 0.416264
-G1 X145.361 Y145.212 E.00348
-; LINE_WIDTH: 0.376212
-G1 X145.451 Y145.266 E.00287
-; LINE_WIDTH: 0.338781
-G1 X145.549 Y145.322 E.00271
-; LINE_WIDTH: 0.303779
-G1 X145.641 Y145.373 E.00224
-; LINE_WIDTH: 0.271411
-G1 X145.738 Y145.426 E.00205
-; LINE_WIDTH: 0.241489
-G1 X145.83 Y145.475 E.0017
-; LINE_WIDTH: 0.226394
-G1 X145.834 Y145.477 E.00006
-; LINE_WIDTH: 0.201317
-G1 X146.02 Y145.572 E.0027
-; LINE_WIDTH: 0.156435
-G1 X146.211 Y145.664 E.00196
-; LINE_WIDTH: 0.114055
-G1 X146.498 Y145.793 E.00182
-; WIPE_START
-G1 X146.211 Y145.664 E-.76
-; WIPE_END
-G1 E-.04 F1800
-G1 X138.644 Y144.662 Z3.2 F30000
-G1 X114.772 Y141.5 Z3.2
+G1 X133.807 Y136.451 Z3.2 F30000
+G1 X111.81 Y139.102 Z3.2
 G1 Z2.8
 G1 E.8 F1800
 ; FEATURE: Internal solid infill
-; LINE_WIDTH: 0.3974
-G1 F15000
-G1 X114.072 Y141.241 E.02154
-G1 X114.072 Y141.758 E.01492
-G1 X114.715 Y141.52 E.01981
-G1 X115.928 Y141.5 F30000
-; LINE_WIDTH: 0.420139
-G1 F15000
-G1 X115.732 Y141.464 E.00612
-G1 X113.662 Y140.7 E.0678
-G1 X113.716 Y141.48 E.02401
-G3 X113.662 Y142.299 I-5.012 J.081 E.02527
-G1 X115.732 Y141.535 E.06783
-G1 X115.869 Y141.51 E.00426
-G1 X115.928 Y141.5 F30000
-; LINE_WIDTH: 0.42104
-G1 F15000
-G1 X139.795 Y141.5 E.73541
-G1 X115.928 Y141.877 F30000
 ; LINE_WIDTH: 0.41999
 G1 F15000
-G1 X139.855 Y141.877 E.7352
-G1 X142.601 Y142.878 E.0898
-G3 X142.62 Y140.114 I5.863 J-1.342 E.08569
-G1 X139.855 Y141.122 E.09042
-G1 X115.928 Y141.122 E.7352
-G1 X113.171 Y140.117 E.09017
-G1 X113.315 Y140.953 E.02607
-G3 X113.171 Y142.882 I-5.846 J.533 E.05971
-G1 X115.869 Y141.888 E.08835
-G1 X139.855 Y141.5 F30000
-; LINE_WIDTH: 0.42014
+G1 X111.753 Y139.773 E.0207
+G1 X111.55 Y140.539 E.02434
+G1 X111.118 Y141.422 E.0302
+G1 X110.635 Y142.057 E.02453
+; LINE_WIDTH: 0.442015
+G1 X110.281 Y142.399 E.016
+; LINE_WIDTH: 0.474054
+G1 F14612.652
+G1 X109.927 Y142.741 E.01729
+G1 X109.223 Y143.132 E.02827
+G3 X108.451 Y143.407 I-4.591 J-11.647 E.0288
+G1 X107.949 Y143.51 E.01801
+G1 X107.15 Y143.556 E.02812
+; LINE_WIDTH: 0.460934
 G1 F15000
-G1 X140.051 Y141.535 E.00612
-G1 X142.117 Y142.298 E.06768
-G3 X142.118 Y140.701 I6.977 J-.792 E.04917
-G1 X140.051 Y141.464 E.06774
-G1 X139.914 Y141.489 E.00426
-G1 X141.013 Y141.5 F30000
-; LINE_WIDTH: 0.39888
+G1 X106.498 Y143.493 E.02231
+G1 X105.788 Y143.31 E.02496
+G1 X105.182 Y143.052 E.02243
+G1 X104.512 Y142.628 E.02701
+G1 X103.924 Y142.093 E.02709
+G3 X103.278 Y141.189 I4.265 J-3.729 E.0379
+G1 X102.96 Y140.452 E.02733
+G3 X102.719 Y139.219 I5.299 J-1.677 E.0429
+G1 X102.752 Y138.397 E.02802
+G1 X102.863 Y137.831 E.01964
+G1 X103.142 Y137.067 E.02771
+G1 X103.529 Y136.394 E.02646
+G3 X104.978 Y135.055 I4.08 J2.963 E.06762
+G1 X105.7 Y134.716 E.02718
+G1 X106.273 Y134.549 E.02032
+G1 X106.994 Y134.447 E.02482
+G3 X108.728 Y134.682 I.194 J5.081 E.0599
+G1 X109.223 Y134.864 E.01797
+; LINE_WIDTH: 0.487695
+G1 F14164.466
+G1 X109.561 Y135.041 E.01381
+; LINE_WIDTH: 0.520185
+G1 F13200.214
+G1 X109.899 Y135.217 E.01482
+; LINE_WIDTH: 0.517024
+G1 F13288.243
+G1 X110.137 Y135.45 E.01286
+; LINE_WIDTH: 0.47821
+G1 F14473.111
+G1 X110.375 Y135.682 E.0118
+; LINE_WIDTH: 0.421707
 G1 F15000
-G1 X141.705 Y141.755 E.0214
-G1 X141.705 Y141.244 E.01482
-G1 X141.07 Y141.479 E.01966
-G1 X111.459 Y138.575 F30000
-; FEATURE: Gap infill
-; LINE_WIDTH: 0.109556
+G3 X111.386 Y137.063 I-3.441 J3.582 E.05309
+G1 X111.665 Y137.829 E.02516
+G1 X111.778 Y138.391 E.0177
+G1 X111.807 Y139.042 E.02012
+G1 X115.049 Y138.998 F30000
+; LINE_WIDTH: 0.52058
+G1 F13189.298
+G1 X114.106 Y138.65 E.03913
+G1 X114.116 Y139.342 E.02695
+G1 X114.993 Y139.019 E.03636
+G1 X139.673 Y136.992 F30000
+; LINE_WIDTH: 0.41999
 G1 F15000
-G2 X111.316 Y138.385 I-.31 J.085 E.00133
-G1 X110.738 Y137.982 F30000
-; LINE_WIDTH: 0.445415
+G1 X116.327 Y136.992 E.71732
+G1 X111.11 Y135.08 E.17074
+; LINE_WIDTH: 0.441885
+G1 X110.657 Y134.936 E.01544
+; LINE_WIDTH: 0.4677
+G1 F14831.232
+G3 X109.404 Y134.478 I2.779 J-9.542 E.04621
+G2 X106.523 Y134.075 I-2.156 J4.915 E.10197
+G1 X105.681 Y134.278 E.02999
+G1 X104.884 Y134.628 E.03014
+G1 X104.338 Y134.977 E.02244
+G1 X103.683 Y135.546 E.03001
+G1 X103.264 Y136.043 E.02252
+G1 X102.814 Y136.782 E.02992
+G1 X102.496 Y137.592 E.03012
+G1 X102.353 Y138.225 E.02248
+G1 X102.295 Y139.088 E.02994
+G1 X102.39 Y139.952 E.03007
+G1 X102.554 Y140.58 E.02249
+; LINE_WIDTH: 0.460844
 G1 F15000
-G1 X110.513 Y137.842 E.00869
-; LINE_WIDTH: 0.413115
-G1 X110.422 Y137.788 E.00318
-; LINE_WIDTH: 0.373416
-G1 X110.325 Y137.73 E.00303
-; LINE_WIDTH: 0.336097
-G1 X110.234 Y137.678 E.00252
-; LINE_WIDTH: 0.301314
-M73 P92 R1
-G1 X110.137 Y137.624 E.00233
-; LINE_WIDTH: 0.269008
-G1 X110.045 Y137.574 E.00193
-; LINE_WIDTH: 0.239264
-G1 X109.949 Y137.523 E.00174
-; LINE_WIDTH: 0.199235
-G1 X109.76 Y137.426 E.0027
-; LINE_WIDTH: 0.154174
-G1 X109.57 Y137.335 E.00191
-; LINE_WIDTH: 0.113165
-G1 X109.301 Y137.214 E.00169
-; WIPE_START
-G1 X109.57 Y137.335 E-.76
-; WIPE_END
-G1 E-.04 F1800
-G1 X111.46 Y144.424 Z3.2 F30000
-G1 Z2.8
-G1 E.8 F1800
-; LINE_WIDTH: 0.109727
+G2 X103.513 Y142.264 I5.399 J-1.961 E.06631
+G1 X104.137 Y142.866 E.02952
+G1 X104.855 Y143.351 E.02952
+G1 X105.532 Y143.659 E.02532
+G1 X106.277 Y143.878 E.02644
+G1 X106.994 Y143.965 E.02458
+G1 X107.875 Y143.937 E.03004
+G2 X109.083 Y143.639 I-.591 J-4.986 E.04247
+; LINE_WIDTH: 0.486973
+G1 F14187.511
+G1 X109.594 Y143.432 E.01996
+; LINE_WIDTH: 0.520338
+G1 F13195.997
+G1 X110.106 Y143.226 E.02146
+; LINE_WIDTH: 0.517515
+G1 F13274.476
+G1 X110.439 Y143.123 E.01348
+; LINE_WIDTH: 0.478505
+G1 F14463.308
+G1 X110.772 Y143.021 E.01237
+; LINE_WIDTH: 0.420183
 G1 F15000
-G1 X111.369 Y144.574 E.00096
-G1 X111.315 Y144.616 E.00038
-G1 X110.736 Y145.019 F30000
-; LINE_WIDTH: 0.446344
+G1 X111.106 Y142.919 E.01072
+G1 X116.327 Y141.004 E.17098
+G1 X139.673 Y141.004 E.71769
+G1 X145.28 Y143.061 E.18361
+; LINE_WIDTH: 0.437745
+G1 X145.642 Y143.176 E.01223
+; LINE_WIDTH: 0.464601
+G1 F14940.206
+G3 X146.91 Y143.638 I-3.259 J10.911 E.04641
+G1 X147.819 Y143.892 E.03241
+M73 P91 R1
+G1 X148.396 Y143.97 E.02002
+G1 X149.263 Y143.95 E.02979
+G1 X149.951 Y143.819 E.02407
+G1 X150.784 Y143.527 E.03033
+G2 X152.736 Y141.952 I-2.279 J-4.823 E.08699
+G1 X153.186 Y141.214 E.02971
+G1 X153.503 Y140.406 E.0298
+G1 X153.671 Y139.555 E.02982
+G1 X153.703 Y138.905 E.02236
+G2 X153.373 Y137.214 I-6.628 J.418 E.05939
+G1 X152.992 Y136.432 E.02986
+G1 X152.621 Y135.899 E.02231
+G1 X152.131 Y135.372 E.02474
+G1 X151.506 Y134.864 E.02768
+G2 X149.724 Y134.118 I-3.233 J5.218 E.06665
+G1 X148.856 Y134.021 E.03001
+G2 X147.051 Y134.314 I-.071 J5.285 E.06316
+G1 X146.282 Y134.613 E.02834
+; LINE_WIDTH: 0.470983
+G1 F14717.477
+G1 X145.882 Y134.742 E.01466
+; LINE_WIDTH: 0.421081
 G1 F15000
-G1 X110.513 Y145.158 E.00862
-; LINE_WIDTH: 0.414614
-G1 X110.422 Y145.212 E.0032
-; LINE_WIDTH: 0.374831
-G1 X110.325 Y145.27 E.00305
-; LINE_WIDTH: 0.337541
-G1 X110.234 Y145.322 E.00253
-; LINE_WIDTH: 0.302839
-G1 X110.137 Y145.376 E.00235
-; LINE_WIDTH: 0.270609
-G1 X110.045 Y145.426 E.00194
-; LINE_WIDTH: 0.240919
-G1 X109.949 Y145.477 E.00176
-; LINE_WIDTH: 0.20096
-G1 X109.76 Y145.573 E.00273
-; LINE_WIDTH: 0.155955
-G1 X109.57 Y145.665 E.00194
-; LINE_WIDTH: 0.113918
-G1 X109.285 Y145.793 E.00181
+G1 X145.482 Y134.871 E.01295
+G1 X139.732 Y136.981 E.18877
+G1 X139.673 Y137.369 F30000
+; LINE_WIDTH: 0.41999
+G1 F15000
+G1 X116.327 Y137.369 E.71732
+G1 X116.131 Y137.334 E.00613
+G1 X110.386 Y135.215 E.18813
+G1 X110.861 Y135.632 E.01941
+G1 X111.283 Y136.144 E.02039
+G1 X111.713 Y136.874 E.02604
+G1 X112.02 Y137.701 E.0271
+G1 X112.148 Y138.318 E.01937
+G1 X112.186 Y139.087 E.02365
+G1 X112.127 Y139.815 E.02245
+G1 X111.914 Y140.636 E.02608
+G1 X111.456 Y141.589 E.03247
+G1 X110.934 Y142.287 E.02679
+G1 X110.383 Y142.784 E.0228
+G1 X116.131 Y140.662 E.18828
+G1 X116.327 Y140.627 E.00611
+G1 X139.673 Y140.627 E.71733
+G1 X139.869 Y140.662 E.00611
+G1 X145.588 Y142.773 E.18732
+G1 X145.365 Y142.591 E.00884
+G1 X144.851 Y142.03 E.02339
+G1 X144.294 Y141.132 E.03247
+G1 X143.98 Y140.295 E.02746
+G1 X143.814 Y139.273 E.03182
+G1 X143.845 Y138.38 E.02744
+G1 X143.962 Y137.761 E.01937
+G1 X144.246 Y136.964 E.026
+G1 X144.668 Y136.215 E.02642
+G3 X145.532 Y135.254 I4.007 J2.734 E.0398
+G1 X139.868 Y137.334 E.1854
+G1 X139.732 Y137.358 E.00424
+G1 X139.673 Y137.746 F30000
+G1 F15000
+G1 X116.327 Y137.746 E.71732
+G1 X116 Y137.688 E.0102
+G1 X111.702 Y136.102 E.14077
+G1 X112.039 Y136.686 E.02071
+G1 X112.375 Y137.573 E.02915
+G1 X112.518 Y138.245 E.02112
+G1 X112.563 Y139.071 E.02543
+G1 X112.502 Y139.856 E.0242
+G1 X112.278 Y140.734 E.02783
+G1 X111.794 Y141.756 E.03473
+G1 X111.709 Y141.892 E.00495
+G1 X116.001 Y140.308 E.14058
+G1 X116.327 Y140.25 E.01019
+G1 X139.673 Y140.25 E.71733
+G1 X139.999 Y140.308 E.01019
+G1 X144.32 Y141.903 E.14152
+G1 X143.971 Y141.327 E.02069
+G1 X143.625 Y140.423 E.02976
+G1 X143.441 Y139.329 E.03408
+G1 X143.468 Y138.363 E.02971
+G1 X143.593 Y137.687 E.02112
+G1 X143.891 Y136.835 E.02774
+G1 X144.293 Y136.111 E.02542
+G1 X139.998 Y137.688 E.14059
+G1 X139.732 Y137.736 E.0083
+G1 X139.673 Y138.123 F30000
+G1 F15000
+G1 X116.327 Y138.123 E.71732
+G1 X115.87 Y138.041 E.01428
+G1 X112.496 Y136.797 E.1105
+G1 X112.73 Y137.445 E.02117
+G1 X112.888 Y138.172 E.02287
+G1 X112.94 Y139.056 E.0272
+G1 X112.877 Y139.898 E.02595
+G1 X112.642 Y140.832 E.02958
+G1 X112.487 Y141.203 E.01237
+G1 X115.87 Y139.954 E.11081
+G1 X116.327 Y139.872 E.01426
+G1 X139.673 Y139.872 E.71733
+G1 X140.13 Y139.954 E.01427
+G1 X143.505 Y141.2 E.11053
+G1 X143.27 Y140.551 E.02121
+G1 X143.068 Y139.386 E.03633
+G1 X143.091 Y138.345 E.03198
+G1 X143.223 Y137.613 E.02287
+G1 X143.501 Y136.803 E.0263
+G1 X140.128 Y138.042 E.11044
+G1 X139.732 Y138.113 E.01235
+G1 X139.673 Y138.5 F30000
+G1 F15000
+G1 X116.327 Y138.5 E.71732
+G3 X115.739 Y138.395 I0 J-1.697 E.01845
+G1 X113.115 Y137.427 E.08596
+G1 X113.258 Y138.099 E.02112
+G1 X113.317 Y139.04 E.02898
+G1 X113.252 Y139.94 E.02771
+G1 X113.102 Y140.574 E.02003
+G1 X115.74 Y139.6 E.08642
+G3 X116.327 Y139.495 I.587 J1.592 E.01843
+G1 X139.673 Y139.495 E.71733
+G3 X140.261 Y139.6 I0 J1.697 E.01844
+G1 X142.888 Y140.571 E.08607
+G1 X142.696 Y139.442 E.03517
+G1 X142.715 Y138.328 E.03425
+G1 X142.883 Y137.432 E.028
+G1 X140.258 Y138.396 E.08594
+G3 X139.732 Y138.495 I-.54 J-1.427 E.0165
+G1 X139.673 Y138.843 F30000
+; LINE_WIDTH: 0.35198
+G1 F15000
+G1 X116.327 Y138.843 E.58794
+; LINE_WIDTH: 0.368983
+G1 X116.139 Y138.843 E.005
+; LINE_WIDTH: 0.419538
+G1 X115.951 Y138.843 E.00577
+G1 X115.609 Y138.749 E.01089
+G2 X113.633 Y138.025 I-25.73 J67.192 E.06458
+G1 X113.693 Y139.025 E.03074
+G1 X113.627 Y139.979 E.02933
+G1 X115.609 Y139.246 E.06487
+G1 X115.951 Y139.153 E.01087
+; LINE_WIDTH: 0.402988
+G1 X116.139 Y139.153 E.00552
+; LINE_WIDTH: 0.352116
+G1 X139.673 Y139.152 E.59294
+; LINE_WIDTH: 0.368983
+G1 X139.86 Y139.152 E.00497
+; LINE_WIDTH: 0.419544
+G1 X140.047 Y139.152 E.00575
+G1 X140.391 Y139.247 E.01094
+G1 X142.397 Y139.987 E.06561
+G1 X142.302 Y139.091 E.02765
+G3 X142.374 Y138.021 I7.092 J-.061 E.03296
+G1 X140.387 Y138.75 E.06493
+G1 X140.047 Y138.843 E.01083
+; LINE_WIDTH: 0.402988
+G1 X139.89 Y138.843 E.00462
+; LINE_WIDTH: 0.368983
+G1 X139.733 Y138.843 E.00418
+G1 X140.95 Y138.998 F30000
+; LINE_WIDTH: 0.51952
+G1 F13218.633
+G1 X141.889 Y139.345 E.03888
+G1 X141.895 Y138.651 E.02693
+G1 X141.007 Y138.977 E.03674
+G1 X144.187 Y139.216 F30000
+; LINE_WIDTH: 0.41999
+G1 F15000
+G1 X144.221 Y138.398 E.02516
+G1 X144.332 Y137.835 E.01762
+G1 X144.6 Y137.092 E.02426
+G1 X144.995 Y136.403 E.0244
+G3 X145.793 Y135.526 I5.062 J3.805 E.0365
+; LINE_WIDTH: 0.43593
+G1 X146.107 Y135.285 E.01266
+; LINE_WIDTH: 0.462141
+G1 X146.421 Y135.045 E.01351
+G1 X147.15 Y134.717 E.02733
+G1 X147.722 Y134.545 E.02038
+G1 X148.459 Y134.445 E.02543
+G1 X149.495 Y134.502 E.03545
+G1 X150.211 Y134.686 E.02525
+G3 X151.249 Y135.199 I-2.546 J6.453 E.03957
+G1 X151.746 Y135.581 E.02143
+G1 X152.284 Y136.164 E.02709
+G3 X153.131 Y137.823 I-3.746 J2.957 E.06406
+G3 X153.137 Y140.157 I-4.871 J1.18 E.08047
+G1 X152.867 Y140.909 E.0273
+G1 X152.471 Y141.602 E.02724
+G3 X151.189 Y142.836 I-4.307 J-3.191 E.06109
+G1 X150.743 Y143.089 E.01751
+G1 X149.998 Y143.375 E.02724
+G1 X149.336 Y143.519 E.02318
+G1 X148.521 Y143.556 E.02786
+G3 X147.077 Y143.25 I.393 J-5.413 E.05056
+; LINE_WIDTH: 0.478447
+G1 F14465.245
+G1 X146.281 Y142.882 E.03114
+G1 X145.667 Y142.359 E.02862
+; LINE_WIDTH: 0.41999
+G1 F15000
+G1 X145.129 Y141.775 E.0244
+G1 X144.616 Y140.936 E.0302
+G1 X144.335 Y140.167 E.02517
+G1 X144.196 Y139.276 E.02772
 ; CHANGE_LAYER
 ; Z_HEIGHT: 3
 ; LAYER_HEIGHT: 0.2
 ; WIPE_START
 G1 F15000
-G1 X109.57 Y145.665 E-.76
+G1 X144.335 Y140.167 E-.34287
+G1 X144.616 Y140.936 E-.3113
+G1 X144.761 Y141.174 E-.10583
 ; WIPE_END
 G1 E-.04 F1800
-; stop printing object, unique label id: 104
+; stop printing object, unique label id: 194
 M625
 ; layer num/total_layer_count: 15/15
 ; update layer progress
@@ -11574,7 +10047,7 @@ M73 L15
 M991 S0 P14 ;notify layer change
 G17
 G3 Z3.2 I1.217 J0 P1  F30000
-; object ids of layer 15 start: 72,104
+; object ids of layer 15 start: 123,194
 M624 AwAAAAAAAAA=
 ;========Date 20250206========
 ; SKIPPABLE_START
@@ -11589,17 +10062,17 @@ M1004 S5 P1  ; external shutter
 M623
 ; SKIPPABLE_END
 
-; object ids of this layer15 end: 72,104
+; object ids of this layer15 end: 123,194
 M625
-; OBJECT_ID: 72
-; start printing object, unique label id: 72
+; OBJECT_ID: 123
+; start printing object, unique label id: 123
 M624 AQAAAAAAAAA=
 G1 X147.885 Y122.336
 G1 Z3
 G1 E.8 F1800
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
 G1 X147.911 Y122.33 E.00084
 G3 X148.567 Y122.243 I.817 J3.67 E.02036
@@ -11621,12 +10094,12 @@ G1 X142.282 Y123.708 Z3.4 F30000
 G1 X107.549 Y129.748 Z3.4
 G1 Z3
 G1 E.8 F1800
-G1 F3600
+G1 F12000
 M204 S5000
 G1 X107.275 Y129.759 E.00842
 G3 X107.117 Y122.243 I.003 J-3.76 E.35789
 G1 X107.275 Y122.24 E.00484
-G3 X107.609 Y129.745 I.003 J3.76 E.35284
+G3 X107.609 Y129.744 I.003 J3.76 E.35284
 ; WIPE_START
 M204 S10000
 G1 X107.275 Y129.759 E-.12692
@@ -11641,7 +10114,7 @@ G1 X113.172 Y128.024 Z3.4 F30000
 G1 X139.563 Y123.21 Z3.4
 G1 Z3
 G1 E.8 F1800
-G1 F3600
+G1 F12000
 M204 S5000
 G1 X139.566 Y123.21 E.00009
 G1 X146.883 Y120.511 E.23962
@@ -11686,7 +10159,7 @@ G1 X147.858 Y122.129 E.05576
 G1 X147.446 Y122.249
 G1 X146.186 Y120.989 E.05476
 G1 X145.796 Y121.133
-G1 X147.062 Y122.399 E.055
+G1 X147.062 Y122.398 E.055
 G1 X146.712 Y122.582
 G1 X145.407 Y121.277 E.05674
 G1 X145.017 Y121.42
@@ -11733,6 +10206,7 @@ G1 X152.689 Y125.892
 G1 X154.142 Y127.345 E.06314
 G1 X154.022 Y127.759
 G1 X152.669 Y126.405 E.0588
+M73 P91 R0
 G1 X152.597 Y126.867
 G1 X153.875 Y128.145 E.05554
 G1 X153.706 Y128.509
@@ -11772,12 +10246,12 @@ G1 X139.953 Y123.288 E.35928
 G1 X139.549 Y123.417
 G1 X147.596 Y131.465 E.3497
 G1 X146.852 Y131.254
-M73 P92 R0
 G1 X139.015 Y123.417 E.34055
 G1 X138.482 Y123.417
 G1 X146.014 Y130.95 E.32731
 G1 X145.169 Y130.637
 G1 X137.949 Y123.417 E.31375
+M73 P92 R0
 G1 X137.416 Y123.417
 G1 X144.324 Y130.325 E.30018
 G1 X143.478 Y130.013
@@ -11788,7 +10262,6 @@ G1 X141.787 Y129.389
 G1 X135.816 Y123.417 E.25949
 G1 X135.283 Y123.417
 G1 X140.942 Y129.077 E.24593
-M73 P93 R0
 G1 X140.097 Y128.765
 G1 X134.749 Y123.417 E.23237
 G1 X134.216 Y123.417
@@ -11805,7 +10278,7 @@ G1 X136.715 Y128.583
 G1 X131.55 Y123.417 E.22446
 G1 X131.017 Y123.417
 G1 X136.182 Y128.583 E.22446
-G1 X135.649 Y128.583
+G1 X135.648 Y128.583
 G1 X130.483 Y123.417 E.22446
 G1 X129.95 Y123.417
 G1 X135.115 Y128.583 E.22446
@@ -11920,6 +10393,7 @@ G1 X109.03 Y131.294 E.05867
 G1 X108.613 Y131.409
 G1 X107.167 Y129.964 E.06283
 G1 X106.566 Y129.896
+M73 P93 R0
 G1 X108.175 Y131.505 E.06992
 G1 X107.7 Y131.563
 G1 X105.828 Y129.691 E.08136
@@ -11947,12 +10421,11 @@ G1 X105.027 Y120.891
 G1 X106.295 Y122.159 E.0551
 G1 X105.892 Y122.29
 G1 X104.669 Y121.067 E.05313
-G1 X104.332 Y121.263
-M73 P94 R0
+G1 X104.332 Y121.262
 G1 X105.516 Y122.447 E.05146
 G1 X105.176 Y122.64
 G1 X104.012 Y121.476 E.05058
-G1 X103.711 Y121.708
+G1 X103.71 Y121.708
 G1 X104.857 Y122.855 E.04984
 G1 X104.569 Y123.1
 G1 X103.427 Y121.957 E.04965
@@ -12092,6 +10565,7 @@ G2 X150.238 Y122.242 I-4.015 J5.244 E.0031
 G1 X150.527 Y122.451 E-.76
 ; WIPE_END
 G1 E-.04 F1800
+M73 P94 R0
 G1 X153.622 Y123.331 Z3.4 F30000
 G1 Z3
 G1 E.8 F1800
@@ -12220,656 +10694,656 @@ G1 E.8 F1800
 G1 F15000
 G1 X152.354 Y124.305 E.00208
 ; LINE_WIDTH: 0.139423
-G1 X152.281 Y124.206 E.00097
+G1 X152.281 Y124.205 E.00097
 ; LINE_WIDTH: 0.105248
 G1 X152.208 Y124.106 E.00063
-; OBJECT_ID: 104
+; OBJECT_ID: 194
 ; WIPE_START
-G1 X152.281 Y124.206 E-.76
+G1 X152.281 Y124.205 E-.76
 ; WIPE_END
 G1 E-.04 F1800
-; stop printing object, unique label id: 72
+; stop printing object, unique label id: 123
 M625
-; start printing object, unique label id: 104
+; start printing object, unique label id: 194
 M624 AgAAAAAAAAA=
-G1 X149.886 Y131.452 Z3.4 F30000
-G1 X147.776 Y137.836 Z3.4
+G1 X149.477 Y131.304 Z3.4 F30000
+G1 X147.885 Y135.334 Z3.4
 G1 Z3
 G1 E.8 F1800
 ; FEATURE: Outer wall
 ; LINE_WIDTH: 0.42
-G1 F3600
+G1 F12000
 M204 S5000
-G1 X147.803 Y137.829 E.00084
-G3 X148.459 Y137.743 I.817 J3.67 E.02036
-G1 X148.616 Y137.739 E.00484
-G3 X147.486 Y137.914 I.003 J3.76 E.69056
-G1 X147.718 Y137.851 E.0074
+G1 X147.911 Y135.328 E.00084
+G3 X148.567 Y135.241 I.817 J3.67 E.02036
+G1 X148.725 Y135.238 E.00484
+G3 X147.595 Y135.413 I.003 J3.76 E.69056
+G1 X147.827 Y135.35 E.0074
 ; WIPE_START
 M204 S10000
-G1 X147.803 Y137.829 E-.03318
-G1 X148.126 Y137.772 E-.12462
-G1 X148.459 Y137.743 E-.12705
-G1 X148.616 Y137.739 E-.05991
-G1 X148.944 Y137.754 E-.12462
-G1 X149.269 Y137.797 E-.12466
-G1 X149.694 Y137.9 E-.16596
+G1 X147.911 Y135.328 E-.03318
+G1 X148.234 Y135.27 E-.12462
+G1 X148.567 Y135.241 E-.12705
+G1 X148.725 Y135.238 E-.05991
+G1 X149.053 Y135.252 E-.12462
+G1 X149.378 Y135.295 E-.12466
+G1 X149.802 Y135.399 E-.16596
 ; WIPE_END
 G1 E-.04 F1800
-G1 X142.174 Y139.208 Z3.4 F30000
-G1 X107.44 Y145.248 Z3.4
+G1 X142.282 Y136.706 Z3.4 F30000
+G1 X107.549 Y142.746 Z3.4
 G1 Z3
 G1 E.8 F1800
-G1 F3600
+G1 F12000
 M204 S5000
-G1 X107.166 Y145.259 E.00842
-G3 X107.009 Y137.743 I.003 J-3.76 E.35789
-G1 X107.166 Y137.739 E.00484
-G3 X107.5 Y145.244 I.003 J3.76 E.35284
+G1 X107.275 Y142.757 E.00842
+G3 X107.117 Y135.241 I.003 J-3.76 E.35789
+G1 X107.275 Y135.238 E.00484
+G3 X107.609 Y142.742 I.003 J3.76 E.35284
 ; WIPE_START
 M204 S10000
-G1 X107.166 Y145.259 E-.12692
-G1 X106.839 Y145.245 E-.12456
-G1 X106.514 Y145.202 E-.12465
-G1 X106.036 Y145.086 E-.18691
-G1 X105.728 Y144.973 E-.12465
-G1 X105.555 Y144.893 E-.07231
+G1 X107.275 Y142.757 E-.12692
+G1 X106.947 Y142.744 E-.12456
+G1 X106.622 Y142.701 E-.12465
+G1 X106.144 Y142.584 E-.18691
+G1 X105.836 Y142.472 E-.12465
+G1 X105.664 Y142.391 E-.07231
 ; WIPE_END
 G1 E-.04 F1800
-G1 X113.064 Y143.523 Z3.4 F30000
-G1 X139.455 Y138.71 Z3.4
+G1 X113.172 Y141.022 Z3.4 F30000
+G1 X139.563 Y136.208 Z3.4
 G1 Z3
 G1 E.8 F1800
-G1 F3600
+G1 F12000
 M204 S5000
-G1 X139.458 Y138.71 E.00009
-M73 P95 R0
-G1 X146.774 Y136.011 E.23962
-G3 X146.533 Y146.902 I1.838 J5.489 E.68163
-G1 X139.458 Y144.29 E.23173
-G1 X116.325 Y144.29 E.71081
-G1 X109.25 Y146.902 E.23175
-G3 X107.529 Y135.721 I-2.079 J-5.403 E.63516
-G3 X109.009 Y136.01 I-.498 J6.474 E.04644
-G1 X116.325 Y138.71 E.23962
-G1 X139.395 Y138.71 E.70887
+G1 X139.566 Y136.208 E.00009
+G1 X146.883 Y133.509 E.23962
+G3 X146.641 Y144.4 I1.838 J5.489 E.68163
+G1 X139.566 Y141.788 E.23173
+G1 X116.434 Y141.788 E.71081
+G1 X109.358 Y144.4 E.23175
+G3 X107.637 Y133.219 I-2.079 J-5.403 E.63516
+G3 X109.117 Y133.509 I-.498 J6.474 E.04644
+G1 X116.434 Y136.208 E.23962
+G1 X139.503 Y136.208 E.70887
 ; WIPE_START
 M204 S10000
-G1 X139.458 Y138.71 E-.02397
-G1 X141.275 Y138.039 E-.73603
+G1 X139.566 Y136.208 E-.02397
+G1 X141.384 Y135.537 E-.73603
 ; WIPE_END
 G1 E-.04 F1800
-G1 X148.788 Y136.696 Z3.4 F30000
-G1 X150.736 Y136.348 Z3.4
+G1 X148.897 Y134.195 Z3.4 F30000
+G1 X150.845 Y133.847 Z3.4
 G1 Z3
 G1 E.8 F1800
 ; FEATURE: Top surface
 G1 F12000
 M204 S2000
-G1 X153.768 Y139.38 E.13172
-G1 X154.042 Y140.187
-G1 X149.93 Y136.075 E.1787
-G1 X149.284 Y135.962
-G1 X154.154 Y140.832 E.21163
-G1 X154.187 Y141.399
-G1 X148.718 Y135.93 E.23765
-G1 X148.191 Y135.936
-G1 X150.063 Y137.808 E.08135
-G1 X149.316 Y137.595
-G1 X147.716 Y135.995 E.06953
-G1 X147.279 Y136.09
-G1 X148.73 Y137.542 E.06307
-G1 X148.211 Y137.556
-G1 X146.857 Y136.202 E.05885
-G1 X146.467 Y136.345
-G1 X147.75 Y137.628 E.05576
-G1 X147.337 Y137.749
-G1 X146.077 Y136.489 E.05476
-G1 X145.688 Y136.632
-G1 X146.953 Y137.898 E.055
-G1 X146.604 Y138.082
-G1 X145.298 Y136.776 E.05674
-G1 X144.909 Y136.92
-G1 X146.284 Y138.295 E.05976
-G1 X145.988 Y138.532
-G1 X144.519 Y137.063 E.06383
-G1 X144.129 Y137.207
-G1 X145.716 Y138.794 E.06895
-G1 X145.471 Y139.082
-G1 X143.74 Y137.351 E.07521
-G1 X143.35 Y137.495
-G1 X145.253 Y139.397 E.08268
-G1 X145.064 Y139.742
-G1 X142.961 Y137.638 E.0914
-G1 X142.571 Y137.782
-G1 X144.901 Y140.112 E.10125
-G1 X144.775 Y140.519
-G1 X142.182 Y137.926 E.11267
-G1 X141.792 Y138.069
-G1 X144.686 Y140.963 E.12575
-G1 X144.653 Y141.463
-G1 X141.403 Y138.213 E.14123
-G1 X141.013 Y138.357
-G1 X144.685 Y142.028 E.15955
-G1 X144.846 Y142.723
-G1 X140.624 Y138.501 E.18349
-G1 X140.234 Y138.644
-G1 X145.395 Y143.805 E.22427
+G1 X153.876 Y136.878 E.13172
+G1 X154.15 Y137.685
+G1 X150.038 Y133.573 E.1787
+G1 X149.392 Y133.461
+G1 X154.262 Y138.331 E.21163
+G1 X154.295 Y138.897
+G1 X148.826 Y133.428 E.23765
+G1 X148.3 Y133.434
+G1 X150.172 Y135.307 E.08135
+G1 X149.425 Y135.093
+G1 X147.825 Y133.493 E.06953
+G1 X147.387 Y133.588
+G1 X148.838 Y135.04 E.06307
+G1 X148.32 Y135.054
+G1 X146.966 Y133.7 E.05885
+G1 X146.575 Y133.843
+G1 X147.858 Y135.126 E.05576
+G1 X147.446 Y135.247
+G1 X146.186 Y133.987 E.05476
+G1 X145.796 Y134.131
+G1 X147.062 Y135.396 E.055
+G1 X146.712 Y135.58
+G1 X145.407 Y134.274 E.05674
+G1 X145.017 Y134.418
+G1 X146.392 Y135.793 E.05976
+G1 X146.096 Y136.031
+G1 X144.628 Y134.562 E.06383
+G1 X144.238 Y134.705
+G1 X145.825 Y136.292 E.06895
+G1 X145.579 Y136.58
+G1 X143.848 Y134.849 E.07521
+G1 X143.459 Y134.993
+G1 X145.362 Y136.896 E.08268
+G1 X145.173 Y137.24
+G1 X143.069 Y135.137 E.0914
+G1 X142.68 Y135.28
+G1 X145.01 Y137.61 E.10125
+G1 X144.883 Y138.017
+G1 X142.29 Y135.424 E.11267
+G1 X141.901 Y135.568
+G1 X144.794 Y138.461 E.12575
+G1 X144.761 Y138.961
+G1 X141.511 Y135.711 E.14123
+G1 X141.122 Y135.855
+G1 X144.793 Y139.527 E.15955
+G1 X144.955 Y140.221
+G1 X140.732 Y135.999 E.18349
+G1 X140.342 Y136.143
+G1 X145.503 Y141.303 E.22427
 ; WIPE_START
 M204 S10000
-G1 X143.981 Y142.391 E-.76
+G1 X144.089 Y139.889 E-.76
 ; WIPE_END
 G1 E-.04 F1800
-G1 X151.329 Y140.328 Z3.4 F30000
-G1 X152.308 Y140.053 Z3.4
+G1 X151.437 Y137.826 Z3.4 F30000
+G1 X152.416 Y137.551 Z3.4
 G1 Z3
 G1 E.8 F1800
 G1 F12000
 M204 S2000
-G1 X154.18 Y141.925 E.08137
-G1 X154.123 Y142.402
-G1 X152.521 Y140.8 E.06961
-G1 X152.58 Y141.392
-G1 X154.033 Y142.845 E.06314
-G1 X153.913 Y143.258
-G1 X152.56 Y141.905 E.0588
-G1 X152.488 Y142.366
-G1 X153.766 Y143.645 E.05554
-G1 X153.597 Y144.009
-G1 X152.368 Y142.779 E.05344
-G1 X152.218 Y143.163
-G1 X153.405 Y144.35 E.05158
-G1 X153.198 Y144.676
-G1 X152.034 Y143.512 E.05058
-G1 X151.82 Y143.831
-G1 X152.972 Y144.983 E.05004
-G1 X152.727 Y145.271
-G1 X151.585 Y144.129 E.04962
-G1 X151.317 Y144.395
-G1 X152.465 Y145.542 E.04985
-G1 X152.181 Y145.792
-G1 X151.032 Y144.643 E.04994
-G1 X150.717 Y144.861
-G1 X151.879 Y146.023 E.05049
-G1 X151.556 Y146.234
-G1 X150.375 Y145.053 E.05132
-G1 X150.004 Y145.215
-G1 X151.219 Y146.429 E.05277
-G1 X150.861 Y146.605
-G1 X149.597 Y145.341 E.05491
-G1 X149.153 Y145.43
-G1 X150.479 Y146.757 E.05766
-G1 X150.074 Y146.884
-G1 X148.653 Y145.463 E.06174
-G1 X148.088 Y145.431
-G1 X149.64 Y146.984 E.06748
-G1 X149.173 Y147.05
-G1 X147.393 Y145.27 E.07735
-G1 X146.31 Y144.72
-G1 X148.663 Y147.074 E.10226
-G1 X148.112 Y147.056
-G1 X139.844 Y138.788 E.35928
-G1 X139.44 Y138.917
-G1 X147.487 Y146.964 E.3497
-G1 X146.744 Y146.754
-G1 X138.907 Y138.917 E.34055
-G1 X138.374 Y138.917
-G1 X145.906 Y146.449 E.32731
-G1 X145.06 Y146.137
-G1 X137.84 Y138.917 E.31375
-G1 X137.307 Y138.917
-G1 X144.215 Y145.825 E.30018
-G1 X143.37 Y145.513
-G1 X136.774 Y138.917 E.28662
-G1 X136.241 Y138.917
-G1 X142.524 Y145.201 E.27306
-G1 X141.679 Y144.888
-G1 X135.707 Y138.917 E.25949
-G1 X135.174 Y138.917
-G1 X140.834 Y144.576 E.24593
-G1 X139.988 Y144.264
-G1 X134.641 Y138.917 E.23237
-G1 X134.108 Y138.917
-G1 X139.273 Y144.082 E.22446
-G1 X138.74 Y144.082
-G1 X133.574 Y138.917 E.22446
-G1 X133.041 Y138.917
-G1 X138.206 Y144.082 E.22446
-G1 X137.673 Y144.082
-G1 X132.508 Y138.917 E.22446
-G1 X131.975 Y138.917
-G1 X137.14 Y144.082 E.22446
-G1 X136.607 Y144.082
-G1 X131.441 Y138.917 E.22446
-G1 X130.908 Y138.917
-G1 X136.073 Y144.082 E.22446
-G1 X135.54 Y144.082
-G1 X130.375 Y138.917 E.22446
-G1 X129.841 Y138.917
-G1 X135.007 Y144.082 E.22446
-G1 X134.473 Y144.082
-G1 X129.308 Y138.917 E.22446
-G1 X128.775 Y138.917
-G1 X133.94 Y144.082 E.22446
-G1 X133.407 Y144.082
-G1 X128.242 Y138.917 E.22446
-G1 X127.708 Y138.917
-G1 X132.874 Y144.082 E.22446
-G1 X132.34 Y144.082
-G1 X127.175 Y138.917 E.22446
-G1 X126.642 Y138.917
-G1 X131.807 Y144.082 E.22446
-G1 X131.274 Y144.082
-G1 X126.109 Y138.917 E.22446
-G1 X125.575 Y138.917
-G1 X130.741 Y144.082 E.22446
-G1 X130.207 Y144.082
-G1 X125.042 Y138.917 E.22446
-G1 X124.509 Y138.917
-G1 X129.674 Y144.082 E.22446
-G1 X129.141 Y144.082
-G1 X123.976 Y138.917 E.22446
-G1 X123.442 Y138.917
-G1 X128.608 Y144.082 E.22446
-G1 X128.074 Y144.082
-G1 X122.909 Y138.917 E.22446
-G1 X122.376 Y138.917
-G1 X127.541 Y144.082 E.22446
-G1 X127.008 Y144.082
-G1 X121.843 Y138.917 E.22446
-G1 X121.309 Y138.917
-G1 X126.475 Y144.082 E.22446
-G1 X125.941 Y144.082
-G1 X120.776 Y138.917 E.22446
-G1 X120.243 Y138.917
-G1 X125.408 Y144.082 E.22446
-G1 X124.875 Y144.082
-G1 X119.71 Y138.917 E.22446
-G1 X119.176 Y138.917
-G1 X124.342 Y144.082 E.22446
-G1 X123.808 Y144.082
-G1 X118.643 Y138.917 E.22446
-G1 X118.11 Y138.917
-G1 X123.275 Y144.082 E.22446
-G1 X122.742 Y144.082
-G1 X117.577 Y138.917 E.22446
-G1 X117.043 Y138.917
-G1 X122.209 Y144.082 E.22446
-G1 X121.675 Y144.082
+G1 X154.289 Y139.424 E.08137
+G1 X154.232 Y139.9
+G1 X152.63 Y138.298 E.06961
+G1 X152.689 Y138.89
+G1 X154.142 Y140.343 E.06314
+G1 X154.022 Y140.756
+G1 X152.669 Y139.403 E.0588
+G1 X152.597 Y139.865
+G1 X153.875 Y141.143 E.05554
+G1 X153.706 Y141.507
+G1 X152.476 Y140.277 E.05344
+G1 X152.327 Y140.661
+G1 X153.514 Y141.848 E.05158
+G1 X153.306 Y142.174
+G1 X152.142 Y141.01 E.05058
+G1 X151.929 Y141.33
+G1 X153.08 Y142.481 E.05004
+G1 X152.835 Y142.769
+G1 X151.693 Y141.627 E.04962
+G1 X151.426 Y141.893
+G1 X152.573 Y143.041 E.04985
+G1 X152.289 Y143.29
+G1 X151.14 Y142.141 E.04994
+G1 X150.826 Y142.36
+G1 X151.987 Y143.521 E.05049
+G1 X151.665 Y143.732
+G1 X150.484 Y142.551 E.05132
+G1 X150.113 Y142.713
+G1 X151.327 Y143.928 E.05277
+G1 X150.97 Y144.103
+G1 X149.706 Y142.84 E.05491
+G1 X149.261 Y142.928
+G1 X150.588 Y144.255 E.05766
+G1 X150.182 Y144.383
+G1 X148.761 Y142.962 E.06174
+G1 X148.196 Y142.93
+G1 X149.749 Y144.483 E.06748
+G1 X149.281 Y144.548
+G1 X147.501 Y142.768 E.07735
+G1 X146.419 Y142.219
+G1 X148.772 Y144.572 E.10226
+G1 X148.221 Y144.554
+G1 X139.953 Y136.286 E.35928
+G1 X139.549 Y136.415
+G1 X147.596 Y144.463 E.3497
+G1 X146.852 Y144.252
+G1 X139.015 Y136.415 E.34055
+G1 X138.482 Y136.415
+G1 X146.014 Y143.947 E.32731
+G1 X145.169 Y143.635
+G1 X137.949 Y136.415 E.31375
+G1 X137.416 Y136.415
+G1 X144.324 Y143.323 E.30018
+G1 X143.478 Y143.011
+G1 X136.882 Y136.415 E.28662
+G1 X136.349 Y136.415
+G1 X142.633 Y142.699 E.27306
+G1 X141.787 Y142.387
+G1 X135.816 Y136.415 E.25949
+G1 X135.283 Y136.415
+G1 X140.942 Y142.075 E.24593
+G1 X140.097 Y141.763
+G1 X134.749 Y136.415 E.23237
+G1 X134.216 Y136.415
+G1 X139.381 Y141.58 E.22446
+G1 X138.848 Y141.58
+G1 X133.683 Y136.415 E.22446
+G1 X133.15 Y136.415
+G1 X138.315 Y141.58 E.22446
+G1 X137.782 Y141.58
+G1 X132.616 Y136.415 E.22446
+M73 P95 R0
+G1 X132.083 Y136.415
+G1 X137.248 Y141.58 E.22446
+G1 X136.715 Y141.58
+G1 X131.55 Y136.415 E.22446
+G1 X131.017 Y136.415
+G1 X136.182 Y141.58 E.22446
+G1 X135.649 Y141.58
+G1 X130.483 Y136.415 E.22446
+G1 X129.95 Y136.415
+G1 X135.115 Y141.58 E.22446
+G1 X134.582 Y141.58
+G1 X129.417 Y136.415 E.22446
+G1 X128.883 Y136.415
+G1 X134.049 Y141.58 E.22446
+G1 X133.515 Y141.58
+G1 X128.35 Y136.415 E.22446
+G1 X127.817 Y136.415
+G1 X132.982 Y141.58 E.22446
+G1 X132.449 Y141.58
+G1 X127.284 Y136.415 E.22446
+G1 X126.75 Y136.415
+G1 X131.916 Y141.58 E.22446
+G1 X131.382 Y141.58
+G1 X126.217 Y136.415 E.22446
+G1 X125.684 Y136.415
+G1 X130.849 Y141.58 E.22446
+G1 X130.316 Y141.58
+G1 X125.151 Y136.415 E.22446
+G1 X124.617 Y136.415
+G1 X129.783 Y141.58 E.22446
+G1 X129.249 Y141.58
+G1 X124.084 Y136.415 E.22446
+G1 X123.551 Y136.415
+G1 X128.716 Y141.58 E.22446
+G1 X128.183 Y141.58
+G1 X123.018 Y136.415 E.22446
+G1 X122.484 Y136.415
+G1 X127.65 Y141.58 E.22446
+G1 X127.116 Y141.58
+G1 X121.951 Y136.415 E.22446
+G1 X121.418 Y136.415
+G1 X126.583 Y141.58 E.22446
+G1 X126.05 Y141.58
+G1 X120.885 Y136.415 E.22446
+G1 X120.351 Y136.415
+G1 X125.517 Y141.58 E.22446
+G1 X124.983 Y141.58
+G1 X119.818 Y136.415 E.22446
+G1 X119.285 Y136.415
+G1 X124.45 Y141.58 E.22446
+G1 X123.917 Y141.58
+G1 X118.752 Y136.415 E.22446
+G1 X118.218 Y136.415
+G1 X123.384 Y141.58 E.22446
+G1 X122.85 Y141.58
+G1 X117.685 Y136.415 E.22446
+G1 X117.152 Y136.415
+G1 X122.317 Y141.58 E.22446
+G1 X121.784 Y141.58
+G1 X116.619 Y136.415 E.22446
+G1 X115.903 Y136.233
+G1 X121.251 Y141.58 E.23236
+G1 X120.717 Y141.58
+G1 X115.058 Y135.922 E.24591
+G1 X114.213 Y135.61
+G1 X120.184 Y141.58 E.25945
+G1 X119.651 Y141.58
+G1 X113.368 Y135.298 E.273
+G1 X112.523 Y134.986
+G1 X119.118 Y141.58 E.28654
+G1 X118.584 Y141.58
+G1 X111.679 Y134.675 E.30009
+G1 X110.834 Y134.363
+G1 X118.051 Y141.58 E.31363
+G1 X117.518 Y141.58
+G1 X109.989 Y134.051 E.32718
+G1 X109.144 Y133.74
+G1 X116.984 Y141.58 E.34072
+G1 X116.451 Y141.58
+G1 X108.406 Y133.535 E.34961
+G1 X107.785 Y133.447
+G1 X116.047 Y141.709 E.35903
+G1 X115.658 Y141.853
+G1 X110.522 Y136.717 E.22318
+G1 X111.045 Y137.774
+G1 X115.268 Y141.997 E.18349
+G1 X114.879 Y142.141
+G1 X111.207 Y138.469 E.15956
+G1 X111.239 Y139.034
+G1 X114.489 Y142.285 E.14124
+G1 X114.1 Y142.428
+G1 X111.205 Y139.534 E.12578
+G1 X111.117 Y139.979
+G1 X113.71 Y142.572 E.1127
+G1 X113.321 Y142.716
+G1 X110.991 Y140.386 E.10126
+G1 X110.828 Y140.757
+G1 X112.931 Y142.86 E.09139
+G1 X112.542 Y143.004
+G1 X110.635 Y141.096 E.08288
+G1 X110.421 Y141.416
+G1 X112.152 Y143.147 E.07525
+G1 X111.763 Y143.291
+G1 X110.175 Y141.703 E.069
+G1 X109.904 Y141.966
+G1 X111.373 Y143.435 E.06384
+G1 X110.984 Y143.579
+G1 X109.607 Y142.202 E.05984
+G1 X109.287 Y142.415
+G1 X110.595 Y143.723 E.05681
+G1 X110.205 Y143.866
+G1 X108.938 Y142.599 E.05506
+G1 X108.556 Y142.75
+G1 X109.816 Y144.01 E.05475
+G1 X109.426 Y144.154
+G1 X108.136 Y142.864 E.05607
+G1 X107.68 Y142.941
+G1 X109.03 Y144.291 E.05867
+G1 X108.613 Y144.407
+G1 X107.167 Y142.961 E.06283
+G1 X106.566 Y142.894
+G1 X108.175 Y144.503 E.06992
+G1 X107.7 Y144.561
+G1 X105.828 Y142.689 E.08136
+; WIPE_START
+M204 S10000
+G1 X107.242 Y144.103 E-.76
+; WIPE_END
+G1 E-.04 F1800
+G1 X109.295 Y136.752 Z3.4 F30000
+G1 X109.57 Y135.766 Z3.4
+G1 Z3
+G1 E.8 F1800
+G1 F12000
+M204 S2000
+G1 X107.223 Y133.419 E.10201
+G1 X106.726 Y133.455
 M73 P96 R0
-G1 X116.51 Y138.917 E.22446
-G1 X115.795 Y138.735
-G1 X121.142 Y144.082 E.23236
-G1 X120.609 Y144.082
-G1 X114.95 Y138.423 E.24591
-G1 X114.105 Y138.112
-G1 X120.076 Y144.082 E.25945
-G1 X119.542 Y144.082
-G1 X113.26 Y137.8 E.273
-G1 X112.415 Y137.488
-G1 X119.009 Y144.082 E.28654
-G1 X118.476 Y144.082
-G1 X111.57 Y137.176 E.30009
-G1 X110.725 Y136.865
-G1 X117.942 Y144.082 E.31363
-G1 X117.409 Y144.082
-G1 X109.88 Y136.553 E.32718
-G1 X109.035 Y136.241
-G1 X116.876 Y144.082 E.34072
-G1 X116.343 Y144.082
-G1 X108.297 Y136.037 E.34961
-G1 X107.676 Y135.949
-G1 X115.939 Y144.211 E.35903
-G1 X115.549 Y144.355
-G1 X110.413 Y139.219 E.22318
-G1 X110.937 Y140.276
-G1 X115.16 Y144.499 E.18349
-G1 X114.77 Y144.643
-G1 X111.098 Y140.971 E.15956
-G1 X111.13 Y141.536
-G1 X114.381 Y144.786 E.14124
-G1 X113.991 Y144.93
-G1 X111.097 Y142.036 E.12578
-G1 X111.008 Y142.481
-G1 X113.602 Y145.074 E.1127
-G1 X113.212 Y145.218
-G1 X110.882 Y142.887 E.10126
-G1 X110.72 Y143.258
-G1 X112.823 Y145.362 E.09139
-G1 X112.433 Y145.505
-G1 X110.526 Y143.598 E.08288
-G1 X110.312 Y143.917
-G1 X112.044 Y145.649 E.07525
-G1 X111.654 Y145.793
-G1 X110.067 Y144.205 E.069
-G1 X109.796 Y144.468
-G1 X111.265 Y145.937 E.06384
-G1 X110.875 Y146.08
-G1 X109.498 Y144.704 E.05984
-G1 X109.179 Y144.917
-G1 X110.486 Y146.224 E.05681
-G1 X110.097 Y146.368
-G1 X108.83 Y145.101 E.05506
-G1 X108.447 Y145.252
-G1 X109.707 Y146.512 E.05475
-G1 X109.318 Y146.656
-G1 X108.027 Y145.365 E.05607
-G1 X107.572 Y145.443
-G1 X108.922 Y146.793 E.05867
-G1 X108.504 Y146.909
-G1 X107.058 Y145.463 E.06283
-G1 X106.458 Y145.395
-G1 X108.067 Y147.004 E.06992
-G1 X107.592 Y147.063
-G1 X105.719 Y145.191 E.08136
+G1 X108.498 Y135.227 E.07704
+G1 X107.808 Y135.07
+G1 X106.252 Y133.515 E.06758
+G1 X105.818 Y133.613
+G1 X107.241 Y135.037 E.06185
+G1 X106.739 Y135.067
+G1 X105.41 Y133.739 E.05774
+G1 X105.027 Y133.889
+G1 X106.295 Y135.157 E.0551
+G1 X105.892 Y135.287
+G1 X104.669 Y134.065 E.05313
+G1 X104.332 Y134.26
+G1 X105.516 Y135.445 E.05146
+G1 X105.176 Y135.638
+G1 X104.012 Y134.474 E.05058
+G1 X103.711 Y134.706
+G1 X104.857 Y135.852 E.04984
+G1 X104.569 Y136.098
+G1 X103.427 Y134.955 E.04965
+G1 X103.165 Y135.226
+G1 X104.307 Y136.368 E.04963
+G1 X104.07 Y136.665
+G1 X102.92 Y135.514 E.04998
+G1 X102.694 Y135.822
+G1 X103.861 Y136.989 E.05073
+G1 X103.673 Y137.335
+G1 X102.486 Y136.147 E.05159
+G1 X102.294 Y136.489
+G1 X103.524 Y137.718 E.05343
+G1 X103.403 Y138.131
+G1 X102.125 Y136.853 E.05555
+G1 X101.978 Y137.239
+G1 X103.331 Y138.593 E.0588
+G1 X103.311 Y139.106
+G1 X101.858 Y137.652 E.06314
+G1 X101.776 Y138.104
+G1 X103.379 Y139.707 E.06964
+G1 X103.584 Y140.445
+G1 X101.714 Y138.575 E.08127
+G1 X101.699 Y139.093
+G1 X107.184 Y144.578 E.23834
+G1 X106.603 Y144.53
+G1 X101.746 Y139.673 E.21106
+G1 X101.856 Y140.317
+G1 X105.962 Y144.422 E.17841
+G1 X105.172 Y144.166
+G1 X102.108 Y141.102 E.13316
 ; WIPE_START
 M204 S10000
-G1 X107.134 Y146.605 E-.76
+G1 X103.522 Y142.516 E-.76
 ; WIPE_END
 G1 E-.04 F1800
-G1 X109.187 Y139.254 Z3.4 F30000
-G1 X109.462 Y138.268 Z3.4
-G1 Z3
-G1 E.8 F1800
-G1 F12000
-M204 S2000
-G1 X107.114 Y135.92 E.10201
-G1 X106.617 Y135.956
-G1 X108.39 Y137.729 E.07704
-G1 X107.699 Y137.572
-G1 X106.144 Y136.016 E.06758
-G1 X105.709 Y136.115
-G1 X107.133 Y137.538 E.06185
-G1 X106.63 Y137.569
-G1 X105.301 Y136.24 E.05774
-G1 X104.918 Y136.39
-G1 X106.186 Y137.658 E.0551
-G1 X105.784 Y137.789
-G1 X104.561 Y136.566 E.05313
-G1 X104.223 Y136.762
-G1 X105.408 Y137.946 E.05146
-G1 X105.068 Y138.14
-G1 X103.904 Y136.976 E.05058
-G1 X103.602 Y137.207
-G1 X104.749 Y138.354 E.04984
-G1 X104.461 Y138.599
-G1 X103.318 Y137.457 E.04965
-G1 X103.056 Y137.728
-G1 X104.198 Y138.87 E.04963
-G1 X103.961 Y139.166
-G1 X102.811 Y138.016 E.04998
-G1 X102.585 Y138.323
-G1 X103.752 Y139.491 E.05073
-G1 X103.565 Y139.836
-G1 X102.378 Y138.649 E.05159
-G1 X102.186 Y138.991
-G1 X103.415 Y140.22 E.05343
-G1 X103.295 Y140.633
-G1 X102.017 Y139.355 E.05555
-G1 X101.87 Y139.741
-G1 X103.223 Y141.094 E.0588
-G1 X103.203 Y141.607
-G1 X101.75 Y140.154 E.06314
-G1 X101.668 Y140.606
-G1 X103.271 Y142.208 E.06964
-G1 X103.475 Y142.946
-G1 X101.605 Y141.076 E.08127
-G1 X101.59 Y141.594
-G1 X107.075 Y147.079 E.23834
-G1 X106.494 Y147.032
-G1 X101.637 Y142.175 E.21106
-G1 X101.748 Y142.818
-G1 X105.853 Y146.924 E.17841
-G1 X105.064 Y146.668
-G1 X101.999 Y143.603 E.13316
-; WIPE_START
-M204 S10000
-G1 X103.413 Y145.018 E-.76
-; WIPE_END
-G1 E-.04 F1800
-G1 X103.684 Y143.394 Z3.4 F30000
-M73 P97 R0
+G1 X103.792 Y140.892 Z3.4 F30000
 G1 Z3
 G1 E.8 F1800
 ; FEATURE: Gap infill
 ; LINE_WIDTH: 0.105248
 G1 F15000
-G1 X103.61 Y143.294 E.00063
+G1 X103.719 Y140.793 E.00063
 ; LINE_WIDTH: 0.140129
-G1 X103.534 Y143.19 E.00102
+G1 X103.643 Y140.689 E.00102
 ; LINE_WIDTH: 0.171261
-G1 X103.474 Y143.1 E.00114
+G1 X103.582 Y140.598 E.00114
 ; LINE_WIDTH: 0.197228
-G1 X103.413 Y143.009 E.00137
+G1 X103.522 Y140.507 E.00137
 ; WIPE_START
-G1 X103.474 Y143.1 E-.76
+G1 X103.582 Y140.598 E-.76
 ; WIPE_END
 G1 E-.04 F1800
-G1 X103.135 Y141.806 Z3.4 F30000
+G1 X103.243 Y139.304 Z3.4 F30000
 G1 Z3
 G1 E.8 F1800
 ; LINE_WIDTH: 0.113225
 G1 F15000
-G1 X103.218 Y141.592 E.00132
+G1 X103.326 Y139.09 E.00132
 ; WIPE_START
-G1 X103.135 Y141.806 E-.76
+G1 X103.243 Y139.304 E-.76
 ; WIPE_END
 G1 E-.04 F1800
-G1 X105.57 Y137.842 Z3.4 F30000
+G1 X105.679 Y135.341 Z3.4 F30000
 G1 Z3
 G1 E.8 F1800
 ; LINE_WIDTH: 0.0902999
 G1 F15000
-G1 X105.465 Y137.916 E.0005
+G1 X105.573 Y135.414 E.0005
 ; WIPE_START
-G1 X105.57 Y137.842 E-.76
+G1 X105.679 Y135.341 E-.76
 ; WIPE_END
 G1 E-.04 F1800
-G1 X108.779 Y137.878 Z3.4 F30000
+G1 X108.888 Y135.376 Z3.4 F30000
 G1 Z3
 G1 E.8 F1800
 ; LINE_WIDTH: 0.105018
 G1 F15000
-G1 X108.701 Y137.826 E.00048
+G1 X108.81 Y135.324 E.00048
 ; LINE_WIDTH: 0.138716
-G1 X108.623 Y137.773 E.00073
+G1 X108.732 Y135.272 E.00073
 ; LINE_WIDTH: 0.185174
-G1 X108.453 Y137.665 E.00233
+G1 X108.562 Y135.164 E.00233
 ; WIPE_START
-G1 X108.623 Y137.773 E-.76
+G1 X108.732 Y135.272 E-.76
 ; WIPE_END
 G1 E-.04 F1800
-G1 X116.127 Y139.171 Z3.4 F30000
-G1 X146.25 Y144.781 Z3.4
+G1 X116.235 Y136.669 Z3.4 F30000
+G1 X146.358 Y142.279 Z3.4
 G1 Z3
 G1 E.8 F1800
 ; LINE_WIDTH: 0.209352
 G1 F15000
-G1 X145.895 Y144.465 E.00644
-G1 X145.334 Y143.866 E.01113
-G1 X144.995 Y143.113 F30000
+G1 X146.004 Y141.963 E.00644
+G1 X145.443 Y141.364 E.01113
+G1 X145.103 Y140.611 F30000
 ; LINE_WIDTH: 0.105037
 G1 F15000
-G1 X144.943 Y143.034 E.00048
+G1 X145.051 Y140.533 E.00048
 ; LINE_WIDTH: 0.138761
-G1 X144.89 Y142.956 E.00073
+G1 X144.999 Y140.455 E.00073
 ; LINE_WIDTH: 0.185217
-G1 X144.782 Y142.787 E.00233
+G1 X144.891 Y140.285 E.00233
 ; WIPE_START
-G1 X144.89 Y142.956 E-.76
+G1 X144.999 Y140.455 E-.76
 ; WIPE_END
 G1 E-.04 F1800
-G1 X144.58 Y141.536 Z3.4 F30000
+G1 X144.688 Y139.034 Z3.4 F30000
 G1 Z3
 G1 E.8 F1800
 ; LINE_WIDTH: 0.105283
 G1 F15000
-G1 X144.675 Y141.752 E.0012
+G1 X144.784 Y139.251 E.0012
 ; WIPE_START
-G1 X144.58 Y141.536 E-.76
+G1 X144.688 Y139.034 E-.76
 ; WIPE_END
 G1 E-.04 F1800
-G1 X148.987 Y137.554 Z3.4 F30000
+G1 X149.095 Y135.052 Z3.4 F30000
 G1 Z3
 G1 E.8 F1800
 ; LINE_WIDTH: 0.0922442
+M73 P97 R0
 G1 F15000
-G2 X148.803 Y137.468 I-1.761 J3.54 E.00081
+G2 X148.912 Y134.966 I-1.761 J3.54 E.00081
 ; WIPE_START
-G1 X148.987 Y137.554 E-.76
+G1 X149.095 Y135.052 E-.76
 ; WIPE_END
 G1 E-.04 F1800
-G1 X150.522 Y138.028 Z3.4 F30000
+G1 X150.631 Y135.527 Z3.4 F30000
 G1 Z3
 G1 E.8 F1800
 ; LINE_WIDTH: 0.104942
 G1 F15000
-G1 X150.418 Y137.95 E.00066
+G1 X150.527 Y135.449 E.00066
 ; LINE_WIDTH: 0.149812
-G2 X150.13 Y137.742 I-4.015 J5.244 E.0031
+G2 X150.238 Y135.24 I-4.015 J5.244 E.0031
 ; WIPE_START
-G1 X150.418 Y137.95 E-.76
+G1 X150.527 Y135.449 E-.76
 ; WIPE_END
 G1 E-.04 F1800
-G1 X153.513 Y138.831 Z3.4 F30000
+G1 X153.622 Y136.329 Z3.4 F30000
 G1 Z3
 G1 E.8 F1800
 ; LINE_WIDTH: 0.104628
 G1 F15000
-G1 X153.437 Y138.729 E.00064
+G1 X153.545 Y136.227 E.00064
 ; LINE_WIDTH: 0.137535
-G1 X153.36 Y138.627 E.00098
+G1 X153.469 Y136.125 E.00098
 ; LINE_WIDTH: 0.177792
-G1 X153.207 Y138.44 E.00266
+G1 X153.316 Y135.938 E.00266
 ; LINE_WIDTH: 0.225392
-G1 X153.054 Y138.253 E.00359
+G1 X153.162 Y135.752 E.00359
 ; LINE_WIDTH: 0.262273
-G1 X152.895 Y138.076 E.00424
+G1 X153.004 Y135.575 E.00424
 ; LINE_WIDTH: 0.298646
-G2 X152.227 Y137.389 I-6.637 J5.783 E.01998
+G2 X152.336 Y134.887 I-6.637 J5.783 E.01998
 ; LINE_WIDTH: 0.28973
-G1 X152.051 Y137.231 E.00478
+G1 X152.159 Y134.729 E.00478
 ; LINE_WIDTH: 0.264218
-G1 X151.874 Y137.072 E.00428
+G1 X151.983 Y134.57 E.00428
 ; LINE_WIDTH: 0.227993
-G1 X151.687 Y136.918 E.00364
+G1 X151.796 Y134.417 E.00364
 ; LINE_WIDTH: 0.181059
-G1 X151.501 Y136.765 E.00272
+G1 X151.609 Y134.263 E.00272
 ; LINE_WIDTH: 0.140231
-G1 X151.393 Y136.684 E.00107
+G1 X151.502 Y134.182 E.00107
 ; LINE_WIDTH: 0.105522
-G1 X151.285 Y136.603 E.00069
-G1 X150.674 Y136.411 F30000
+G1 X151.394 Y134.101 E.00069
+G1 X150.782 Y133.909 F30000
 ; LINE_WIDTH: 0.188296
 G1 F15000
-G1 X150.544 Y136.323 E.00186
+G1 X150.652 Y133.822 E.00186
 ; LINE_WIDTH: 0.144019
-G1 X150.413 Y136.236 E.00129
+G1 X150.522 Y133.734 E.00129
 ; LINE_WIDTH: 0.103255
-G1 X150.335 Y136.19 E.00045
+G1 X150.444 Y133.688 E.00045
 ; WIPE_START
-G1 X150.413 Y136.236 E-.76
+G1 X150.522 Y133.734 E-.76
 ; WIPE_END
 G1 E-.04 F1800
-G1 X142.801 Y136.793 Z3.4 F30000
-G1 X110.473 Y139.159 Z3.4
+G1 X142.91 Y134.291 Z3.4 F30000
+G1 X110.582 Y136.657 Z3.4
 G1 Z3
 G1 E.8 F1800
 ; LINE_WIDTH: 0.210417
 G1 F15000
-G2 X109.522 Y138.207 I-5.89 J4.936 E.01838
+G2 X109.631 Y135.706 I-5.89 J4.936 E.01838
 ; WIPE_START
-G1 X110.133 Y138.78 E-.47232
-G1 X110.473 Y139.159 E-.28768
+G1 X110.241 Y136.278 E-.47232
+G1 X110.582 Y136.657 E-.28768
 ; WIPE_END
 G1 E-.04 F1800
-G1 X105.74 Y145.147 Z3.4 F30000
-G1 X105.654 Y145.256 Z3.4
+G1 X105.849 Y142.645 Z3.4 F30000
+G1 X105.762 Y142.755 Z3.4
 G1 Z3
 G1 E.8 F1800
 ; LINE_WIDTH: 0.157382
 G1 F15000
-G1 X105.471 Y145.129 E.00208
+G1 X105.58 Y142.627 E.00208
 ; LINE_WIDTH: 0.13943
-G1 X105.372 Y145.056 E.00097
+G1 X105.48 Y142.554 E.00097
 ; LINE_WIDTH: 0.105255
-G1 X105.272 Y144.982 E.00063
+G1 X105.381 Y142.481 E.00063
 ; WIPE_START
-G1 X105.372 Y145.056 E-.76
+G1 X105.48 Y142.554 E-.76
 ; WIPE_END
 G1 E-.04 F1800
-G1 X104.497 Y146.396 Z3.4 F30000
+G1 X104.606 Y143.894 Z3.4 F30000
 G1 Z3
 G1 E.8 F1800
 ; LINE_WIDTH: 0.10551
 G1 F15000
-G1 X104.39 Y146.315 E.00069
+G1 X104.498 Y143.813 E.00069
 ; LINE_WIDTH: 0.140197
-G1 X104.282 Y146.234 E.00107
+G1 X104.39 Y143.732 E.00107
 ; LINE_WIDTH: 0.180979
-G1 X104.095 Y146.081 E.00272
+G1 X104.204 Y143.579 E.00272
 ; LINE_WIDTH: 0.227898
-G1 X103.909 Y145.927 E.00364
+G1 X104.018 Y143.426 E.00364
 ; LINE_WIDTH: 0.264113
-G1 X103.732 Y145.769 E.00428
+G1 X103.841 Y143.267 E.00428
 ; LINE_WIDTH: 0.298863
-G3 X103.046 Y145.099 I5.791 J-6.627 E.02
+G3 X103.154 Y142.598 I5.791 J-6.627 E.02
 ; LINE_WIDTH: 0.288338
-G1 X102.887 Y144.923 E.00475
+G1 X102.996 Y142.421 E.00475
 ; LINE_WIDTH: 0.26218
-G1 X102.729 Y144.746 E.00424
+G1 X102.838 Y142.244 E.00424
 ; LINE_WIDTH: 0.225308
-G1 X102.576 Y144.559 E.00359
+G1 X102.684 Y142.057 E.00359
 ; LINE_WIDTH: 0.177718
-G1 X102.423 Y144.372 E.00265
+G1 X102.531 Y141.87 E.00265
 ; LINE_WIDTH: 0.137481
-G1 X102.346 Y144.27 E.00098
+G1 X102.455 Y141.769 E.00098
 ; LINE_WIDTH: 0.104611
-G1 X102.27 Y144.168 E.00064
+G1 X102.379 Y141.667 E.00064
 ; WIPE_START
-G1 X102.346 Y144.27 E-.76
+G1 X102.455 Y141.769 E-.76
 ; WIPE_END
 G1 E-.04 F1800
-G1 X109.979 Y144.234 Z3.4 F30000
-G1 X139.527 Y144.095 Z3.4
+G1 X110.087 Y141.733 Z3.4 F30000
+G1 X139.636 Y141.593 Z3.4
 G1 Z3
 G1 E.8 F1800
 ; LINE_WIDTH: 0.0943603
 G1 F15000
-G2 X139.353 Y144.002 I-.602 J.91 E.00083
+G2 X139.462 Y141.5 I-.602 J.91 E.00083
 ; WIPE_START
-G1 X139.527 Y144.095 E-.76
+G1 X139.636 Y141.593 E-.76
 ; WIPE_END
 G1 E-.04 F1800
-G1 X146.891 Y146.102 Z3.4 F30000
-G1 X149.825 Y146.902 Z3.4
+G1 X147 Y143.601 Z3.4 F30000
+G1 X149.933 Y144.4 Z3.4
 G1 Z3
 G1 E.8 F1800
 ; LINE_WIDTH: 0.0995653
 G1 F15000
-G1 X149.663 Y146.984 E.00084
+G1 X149.771 Y144.482 E.00084
 ; WIPE_START
-G1 X149.825 Y146.902 E-.76
+G1 X149.933 Y144.4 E-.76
 ; WIPE_END
 G1 E-.04 F1800
-G1 X152.373 Y139.987 Z3.4 F30000
+G1 X152.482 Y137.485 Z3.4 F30000
 G1 Z3
 G1 E.8 F1800
 ; LINE_WIDTH: 0.157378
 G1 F15000
-G1 X152.246 Y139.805 E.00208
+G1 X152.354 Y137.303 E.00208
 ; LINE_WIDTH: 0.139423
-G1 X152.173 Y139.705 E.00097
+G1 X152.281 Y137.203 E.00097
 ; LINE_WIDTH: 0.105248
-G1 X152.1 Y139.605 E.00063
+G1 X152.208 Y137.104 E.00063
 ; close powerlost recovery
 M1003 S0
 ; WIPE_START
 G1 F15000
-G1 X152.173 Y139.705 E-.76
+G1 X152.281 Y137.203 E-.76
 ; WIPE_END
 G1 E-.04 F1800
-; stop printing object, unique label id: 104
+; stop printing object, unique label id: 194
 M625
 M106 S0
 M106 P2 S0
@@ -12900,7 +11374,6 @@ G1 X20 Y50 F12000
 G1 Y-3
 T255
 G1 X65 F12000
-M73 P98 R0
 G1 Y265
 G1 X100 F12000 ; wipe
 M621 S255
