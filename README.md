@@ -1,6 +1,6 @@
 # G-Code Mass & Inertia Analyzer
 
-A Rust library and tools for calculating mass, center of mass, and inertia tensors from G-code files. Perfect for robotics applications where you need accurate physical properties of 3D printed parts for URDF files.
+A Python (originally Rust) library and tools for calculating mass, center of mass, and inertia tensors from G-code files. Perfect for robotics applications where you need accurate physical properties of 3D printed parts for URDF files.
 
 Based on the original [PrintDynamic](https://github.com/gmmyung/printdynamic) project by [@gmmyung](https://github.com/gmmyung). This fork:
 - Reorganizes the codebase
