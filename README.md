@@ -2,7 +2,11 @@
 
 A Rust library and tools for calculating mass, center of mass, and inertia tensors from G-code files. Perfect for robotics applications where you need accurate physical properties of 3D printed parts for URDF files.
 
-Based on the original [PrintDynamic](https://github.com/gmmyung/printdynamic) project by [@gmmyung](https://github.com/gmmyung). This fork reorganizes the codebase, adds a CLI tool with URDF output, and provides better documentation for robotics applications.
+Based on the original [PrintDynamic](https://github.com/gmmyung/printdynamic) project by [@gmmyung](https://github.com/gmmyung). This fork:
+- Reorganizes the codebase
+- Fixed various bugs in inertia calculation, supports bambulab gcode with extra features
+- Adds a CLI tool with URDF output
+- Provides better documentation for robotics applications
 
 ## 🆕 What's New in v0.3.1 (Python)
 
