@@ -4,7 +4,7 @@ A Rust library and tools for calculating mass, center of mass, and inertia tenso
 
 Based on the original [PrintDynamic](https://github.com/gmmyung/printdynamic) project by [@gmmyung](https://github.com/gmmyung). This fork reorganizes the codebase, adds a CLI tool with URDF output, and provides better documentation for robotics applications.
 
-## 🆕 What's New in v0.3.0 (Python)
+## 🆕 What's New in v0.3.1 (Python)
 
 - **Fixed Z-axis COM Bug**: Center of mass Z-coordinate now correctly calculated at center of deposited material layer (not nozzle position)
 - **Bambu Lab Y-axis Correction**: Added automatic 2mm Y-axis offset correction for Bambu Lab slicer coordinate system
@@ -20,7 +20,7 @@ Based on the original [PrintDynamic](https://github.com/gmmyung/printdynamic) pr
 
 - **Accurate Physics Calculations** - Computes mass, center of mass, and full inertia tensors
 - **G-code Parsing** - Handles standard FDM printer G-code with extrusion
-- **Bambu Lab Support** (Python v0.3.0+) - Special handling for Bambu Lab slicer G-codes:
+- **Bambu Lab Support** (Python v0.3.1+) - Special handling for Bambu Lab slicer G-codes:
   - Automatic detection and color-coded status
   - Multi-object detection with single-object enforcement
   - Calibration line filtering to exclude purge material

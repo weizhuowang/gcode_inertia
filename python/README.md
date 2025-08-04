@@ -68,6 +68,9 @@ Same as the Rust version - all calculations are in the 3D printer's coordinate f
 
 ## Version History
 
+### v0.3.1 (2025-08-04)
+- **Bug Fix**: Y-axis offset for Bambu Lab slicers now properly applied to segments before property calculations, ensuring correct inertia tensor values
+
 ### v0.3.0 (2025-08-03)
 - **Bug Fixes**:
   - Fixed Z-axis center of mass calculation - now correctly positions mass at center of deposited layer (not nozzle position)

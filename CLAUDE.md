@@ -28,7 +28,7 @@ cargo test
 cargo build --release -p gcode_inertia_cli
 
 # Run CLI tool
-./target/release/gcode-inertia -f test.gcode --output urdf
+./target/release/gcode-inertia -f example_gcodes/test.gcode --output urdf
 
 # Build and serve web interface
 cd web && trunk serve
@@ -45,7 +45,7 @@ python -m pytest
 pip install -e .
 
 # Run CLI
-gcode-inertia-py -f ../test.gcode --output urdf
+gcode-inertia-py -f ../example_gcodes/test.gcode --output urdf
 ```
 
 ## Key Implementation Details
@@ -82,7 +82,7 @@ Both implementations have unit tests covering:
 - Inertia tensor computations
 - G-code parsing edge cases (relative mode, retractions)
 
-Test files available: `test.gcode`, `arc.gcode`, `bambu_test_*.gcode`
+Test files available in `example_gcodes/`: `test.gcode`, `arc.gcode`, `bambu_test_*.gcode`
 
 ## Bambu Lab Specific Features (Python v0.3.0+)
 

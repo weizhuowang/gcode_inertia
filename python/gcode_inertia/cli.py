@@ -213,13 +213,18 @@ For URDF/robotics applications you MUST:
         print("Warning: No extrusion segments found in G-code", file=sys.stderr)
         sys.exit(0)
 
+    # Apply Bambu Lab Y-axis offset correction to segments
+    if is_bambu:
+        for seg in segments:
+            if hasattr(seg, 'start'):
+                seg.start[1] += 2.0  # LineSeg
+                seg.end[1] += 2.0
+            else:
+                seg.arc_center[1] += 2.0  # ArcSeg
+        print_colored("  ✓ Applied 2mm Y-axis offset correction for Bambu Lab slicer", "green")
+    
     # Calculate properties
     properties = calculate_properties(segments)
-    
-    # Apply Bambu Lab Y-axis offset correction
-    if is_bambu:
-        properties["center_of_mass"][1] += 2.0  # Add 2mm to Y coordinate
-        print_colored("  ✓ Applied 2mm Y-axis offset correction for Bambu Lab slicer", "green")
 
     # Output results
     if args.output == "json":
